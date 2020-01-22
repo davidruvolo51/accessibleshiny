@@ -54,7 +54,7 @@ datatable <- function(data, id = NULL, caption = NULL, css = NULL,
     }
 
     # should a caption be rendered?
-    if (!is.null(caption)) {
+    if (length(caption) > 0) {
         tbl$children <- list(
             htmltools::tags$caption(caption),
             tbl$children

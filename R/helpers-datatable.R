@@ -113,7 +113,7 @@ datatable_helpers$cell_attributes <- function(value) {
         } else if (value == 0) {
             out <- class_string(new = "value-zero")
         } else {
-            out <- class_stinrg(new = "value-unknown")
+            out <- class_string(new = "value-unknown")
         }
     } else if (c == "logical") {
         out <- class_string(new = paste0("value-", tolower(value)))
