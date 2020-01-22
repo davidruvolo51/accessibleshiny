@@ -1,0 +1,18 @@
+Package: shinyAccess
+Type: Package
+Title: An accessible components extension for shiny applications
+Version: 0.1.0
+Author: dcruvolo
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: This package provides a series of ui components for creating 
+    accessible shiny applications. This is important for applications that are
+    used by a wider-population (e.g., department, organization, public). The ui 
+    components in this package are built on Web Content Accessibility Guidelines (WCAG) 
+    at the core and allow for custom styling. The components include page layouts,
+    inputs, figures, tables and forms. See documentation and website for more
+    information.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    htmltools
