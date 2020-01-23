@@ -6,9 +6,9 @@
   "description": "library of accessible ui components for shiny",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/*.scss -d public --no-cache --no-source-maps",
-    "build": "parcel build src/*.scss -d public --no-cache --no-source-maps",
-    "clean": "rm -rf public/ .cache/"
+    "devcss": "parcel src/*.scss -d css --no-cache --no-source-maps",
+    "buildcss": "parcel build src/*.scss -d css --no-cache --no-source-maps",
+    "clean": "rm -rf public/ .cache/ css"
   },
   "dependencies": {
     "autoprefixer": "^9.7.4",

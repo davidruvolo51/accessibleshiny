@@ -16,12 +16,14 @@ datatable_helpers$build_header <- function(data, options) {
 
         # build header
         cell <- htmltools::tags$th(scope = "col", cell_value)
-        cell
+        return(cell)
     })
 
     # return header
-    htmltools::tags$thead(
-        htmltools::tags$tr(role = "row", cells)
+    return(
+        htmltools::tags$thead(
+            htmltools::tags$tr(role = "row", cells)
+        )
     )
 }
 
@@ -71,15 +73,15 @@ datatable_helpers$build_body <- function(data, options) {
             }
 
             # return cell
-            cell
+            return(cell)
         })
 
         # return cells in a row
-        htmltools::tags$tr(role = "row", cells)
+        return(htmltools::tags$tr(role = "row", cells))
     })
 
     # return body
-    htmltools::tags$tbody(body)
+    return(htmltools::tags$tbody(body))
 }
 
 # FUNCTION: evaluate data value by class type (returns a string of css classes)
@@ -98,7 +100,7 @@ datatable_helpers$cell_attributes <- function(value) {
     # format output classes (i.e., css classnames)
     # start by evaluating class types that should be handled
     # differently (i.e., specific processing, transformations, etc.).
-    # Then, return things as normal 
+    # Then, return things as normal
     if (c == "NULL") {
         out <- class_string(default = "datatype-null", new = "value-null")
     } else if (is.nan(value)) {
@@ -123,4 +125,28 @@ datatable_helpers$cell_attributes <- function(value) {
 
     # return
     return(out)
+}
+
+# add css dependency
+datatable_helpers$datatable_dependency <- function() {
+    htmltools::htmlDependency(
+        name = "datatable-css",
+        version = "0.1.0",
+        src = "assets/css/",
+        package = "accessibleshiny",
+        stylesheet = "datatable.css",
+        all_files = FALSE
+    )
+
+}
+
+# render function: where html = a/ a list of html object(s)
+datatable_helpers$render_with_dependencies <- function(html) {
+    htmltools::tagList(
+        # add css
+        datatable_helpers$datatable_dependency(),
+
+        # render child elements
+        html
+    )
 }

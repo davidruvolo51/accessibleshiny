@@ -1,8 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 README.md
-inst/css/node_modules
-inst/css/src
-inst/css/package.json
-inst/css/package-lock.json
-inst/css/.cache
+inst/assets/node_modules
+inst/assets/src
+inst/assets/package.json
+inst/assets/package-lock.json
+inst/assets/.cache

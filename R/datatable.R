@@ -1,5 +1,5 @@
 #' Accessible and Responsive Datatables
-#' 
+#'
 #' The \code{datatable} function creates an accessible, responsive table from a
 #' dataset. The function returns a shiny tagList object which can
 #' be used in shiny applications or markdown documents. This function
@@ -30,7 +30,6 @@
 #'
 #' tbl <- datatable(id = "iris", data = iris, options = list(asHTML = T))
 #' writeLines(as.character(tbl), "~/Desktop/iris_table.html")
-#'
 #' @return Returns an html object, i.e., shiny tagList. Use
 #'         \code{options = list(...)} for addtional rendering options.
 #' @keywords datatable a11y
@@ -38,20 +37,11 @@
 #' @importFrom htmltools singleton htmlDependencies tags
 #'
 datatable <- function(data, id = NULL, caption = NULL, css = NULL,
-    options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
-
-    # load css via inst/css/public/datatables.css
-    htmltools::singleton(
-        htmltools::htmlDependencies(
-            name = "datatables",
-            version = "1.0.0",
-            src = c(href = "accessibleshiny"),
-            stylesheet = "datatable.css"
-        )
-    )
+options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
 
     # render table and table elements
-    tbl <- htmltools::tags$table(class = "datatable",
+    tbl <- htmltools::tags$table(
+        class = "datatable",
         datatable_helpers$build_header(data, options),
         datatable_helpers$build_body(data, options)
     )
@@ -74,6 +64,7 @@ datatable <- function(data, id = NULL, caption = NULL, css = NULL,
         )
     }
 
-    # return
-    tbl
+    # load css from ww/css/datatables.css
+    # and return table
+    datatable_helpers$render_with_dependencies(html = tbl)
 }
