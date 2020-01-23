@@ -1,5 +1,12 @@
-#' The datatable function creates an accessible datatable.
+#' Accessible and Responsive Datatables
+#' 
+#' The \code{datatable} function creates an accessible, responsive table from a
+#' dataset. The function returns a shiny tagList object which can
+#' be used in shiny applications or markdown documents. This function
+#' can also be used as an html table generator and the output can be
+#' written to file. This function takes the following arguments.
 #'
+#' @section Arugments
 #' @param data A data object used to render the table (required)
 #' @param id A unique id for the table (required)
 #' @param css A character string of css name(s) to render in the table element
@@ -12,30 +19,36 @@
 #'      @asHTML A logical argument when true will render cell values as
 #'              html elements (default = FALSE)
 #'
-#' @section Additional Options
-#' Additional options are available for customizing the output. All options must
-#' be passed through as a list. See examples for implementation. The available
-#' options are described below.
-#'
-#' \code{css}: a character string containing one or more css classes. Classes
-#'          must be seperated by a space, e.g., "myclass-a myclass-b"
-#'
 #' @examples
-#'
 #' datatable(data = iris, id = "iris-table")
 #'
 #' datatable(data = iris, id = "iris-table", css = "dark-theme")
-#' 
+#'
 #' datatable(id = "iris", data = iris, options = list(responsive = T))
-
+#'
+#' datatable(id = "iris", data = iris, options = list(asHTML = T))
+#'
+#' tbl <- datatable(id = "iris", data = iris, options = list(asHTML = T))
+#' writeLines(as.character(tbl), "~/Desktop/iris_table.html")
+#'
+#' @return Returns an html object, i.e., shiny tagList. Use
+#'         \code{options = list(...)} for addtional rendering options.
 #' @keywords datatable a11y
-#' @author David Ruvolo
-
-
-# TABLE
-# define a function that returns the table
+#' @author dcruvolo
+#' @importFrom htmltools singleton htmlDependencies tags
+#'
 datatable <- function(data, id = NULL, caption = NULL, css = NULL,
     options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
+
+    # load css via inst/css/public/datatables.css
+    htmltools::singleton(
+        htmltools::htmlDependencies(
+            name = "datatables",
+            version = "1.0.0",
+            src = c(href = "accessibleshiny"),
+            stylesheet = "datatable.css"
+        )
+    )
 
     # render table and table elements
     tbl <- htmltools::tags$table(class = "datatable",

@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+README.md
+inst/css/node_modules
+inst/css/src
+inst/css/package.json
+inst/css/package-lock.json
+inst/css/.cache

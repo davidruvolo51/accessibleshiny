@@ -1,4 +1,4 @@
-Package: shinyAccess
+Package: accessibleshiny
 Type: Package
 Title: An accessible components extension for shiny applications
 Version: 0.1.0
@@ -15,4 +15,5 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    htmltools
+    htmltools (>= 0.4.0)
+RoxygenNote: 7.0.2

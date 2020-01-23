@@ -3,4 +3,5 @@
 .RData
 .Ruserdata
 .sass-cache/
-.cache
+.cache/
+node_modules/

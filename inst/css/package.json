@@ -1,0 +1,53 @@
+{
+  "name": "accessibleshiny",
+  "version": "1.0.0",
+  "author": "dcruvolo",
+  "license": "ISC",
+  "description": "library of accessible ui components for shiny",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/*.scss -d public --no-cache --no-source-maps",
+    "build": "parcel build src/*.scss -d public --no-cache --no-source-maps",
+    "clean": "rm -rf public/ .cache/"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.7.4",
+    "cssnano": "^4.1.10",
+    "sass": "^1.25.0"
+  },
+  "postcss": {
+    "modules": false,
+    "plugins": {
+      "autoprefixer": {
+        "overrideBrowserslist": [
+          ">1%",
+          "last 4 versions",
+          "Firefox ESR",
+          "not ie < 9"
+        ],
+        "flexbox": "no-2009"
+      },
+      "cssnano": {
+        "calc": true,
+        "discardComments": {
+          "removeAll": true
+        }
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidruvolo51/accessibleshiny"
+  },
+  "bugs": {
+    "url": "https://github.com/davidruvolo51/accessibleshiny/issues"
+  },
+  "keywords": [
+    "css",
+    "r",
+    "shiny"
+  ],
+  "devDependencies": {
+    "postcss-modules": "^1.5.0"
+  }
+}
