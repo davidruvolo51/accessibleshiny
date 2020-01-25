@@ -128,25 +128,13 @@ datatable_helpers$cell_attributes <- function(value) {
 }
 
 # add css dependency
-datatable_helpers$datatable_dependency <- function() {
+datatable_helpers$datatable_dependencies <- function(...) {
     htmltools::htmlDependency(
-        name = "datatable-css",
+        name = "datatable",
         version = "0.1.0",
         src = "assets/css/",
         package = "accessibleshiny",
-        stylesheet = "datatable.css",
+        stylesheet = "datatable.min.css",
         all_files = FALSE
-    )
-
-}
-
-# render function: where html = a/ a list of html object(s)
-datatable_helpers$render_with_dependencies <- function(html) {
-    htmltools::tagList(
-        # add css
-        datatable_helpers$datatable_dependency(),
-
-        # render child elements
-        html
     )
 }

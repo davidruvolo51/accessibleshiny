@@ -64,7 +64,9 @@ options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
         )
     }
 
-    # load css from ww/css/datatables.css
-    # and return table
-    datatable_helpers$render_with_dependencies(html = tbl)
+    # load css from ww/css/datatables.css and return tbl
+    htmltools::tagList(
+        datatable_helpers$datatable_dependencies(),
+        tbl
+    )
 }

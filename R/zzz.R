@@ -9,3 +9,10 @@
         )
     )
 }
+
+# remove resources
+.onUnload <- function(libname, pkgname) {
+    shiny::removeResourcePath(
+        prefix = "assets"
+    )
+}
