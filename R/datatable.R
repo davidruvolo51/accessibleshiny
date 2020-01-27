@@ -11,6 +11,8 @@
 #' @param id A unique id for the table (required)
 #' @param css A character string of css name(s) to render in the table element
 #' @param caption  A short description (1-2 lines) for the table (optional)
+#' @param style a list of options to control the appearance of the app
+#'      @param rowHighlighting a logical value when true will highlight odd rows
 #' @param options A list of options to pass on to the render table method
 #'      @param responsive A logical arg for turning on/off the rendering of
 #'             additional elements for a responsive tables (default = FALSE)
@@ -37,11 +39,12 @@
 #' @importFrom htmltools singleton htmlDependencies tags
 #'
 datatable <- function(data, id = NULL, caption = NULL, css = NULL,
+style = list(rowHighlighting = TRUE),
 options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
 
     # render table and table elements
     tbl <- htmltools::tags$table(
-        class = "datatable",
+        class = datatable_helpers$datatable_css(css = css, style = style),
         datatable_helpers$build_header(data, options),
         datatable_helpers$build_body(data, options)
     )
@@ -49,11 +52,6 @@ options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
     # add id
     if (length(id) > 0) {
         tbl$attribs$id <- id
-    }
-
-    # add css
-    if (length(css) > 0) {
-        tbl$attribs$class <- css
     }
 
     # should a caption be rendered?

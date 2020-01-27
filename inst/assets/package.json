@@ -6,9 +6,9 @@
   "description": "library of accessible ui components for shiny",
   "main": "index.js",
   "scripts": {
-    "renamecss": "for f in css/*.css; do mv \"$f\" \"${f/.css/.min.css}\"; done && echo \"renamed css files\";",
-    "devcss": "parcel src/*.scss -d css --no-cache --no-source-maps",
-    "buildcss": "parcel build src/*.scss -d css --no-cache --no-source-maps",
+    "rename": "for f in css/*.css; do mv \"$f\" \"${f/.css/.min.css}\"; done && echo \"renamed css files\";",
+    "dev": "parcel build src/*.scss -d css --no-cache --no-source-maps",
+    "build": "yarn dev && yarn rename",
     "clean": "rm -rf public/ .cache/ css"
   },
   "dependencies": {
