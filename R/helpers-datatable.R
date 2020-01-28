@@ -40,8 +40,11 @@ datatable_helpers$build_body <- function(data, options) {
                 cell_value <- data[row, col]
             }
 
-            # render css classes based on cell values
-            cell_css <- datatable_helpers$cell_attributes(data[row, col])
+            # render css classes based on cell values and colnum
+            cell_css <- paste0(
+                datatable_helpers$cell_attributes(data[row, col]),
+                " column-", col
+            )
 
             # process options$rowHeaders (this generates the cell)
             if (isTRUE(options$rowHeaders) && col == 1) {
@@ -72,7 +75,8 @@ datatable_helpers$build_body <- function(data, options) {
                 )
             }
 
-            # return cell
+            # add data-attribute and return
+            cell$attribs$`data-value` <- cell_value
             return(cell)
         })
 
@@ -131,10 +135,23 @@ datatable_helpers$cell_attributes <- function(value) {
 datatable_helpers$datatable_dependencies <- function(...) {
     htmltools::htmlDependency(
         name = "datatable",
-        version = "0.1.0",
+        version = "0.1.1",
         src = "assets/css/",
         package = "accessibleshiny",
         stylesheet = "datatable.min.css",
         all_files = FALSE
     )
+}
+
+# process html datatable classnames
+datatable_helpers$datatable_css <- function(css, style) {
+    default_class <- "datatable"
+    out <- default_class
+    if (isTRUE(style$rowHighlighting)) {
+        out <- paste(out, "row-highlighting", sep = " ")
+    }
+    if (length(css) > 0) {
+        out <- paste(out, css, sep = " ")
+    }
+    return(out)
 }

@@ -1,7 +1,7 @@
 Package: accessibleshiny
 Type: Package
 Title: An accessible components extension for shiny applications
-Version: 0.1.0
+Version: 0.1.1
 Author: dcruvolo
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: This package provides a series of ui components for creating 
@@ -16,3 +16,5 @@ Encoding: UTF-8
 LazyData: true
 Imports: htmltools (>= 0.4.0), shiny (>= 1.4.0)
 RoxygenNote: 7.0.2
+Suggests: 
+    testthat

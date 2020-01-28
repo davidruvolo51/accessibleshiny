@@ -9,6 +9,7 @@ datatable(
   id = NULL,
   caption = NULL,
   css = NULL,
+  style = list(rowHighlighting = TRUE),
   options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)
 )
 }
@@ -20,6 +21,9 @@ datatable(
 \item{caption}{A short description (1-2 lines) for the table (optional)}
 
 \item{css}{A character string of css name(s) to render in the table element}
+
+\item{style}{a list of options to control the appearance of the app
+@param rowHighlighting a logical value when true will highlight odd rows}
 
 \item{options}{A list of options to pass on to the render table method
 @param responsive A logical arg for turning on/off the rendering of
@@ -49,13 +53,20 @@ datatable(data = iris, id = "iris-table")
 
 datatable(data = iris, id = "iris-table", css = "dark-theme")
 
-datatable(id = "iris", data = iris, options = list(responsive = T))
+datatable(id = "iris", data = iris, options = list(responsive = TRUE))
 
-datatable(id = "iris", data = iris, options = list(asHTML = T))
+datatable(id = "iris", data = iris, options = list(asHTML = TRUE))
 
-tbl <- datatable(id = "iris", data = iris, options = list(asHTML = T))
+df <- iris
+df$link <- paste0(
+    "<a href='https://www.google.com/search?q=",
+    gsub(" ", "+", df$link),
+    "'>",
+    df$link,
+    "</a>"
+)
+tbl <- datatable(id = "iris", data = iris, options = list(asHTML = TRUE))
 writeLines(as.character(tbl), "~/Desktop/iris_table.html")
-
 }
 \author{
 dcruvolo
