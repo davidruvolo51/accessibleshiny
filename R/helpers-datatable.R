@@ -135,7 +135,7 @@ datatable_helpers$cell_attributes <- function(value) {
 datatable_helpers$datatable_dependencies <- function(...) {
     htmltools::htmlDependency(
         name = "datatable",
-        version = "0.1.0",
+        version = "0.1.1",
         src = "assets/css/",
         package = "accessibleshiny",
         stylesheet = "datatable.min.css",
