@@ -147,11 +147,11 @@ datatable_helpers$datatable_dependencies <- function(...) {
 datatable_helpers$datatable_css <- function(css, style) {
     default_class <- "datatable"
     out <- default_class
-    if (length(css) > 0) {
-        out <- paste(out, css, sep = " ")
-    }
     if (isTRUE(style$rowHighlighting)) {
         out <- paste(out, "row-highlighting", sep = " ")
+    }
+    if (length(css) > 0) {
+        out <- paste(out, css, sep = " ")
     }
     return(out)
 }

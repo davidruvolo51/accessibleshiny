@@ -26,11 +26,19 @@
 #'
 #' datatable(data = iris, id = "iris-table", css = "dark-theme")
 #'
-#' datatable(id = "iris", data = iris, options = list(responsive = T))
+#' datatable(id = "iris", data = iris, options = list(responsive = TRUE))
 #'
-#' datatable(id = "iris", data = iris, options = list(asHTML = T))
+#' datatable(id = "iris", data = iris, options = list(asHTML = TRUE))
 #'
-#' tbl <- datatable(id = "iris", data = iris, options = list(asHTML = T))
+#' df <- iris
+#' df$link <- paste0(
+#'     "<a href='https://www.google.com/search?q=",
+#'     gsub(" ", "+", df$link),
+#'     "'>",
+#'     df$link,
+#'     "</a>"
+#' )
+#' tbl <- datatable(id = "iris", data = iris, options = list(asHTML = TRUE))
 #' writeLines(as.character(tbl), "~/Desktop/iris_table.html")
 #' @return Returns an html object, i.e., shiny tagList. Use
 #'         \code{options = list(...)} for addtional rendering options.
