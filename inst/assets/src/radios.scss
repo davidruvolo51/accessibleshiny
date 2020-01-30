@@ -1,0 +1,60 @@
+$dark: #252525;
+$light: #f6f6f6;
+$med: #c4c4c4;
+
+.radios {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: inherit;
+
+    legend {
+        margin-bottom: 6px;
+    }
+
+    // input wrapper
+    .radio-btn {
+        display: inline-block;
+        margin-right: 12px;
+
+        input[type=radio]{
+            position: absolute;
+            clip: rect(1px 1px 1px 1px);
+            clip: rect(1px, 1px, 1px, 1px);
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            white-space: nowrap;
+
+            &:checked + label {
+                cursor: pointer;
+                border-color: $dark;
+                background-color: $dark;
+                color: $light;
+                border-bottom-width: 3px;
+            }
+        }
+
+        label {
+            display: inline-block;
+            margin: 12px 4px;
+            padding: 7px 12px;
+            border: 1px solid $med;
+            border-bottom-width: 3px;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                border-color: $dark;
+                background-color: $dark;
+                border-bottom-width: 3px;
+                color: $light;
+            }
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
