@@ -11,6 +11,6 @@ Please refer to the wiki for more information about developing the package and f
 You can install the `accessibleshiny` package using the remotes package.
 
 ```r
-install.packages("remotes")
-remotes::install_github("davidruvolo51/accessibleshiny")
+install.packages("devtools")
+devtools::install_github("davidruvolo51/accessibleshiny")
 ```

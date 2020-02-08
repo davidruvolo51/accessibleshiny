@@ -11,16 +11,31 @@
 #' @param id A unique id for the table (required)
 #' @param css A character string of css name(s) to render in the table element
 #' @param caption  A short description (1-2 lines) for the table (optional)
-#' @param style a list of options to control the appearance of the app
-#'      @param rowHighlighting a logical value when true will highlight odd rows
-#' @param options A list of options to pass on to the render table method
-#'      @param responsive A logical arg for turning on/off the rendering of
-#'             additional elements for a responsive tables (default = FALSE)
-#'      @param rowHeaders a logical argument when true sets the first cell
-#'             of every row as a header element (default = FALSE).
-#'      @asHTML A logical argument when true will render cell values as
-#'              html elements (default = FALSE)
+#' @parma ... Other list object used to control the component. See the next
+#'      section and the wiki for more information.
 #'
+#' @section Optional Arguments
+#' Using \code{...}, you can pass additional arguments that allow you to
+#' control the markup, css attributes, etc. These arguments must be passed
+#' as list objects through \code{style = list()} or by using
+#' \code{options = list()}. These arguments are explained below. See the wiki
+#' for more information.
+#' \code{style} a list of options to control the appearance of the app
+#'      \code{enabled} When TRUE (default), all css classes will be applied.
+#'              FALSE will return a table with no css classes. This will also
+#'              overide the argument \code{loadDependency}, \code{responsive},
+#'      \code{rowHighlighting} a logical value when true will highlight odd rows
+#' \code{options} A list of options to pass on to the render table method
+#'      \code{responsive} A logical arg for turning on/off the rendering of
+#'             additional elements for a responsive tables (default = FALSE)
+#'      \code{rowHeaders} a logical argument when true sets the first cell
+#'             of every row as a header element (default = FALSE).
+#'      \code{asHTML} A logical argument when true will render cell values as
+#'              html elements (default = FALSE)
+#'      \code{loadDependency} When TRUE (default), the function will load the
+#'              corresponding css files into the header document. FALSE will
+#'              not load datatable dependencies.
+#' 
 #' @examples
 #' datatable(data = iris, id = "iris-table")
 #'
@@ -44,23 +59,34 @@
 #'         \code{options = list(...)} for addtional rendering options.
 #' @keywords datatable a11y
 #' @author dcruvolo
-#' @importFrom htmltools singleton htmlDependencies tags
+#' @importFrom htmltools tags
 #'
-datatable <- function(data, id = NULL, caption = NULL, css = NULL,
-style = list(rowHighlighting = TRUE),
-options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
+datatable <- function(data, id = NULL, caption = NULL, css = NULL, ...) {
+
+    # validate args: send `...` down to validation function. The returned
+    # output is nested lists. To access optiions and props, use `props$style`
+    # or `props$options`.
+    props <- datatable_helpers$validate_props(...)
 
     # render table and table elements
     tbl <- htmltools::tags$table(
-        class = datatable_helpers$datatable_css(css = css, style = style),
-        datatable_helpers$build_header(data, options),
-        datatable_helpers$build_body(data, options)
+        datatable_helpers$build_header(
+            data = data,
+            options = props$options
+        ),
+        datatable_helpers$build_body(
+            data = data,
+            style = props$style,
+            options = props$options
+        )
     )
 
-    # add id
-    if (length(id) > 0) {
-        tbl$attribs$id <- id
-    }
+    # update table attributes - apply css only if style$enabled == TRUE
+    tbl$attribs <- datatable_helpers$set_table_attributes(
+        id = id,
+        css = css,
+        style = props$style
+    )
 
     # should a caption be rendered?
     if (length(caption) > 0) {
@@ -70,9 +96,13 @@ options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)) {
         )
     }
 
-    # load css from ww/css/datatables.css and return tbl
-    htmltools::tagList(
-        datatable_helpers$datatable_dependencies(),
+    # load css from ww/css/datatables.css if applicable
+    if (isFALSE(props$style$enabled) | isFALSE(props$options$loadDependency)) {
         tbl
-    )
+    } else {
+        htmltools::tagList(
+            datatable_helpers$load_dependencies(),
+            tbl
+        )
+    }
 }
