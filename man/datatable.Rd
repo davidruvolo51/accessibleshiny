@@ -4,14 +4,7 @@
 \alias{datatable}
 \title{Accessible and Responsive Datatables}
 \usage{
-datatable(
-  data,
-  id = NULL,
-  caption = NULL,
-  css = NULL,
-  style = list(rowHighlighting = TRUE),
-  options = list(responsive = TRUE, rowHeaders = TRUE, asHTML = FALSE)
-)
+datatable(data, id = NULL, caption = NULL, css = NULL, ...)
 }
 \arguments{
 \item{data}{A data object used to render the table (required)}
@@ -21,17 +14,6 @@ datatable(
 \item{caption}{A short description (1-2 lines) for the table (optional)}
 
 \item{css}{A character string of css name(s) to render in the table element}
-
-\item{style}{a list of options to control the appearance of the app
-@param rowHighlighting a logical value when true will highlight odd rows}
-
-\item{options}{A list of options to pass on to the render table method
-@param responsive A logical arg for turning on/off the rendering of
-       additional elements for a responsive tables (default = FALSE)
-@param rowHeaders a logical argument when true sets the first cell
-       of every row as a header element (default = FALSE).
-@asHTML A logical argument when true will render cell values as
-        html elements (default = FALSE)}
 }
 \value{
 Returns an html object, i.e., shiny tagList. Use

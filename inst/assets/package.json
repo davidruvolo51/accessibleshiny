@@ -6,10 +6,10 @@
   "description": "library of accessible ui components for shiny",
   "main": "index.js",
   "scripts": {
-    "rename": "for f in css/*.css; do mv \"$f\" \"${f/.css/.min.css}\"; done && echo \"renamed css files\";",
+    "clean": "rm -rf public/ .cache/ css",
     "dev": "parcel build src/*.scss -d css --no-cache --no-source-maps",
-    "build": "yarn dev && yarn rename",
-    "clean": "rm -rf public/ .cache/ css"
+    "rename": "for f in css/*.css; do mv \"$f\" \"${f/.css/.min.css}\"; done && echo \"renamed css files\";",
+    "build": "yarn dev && yarn rename"
   },
   "dependencies": {
     "autoprefixer": "^9.7.4",
