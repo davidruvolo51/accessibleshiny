@@ -8,7 +8,7 @@ Please refer to the wiki for more information about developing the package and f
 
 ## Installation
 
-You can install the `accessibleshiny` package using the remotes package.
+You can install the `accessibleshiny` package using the `devtools` package.
 
 ```r
 install.packages("devtools")
