@@ -1,7 +1,7 @@
 Package: accessibleshiny
 Type: Package
 Title: An accessible components extension for shiny applications
-Version: 0.1.2
+Version: 0.1.3
 Author: dcruvolo
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: This package provides a series of ui components for creating 
