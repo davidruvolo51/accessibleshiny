@@ -14,6 +14,30 @@ datatable(data, id = NULL, caption = NULL, css = NULL, ...)
 \item{caption}{A short description (1-2 lines) for the table (optional)}
 
 \item{css}{A character string of css name(s) to render in the table element}
+
+\item{...}{Other list object used to control the component. See the next
+     section and the wiki for more information.
+
+Using \code{...}, you can pass additional arguments that allow you to
+control the markup, css attributes, etc. These arguments must be passed
+as list objects through \code{style = list()} or by using
+\code{options = list()}. These arguments are explained below. See the wiki
+for more information.
+\code{style} a list of options to control the appearance of the app
+     \code{enabled} When TRUE (default), all css classes will be applied.
+             FALSE will return a table with no css classes. This will also
+             overide the argument \code{loadDependency}, \code{responsive},
+     \code{rowHighlighting} a logical value when true will highlight odd rows
+\code{options} A list of options to pass on to the render table method
+     \code{responsive} A logical arg for turning on/off the rendering of
+            additional elements for a responsive tables (default = FALSE)
+     \code{rowHeaders} a logical argument when true sets the first cell
+            of every row as a header element (default = FALSE).
+     \code{asHTML} A logical argument when true will render cell values as
+             html elements (default = FALSE)
+     \code{loadDependency} When TRUE (default), the function will load the
+             corresponding css files into the header document. FALSE will
+             not load datatable dependencies.}
 }
 \value{
 Returns an html object, i.e., shiny tagList. Use

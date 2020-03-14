@@ -135,22 +135,6 @@ datatable_helpers$validate_props <- function(...) {
 # cell level which can be used for further formating in css. See the wiki
 # for more information about each helper function
 
-
-# load_dependencies
-# When called, this function attaches the css files in the <head> of the html
-# document. Use the argument `option = list(loadDependency = FALSE)` to
-# prevent the css file be linked in the head of the web document.
-datatable_helpers$load_dependencies <- function() {
-    htmltools::htmlDependency(
-        name = "datatable",
-        version = "0.1.2",
-        src = "assets/css/",
-        package = "accessibleshiny",
-        stylesheet = "datatable.min.css",
-        all_files = FALSE
-    )
-}
-
 # set_table_attributes
 # This function processes the input arguments, `id`, `css` and `style` to
 # define the attributes for the parent element, ie., <table>. This returns

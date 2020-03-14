@@ -7,14 +7,14 @@
 #' written to file. This function takes the following arguments.
 #'
 #' @section Arugments
+#'
 #' @param data A data object used to render the table (required)
 #' @param id A unique id for the table (required)
 #' @param css A character string of css name(s) to render in the table element
 #' @param caption  A short description (1-2 lines) for the table (optional)
-#' @parma ... Other list object used to control the component. See the next
+#' @param ... Other list object used to control the component. See the next
 #'      section and the wiki for more information.
 #'
-#' @section Optional Arguments
 #' Using \code{...}, you can pass additional arguments that allow you to
 #' control the markup, css attributes, etc. These arguments must be passed
 #' as list objects through \code{style = list()} or by using
@@ -35,7 +35,7 @@
 #'      \code{loadDependency} When TRUE (default), the function will load the
 #'              corresponding css files into the header document. FALSE will
 #'              not load datatable dependencies.
-#' 
+#'
 #' @examples
 #' datatable(data = iris, id = "iris-table")
 #'
@@ -96,13 +96,6 @@ datatable <- function(data, id = NULL, caption = NULL, css = NULL, ...) {
         )
     }
 
-    # load css from ww/css/datatables.css if applicable
-    if (isFALSE(props$style$enabled) | isFALSE(props$options$loadDependency)) {
-        tbl
-    } else {
-        htmltools::tagList(
-            datatable_helpers$load_dependencies(),
-            tbl
-        )
-    }
+    # return
+    return(tbl)
 }

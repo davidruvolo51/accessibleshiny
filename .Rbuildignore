@@ -1,8 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 README.md
-inst/assets/node_modules
-inst/assets/src
-inst/assets/package.json
-inst/assets/package-lock.json
-inst/assets/.cache
+node_modules
+package.json
+package-lock.json
+.cache
+accessibleshiny.code-workspace
+inst/assets/css/*.scss
