@@ -30,7 +30,6 @@ datatable_helpers$defaults <- list()
 # in the main function. Add more props as needed and make sure the validation
 # function is updated accordingly.
 datatable_helpers$defaults$style <- list(
-    enabled = TRUE,
     rowHighlighting = TRUE
 )
 
@@ -71,12 +70,6 @@ datatable_helpers$validate_props <- function(...) {
         # assign inputs$style to props$style
         props$style <-  inputs$style
 
-        # is option `enabled` missing?
-        if (is.null(inputs$style$enabled)) {
-            props$style$enabled <-
-                datatable_helpers$defaults$style$enabled
-        }
-
         # is option `rowHighlighting` missing?
         if (is.null(inputs$style$rowHighlighting)) {
             props$style$rowHighlighting <-
@@ -113,11 +106,6 @@ datatable_helpers$validate_props <- function(...) {
             props$options$asHTML <-
                 datatable_helpers$defaults$options$asHTML
         }
-        # is option `loadDependency` missing?
-        if (is.null(inputs$options$loadDependency)) {
-            props$options$loadDependency <-
-                datatable_helpers$defaults$options$loadDependency
-        }
     }
 
     # RETURN PROPS
@@ -141,29 +129,25 @@ datatable_helpers$validate_props <- function(...) {
 # a list object which can be added as a one stop attribute generator.
 datatable_helpers$set_table_attributes <- function(id, css, style) {
     attributes <- list()
-    # apply css classnames only if style$options$enabled == TRUE
-    if (isTRUE(style$enabled)) {
+    # apply default css
+    attributes$class <- "datatable"
 
-        # apply default css
-        attributes$class <- "datatable"
+    # should the row highlighting class be added?
+    if (isTRUE(style$rowHighlighting)) {
+        attributes$class <- paste(
+            attributes$class,
+            "row-highlighting",
+            sep = " "
+        )
+    }
 
-        # should the row highlighting class be added?
-        if (isTRUE(style$rowHighlighting)) {
-            attributes$class <- paste(
-                attributes$class,
-                "row-highlighting",
-                sep = " "
-            )
-        }
-
-        # Did the user supply a string containing css classes?
-        if (length(css) > 0) {
-            attributes$class <- paste(
-                attributes$class,
-                css,
-                sep = " "
-            )
-        }
+    # Did the user supply a string containing css classes?
+    if (length(css) > 0) {
+        attributes$class <- paste(
+            attributes$class,
+            css,
+            sep = " "
+        )
     }
 
     # apply id
@@ -282,7 +266,11 @@ datatable_helpers$build_header <- function(data, options) {
         }
 
         # assemble table header cell
-        cell <- htmltools::tags$th(scope = "col", cell_value)
+        cell <- htmltools::tags$th(
+            scope = "col",
+            class = paste0("column-", n),
+            cell_value
+        )
         return(cell)
     })
 
@@ -334,34 +322,25 @@ datatable_helpers$build_body <- function(data, style, options) {
                 )
             }
 
-            # set cell css only if style is enabled
-            if (isTRUE(style$enabled)) {
-                cell$attribs$class <- paste0(
-                    datatable_helpers$set_cell_css(data[row, col]),
-                        " column-", col
-                )
+            # apply cell css
+            cell$attribs$class <- paste0(
+                datatable_helpers$set_cell_css(data[row, col]),
+                    " column-", col
+            )
 
-                # add responsiveness only if style is enabled
-                if (isTRUE(options$responsive)) {
-                    cell$children <- list(
-                        htmltools::tags$span(
-                            class = "hidden-colname",
-                            `aria-hidden` = "true",
-                            colnames(data)[col]
-                        ),
-                        cell_value
-                    )
-                }
-
-                # add data-value
-                cell$attribs$`data-value` <- cell_value
-
-            } else {
-
-                # else return value
+            # add custom data attrib and responsiveness (if requested)
+            cell$attribs$`data-value` <- cell_value
+            if (isTRUE(options$responsive)) {
                 cell$children <- list(
+                    htmltools::tags$span(
+                        class = "hidden-colname",
+                        `aria-hidden` = "true",
+                        colnames(data)[col]
+                    ),
                     cell_value
                 )
+            } else {
+                cell$children <- list(cell_value)
             }
 
             # return cell
