@@ -20,30 +20,15 @@ datatable_helpers <- list()
 # passed through `...`. The two elements that are currently accepted are
 # `style` and `options`.
 
-datatable_helpers$defaults <- list()
-
-# defaults$style
-# define a list of default settings for the optional argument `style`. The
-# options defined here are used to control the rendering of the css props
-# of the component. For example, if the user wants to display all rendering
-# of css styles, they can do so by passing `style = list(enabled = FALSE)`
-# in the main function. Add more props as needed and make sure the validation
-# function is updated accordingly.
-datatable_helpers$defaults$style <- list(
-    rowHighlighting = TRUE
-)
-
-# defaults$options
-# define a list of default settings that control the html markup of the ui
-# component. These arguments are passed as a list object through `...`. This
-# allows the user to manipulate the component inline. More information can
-# be found in the wiki. Add more props as needed and make sure the validation
-# function is updated accordingly.
-datatable_helpers$defaults$options <- list(
-    responsive = TRUE,
-    rowHeaders = TRUE,
-    asHTML = FALSE,
-    loadDependency = TRUE
+datatable_helpers$defaults <- list(
+    style = list(
+        rowHighlighting = TRUE
+    ),
+    options = list(
+        responsive = TRUE,
+        rowHeaders = TRUE,
+        asHTML = FALSE
+    )
 )
 
 # VALIDATE PROPS
@@ -52,15 +37,14 @@ datatable_helpers$defaults$options <- list(
 datatable_helpers$validate_props <- function(...) {
 
     # process inputs and prep options list
-    args <- eval(substitute(alist(...)))
-    inputs <- purrr::map(args, as.list)
+    args <- dots_list(...)
     props <- list()
 
     #//////////////////////////////////////
 
     # PROCESS INPUTS$STYLE
     # when missing
-    if (is.null(inputs$style)) {
+    if (is.null(args$style)) {
         props$style <- datatable_helpers$defaults$style
     }
 
@@ -260,27 +244,31 @@ datatable_helpers$build_header <- function(data, options) {
 
         # define cell content: as html or text
         if (isTRUE(options$asHTML)) {
-            cell_value <- htmltools::HTML(columns[n])
-        } else {
+            cell_value <- HTML(columns[n])
+        }
+        if (isFALSE(options$asHTML)) {
             cell_value <- columns[n]
         }
 
-        # assemble table header cell
-        cell <- htmltools::tags$th(
+        # assemble table header cell with column number
+        cell <- tags$th(
             scope = "col",
             class = paste0("column-", n),
             cell_value
         )
+
+        # return cell
         return(cell)
     })
 
     # assemble table header element
-    return(
-        htmltools::tags$thead(
-            class = "datatable-header",
-            htmltools::tags$tr(role = "row", cells)
-        )
+    thead <- tags$thead(
+        class = "datatable-header",
+        tags$tr(role = "row", cells)
     )
+
+    # return
+    return(thead)
 }
 
 # build_body
@@ -306,18 +294,18 @@ datatable_helpers$build_body <- function(data, style, options) {
 
             # process options: render as html or escape?
             if (isTRUE(options$asHTML)) {
-                cell_value <- htmltools::HTML(data[row, col])
+                cell_value <- HTML(data[row, col])
             } else {
                 cell_value <- data[row, col]
             }
 
             # process options$rowHeaders (this generates the cell)
             if (isTRUE(options$rowHeaders) && col == 1) {
-                cell <- htmltools::tags$th(
+                cell <- tags$th(
                     role = "rowheader"
                 )
             } else {
-                cell <- htmltools::tags$td(
+                cell <- tags$td(
                     role = "cell"
                 )
             }
@@ -332,7 +320,7 @@ datatable_helpers$build_body <- function(data, style, options) {
             cell$attribs$`data-value` <- cell_value
             if (isTRUE(options$responsive)) {
                 cell$children <- list(
-                    htmltools::tags$span(
+                    tags$span(
                         class = "hidden-colname",
                         `aria-hidden` = "true",
                         colnames(data)[col]
@@ -348,9 +336,9 @@ datatable_helpers$build_body <- function(data, style, options) {
         })
 
         # return cells in a row
-        return(htmltools::tags$tr(role = "row", cells))
+        return(tags$tr(role = "row", cells))
     })
 
     # return body
-    return(htmltools::tags$tbody(class = "datatable-body", body))
+    return(tags$tbody(class = "datatable-body", body))
 }

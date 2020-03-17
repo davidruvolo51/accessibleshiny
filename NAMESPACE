@@ -1,3 +1,2 @@
 export("datatable")
 export("use_accessibleshiny")
-importFrom(shiny, addResourcePath)
