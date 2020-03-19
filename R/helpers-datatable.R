@@ -83,7 +83,7 @@ set_cell_attributes <- function(index, value) {
 # the data type and column index. Cells may also be returned as a
 # row header if the option is TRUE.
 tbody_cells <- function(..., options) {
-    args <- dots_list(...)
+    args <- list2(...)
     index <- 1
     cells <- imap(args, function(d, .x) {
 
@@ -139,7 +139,7 @@ tbody_cells <- function(..., options) {
 # This function generates the markup for each row. User defined
 # options are passed into the lower-level function `tbody_cells`.
 tbody_rows <- function(..., options, colnames) {
-    args <- dots_list(...)
+    args <- list2(...)
     cells <- pmap(args, ~ tbody_cells(..., options = options))
     r <- tags$tr(cells, role = "row")
     return(r)
@@ -165,7 +165,7 @@ thead <- function(data, options) {
         col <- as.character(c)
 
         # define cell content based on options$html_escape
-        if (options$html_escape) {
+        if (!options$html_escape) {
             cell_value <- HTML(c)
         }
         if (options$html_escape) {
@@ -199,7 +199,7 @@ thead <- function(data, options) {
 # control the html markup (i.e., row headers, responsive, etc).
 validate_props <- function(...) {
     # process three dots
-    args <- dots_list(...)
+    args <- list2(...)
 
     # set defaults
     attr <- list(

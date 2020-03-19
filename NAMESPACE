@@ -1,6 +1,6 @@
 export("datatable")
 export("use_accessibleshiny")
 importFrom(purrr, map, pmap, imap)
-importFrom(rlang, dots_list)
+importFrom(rlang, list2)
 importFrom(htmltools, tags, HTML, htmlEscape, tagList, htmlDependency)
 importFrom(shiny, addResourcePath, removeResourcePath)
