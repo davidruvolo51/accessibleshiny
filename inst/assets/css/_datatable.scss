@@ -5,6 +5,7 @@ $dark: #2b2b2b;
 
 // begin
 .datatable {
+	font-family: Arial, Helvetica, sans-serif;
 	width: 100%;
 	border-spacing: 0;
 	text-align: left;
@@ -36,7 +37,7 @@ $dark: #2b2b2b;
 			th,
 			td {
 				font-weight: 400;
-				padding: 24px 12px;
+				padding: 16px 12px;
 
 				.hidden-colname {
 					display: inline-block;
@@ -72,15 +73,17 @@ $dark: #2b2b2b;
 			tr {
 				th,
 				td {
-					display: block;
-					padding: 5px 0 5px 12px;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					padding: 8px 0;
+					padding-left: 12px;
 
 					.hidden-colname {
 						display: inline-block;
 						clip: auto;
-						width: 150px;
-						height: auto;
-						line-height: 1;
+						width: 50%;
+						height: 100%;
 					}
 				}
 			}

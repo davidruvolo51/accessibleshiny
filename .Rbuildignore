@@ -6,4 +6,4 @@ package.json
 package-lock.json
 .cache
 accessibleshiny.code-workspace
-inst/assets/css/*.scss
+^inst/assets/css/*.scss$
