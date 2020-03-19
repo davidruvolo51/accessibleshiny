@@ -1,6 +1,6 @@
 {
 	"name": "accessibleshiny",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"author": "dcruvolo",
 	"license": "ISC",
 	"description": "library of accessible ui components for shiny",
@@ -9,7 +9,7 @@
 		"clean": "rm -rf .cache/ inst/assets/css/accessibleshiny.min.css",
 		"build": "parcel build inst/assets/css/index.scss -d inst/assets/css -o inst/assets/css/accessibleshiny.min.css --no-cache --no-source-maps",
 		"document": "Rscript -e \"devtools::document()\"",
-		"package": "cd .. && R CMD build accessibleshiny/ && R CMD install accessibleshiny_*.tar.gz"
+		"package": "Rscript -e \"devtools::build()\" && Rscript -e \"devtools::install()\""
 	},
 	"dependencies": {},
 	"postcss": {
