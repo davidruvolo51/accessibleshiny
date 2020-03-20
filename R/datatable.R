@@ -57,12 +57,12 @@
 datatable <- function(data, caption = NULL, ...) {
 
     # validate input args
-    props <- validate_props(...)
+    props <- datatable_helpers$validate_props(...)
 
     # generate table markup
     tbl <- tags$table(
-        thead(data, options = props$options),
-        tbody(data, options = props$options)
+        datatable_helpers$thead(data, options = props$options),
+        datatable_helpers$tbody(data, options = props$options)
     )
 
     # update table attributes
