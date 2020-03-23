@@ -11,6 +11,7 @@ $dark: #2b2b2b;
 	text-align: left;
 	font-size: 13pt;
 
+	// default child styles
 	caption {
 		text-align: left;
 		font-size: 16pt;
@@ -50,6 +51,8 @@ $dark: #2b2b2b;
 			}
 		}
 	}
+	
+	// child styles when classes added at the parent level
 	&.row-highlighting {
 		tbody {
 			tr:nth-child(even) {
@@ -57,9 +60,20 @@ $dark: #2b2b2b;
 			}
 		}
 	}
+
+	&.caption-side-top {
+		caption {
+			caption-side: top;
+		}
+	}
+	&.caption-side-bottom {
+		caption {
+			caption-side: bottom;
+		}
+	}
 }
 
-@media (max-width: 892px) {
+@media (max-width: 70%) {
 	.datatable {
 		thead {
 			position: absolute;

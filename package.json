@@ -1,6 +1,6 @@
 {
 	"name": "accessibleshiny",
-	"version": "0.1.4",
+	"version": "0.1.41",
 	"author": "dcruvolo",
 	"license": "ISC",
 	"description": "library of accessible ui components for shiny",

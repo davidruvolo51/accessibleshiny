@@ -205,12 +205,13 @@ datatable_helpers$validate_props <- function(...) {
     # set defaults
     attr <- list(
         role = "grid",
-        class = "datatable row-highlighting"
+        class = "datatable row-highlighting caption-side-top"
     )
     options <- list(
         responsive = TRUE,
         row_headers = FALSE,
-        html_escape = TRUE
+        html_escape = TRUE,
+        caption_position = "top"
     )
 
     # evaluate args only if args exist
@@ -224,9 +225,22 @@ datatable_helpers$validate_props <- function(...) {
 
         # process style args (i.e., update css)
         if (!is.null(args$style)) {
+
+            # should row highlighting be added to the table?
             if (!is.null(args$style$row_highlighting)) {
                 if (isFALSE(args$style$row_highlighting)) {
                     attr$class <- gsub(" row-highlighting", "", attr$class)
+                }
+            }
+
+            # should caption position be set to below?
+            if (!is.null(args$style$caption_below)) {
+                if (isTRUE(args$style$caption_below)) {
+                    attr$class <- gsub(
+                        pattern = " caption-side-top",
+                        replacement = " caption-side-bottom",
+                        x = attr$class
+                    )
                 }
             }
         }
