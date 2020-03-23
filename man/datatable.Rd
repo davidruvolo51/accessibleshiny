@@ -24,6 +24,9 @@ must be entered as a list object.
 \code{style} a list of options to control the appearance of the app
      \code{row_highlighting} a logical value when true will highlight
      odd rows
+     \code{caption_below} a logical argument to set the caption position
+             to below the table. By default, the position is set to
+             above the table (i.e., FALSE).
 \code{options} A list of options to pass on to the render table method
      \code{responsive} A logical arg for turning on/off the rendering of
             additional elements for a responsive tables (default = TRUE)

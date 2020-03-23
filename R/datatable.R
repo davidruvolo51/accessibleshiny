@@ -23,6 +23,9 @@
 #' \code{style} a list of options to control the appearance of the app
 #'      \code{row_highlighting} a logical value when true will highlight
 #'      odd rows
+#'      \code{caption_below} a logical argument to set the caption position
+#'              to below the table. By default, the position is set to
+#'              above the table (i.e., FALSE).
 #' \code{options} A list of options to pass on to the render table method
 #'      \code{responsive} A logical arg for turning on/off the rendering of
 #'             additional elements for a responsive tables (default = TRUE)
@@ -56,6 +59,9 @@
 #' @author dcruvolo
 datatable <- function(data, caption = NULL, ...) {
 
+    # validate if data.frame
+    stopifnot(!is.null(data))
+
     # validate input args
     props <- datatable_helpers$validate_props(...)
 
@@ -71,7 +77,9 @@ datatable <- function(data, caption = NULL, ...) {
     # append caption
     if (length(caption) > 0) {
         tbl$children <- list(
-            tags$caption(caption),
+            tags$caption(
+                as.character(caption)
+            ),
             tbl$children
         )
     }
