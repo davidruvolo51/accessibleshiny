@@ -20,6 +20,7 @@ $dark: #2b2b2b;
 		font-weight: 600;
 	}
 
+	// thead styles: normal
 	thead {
 		tr {
 			th {
@@ -33,6 +34,7 @@ $dark: #2b2b2b;
 		}
 	}
 
+	// tbody styles: normal (hide inline column name)
 	tbody {
 		tr {
 			th,
@@ -47,6 +49,7 @@ $dark: #2b2b2b;
 					width: 1px;
 					height: 1px;
 					overflow: hidden;
+					white-space: nowrap;
 				}
 			}
 		}
@@ -61,6 +64,7 @@ $dark: #2b2b2b;
 		}
 	}
 
+	// classes for caption
 	&.caption-side-top {
 		caption {
 			caption-side: top;
@@ -75,6 +79,8 @@ $dark: #2b2b2b;
 
 @media (max-width: 892px) {
 	.datatable {
+
+		// smaller devices: visually hide table header
 		thead {
 			position: absolute;
 			clip: rect(1px 1px 1px 1px);
@@ -82,7 +88,10 @@ $dark: #2b2b2b;
 			width: 1px;
 			height: 1px;
 			overflow: hidden;
+			white-space: nowrap;
 		}
+
+		// smaller devices: show inline column names
 		tbody {
 			tr {
 				th,
@@ -90,7 +99,7 @@ $dark: #2b2b2b;
 					display: flex;
 					justify-content: flex-start;
 					align-items: center;
-					padding: 8px 0;
+					padding: 4px 0;
 					padding-left: 12px;
 
 					.hidden-colname {
