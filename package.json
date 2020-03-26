@@ -9,6 +9,7 @@
 		"clean": "rm -rf inst/assets/css/accessibleshiny.min.css",
 		"build": "parcel build inst/assets/css/index.scss -d inst/assets/css -o inst/assets/css/accessibleshiny.min.css --no-cache --no-source-maps",
 		"document": "Rscript -e \"devtools::document()\"",
+		"uninstall": "Rscript -e \"devtools::uninstall()\"",
 		"package": "Rscript -e \"devtools::build()\" && Rscript -e \"devtools::install()\""
 	},
 	"dependencies": {},
