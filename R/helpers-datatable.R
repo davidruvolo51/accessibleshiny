@@ -212,8 +212,7 @@ datatable_helpers.validate_props <- function(...) {
     options <- list(
         responsive = TRUE,
         row_headers = FALSE,
-        html_escape = TRUE,
-        caption_position = "top"
+        html_escape = TRUE
     )
 
     # evaluate args only if args exist
