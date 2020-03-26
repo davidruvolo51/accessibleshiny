@@ -2,13 +2,17 @@
 #' FILE: tests-datatable.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-01-28
-#' MODIFIED: 2020-01-28
+#' MODIFIED: 2020-03-26
 #' PURPOSE: unit testing for datatable() function
 #' STATUS: working; on.going
 #' PACKAGES: accessibleshiny; testthat
 #' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
-context("datatable")
+options(stringsAsFactors = FALSE)
+
+# pkgs
+library(testthat)
+library(accessibleshiny)
 
 # ~ 1 ~
 # evaluate table component
@@ -18,7 +22,7 @@ context("datatable")
 # evaluate the opening <table> element
 test_that("Returned Element is an html table", {
     tbl <- datatable(data = iris[1:2, ])
-    elem <- as.character(tbl[[2]]$name)
+    elem <- as.character(tbl$name)
     expect_identical("table", elem)
 })
 
@@ -26,9 +30,9 @@ test_that("Returned Element is an html table", {
 #' table : class attribute
 # evaluate default classnames applied to the table element
 test_that("Output has default css classes", {
-    ref_css <- "datatable row-highlighting test"
-    tbl <- datatable(data = iris[1:2, ], css = "test")
-    elem_css <- as.character(tbl[[2]]$attribs$class)
+    ref_css <- "datatable row-highlighting caption-side-top test"
+    tbl <- datatable(data = iris[1:2, ], class = "test")
+    elem_css <- as.character(tbl$attribs$class)
     expect_equal(ref_css, elem_css)
 })
 
@@ -37,7 +41,7 @@ test_that("Output has default css classes", {
 # table id is present
 test_that("Table is rendered with a unique id", {
     tbl <- datatable(data = iris[1:2, ], id = "test")
-    tbl_id <- tbl[[2]]$attribs$id
+    tbl_id <- tbl$attribs$id
     expect_identical("test", tbl_id)
 })
 
@@ -46,7 +50,7 @@ test_that("Table is rendered with a unique id", {
 #' table has header (thead) and body (tbody) element
 test_that("Table returns header and body", {
     tbl <- datatable(data = iris[1:2, ])
-    tbl_elems <- length(tbl[[2]]$children)
+    tbl_elems <- length(tbl$children)
     expect_equal(2, tbl_elems)
 })
 
@@ -63,7 +67,7 @@ test_that("Table returns header and body", {
 #' we can extract the first element van the header
 test_that("Role for table header row(s) has been defined", {
     tbl <- datatable(data = iris[1:2, ])
-    tbl_role <- as.character(tbl[[2]]$children[[1]]$children[[1]]$attribs)
+    tbl_role <- as.character(tbl$children[[1]]$children[[1]]$attribs$role)
     expect_identical("row", tbl_role)
 })
 
@@ -79,7 +83,7 @@ test_that("Role for table header row(s) has been defined", {
 test_that("All table headers have scope defined", {
     df <- iris[1:2, ]
     tbl <- datatable(data = df)
-    thead <- tbl[[2]]$children[[1]]$children[[1]]$children[[1]]
+    thead <- tbl$children[[1]]$children[[1]]$children[[1]]
     scopes <- list()
     lapply(seq_len(length(thead)), function(x) {
         scopes[[x]] <<- thead[[x]]$attribs
@@ -101,7 +105,7 @@ test_that("All table headers have scope defined", {
 test_that("All table body rows have role defined", {
     df <- iris[1:2, ]
     tbl <- datatable(data = df)
-    tr <- tbl[[2]]$children[[2]]$children[[1]]
+    tr <- tbl$children[[2]]$children[[1]]
     roles <- list()
     lapply(seq_len(length(tr)), function(x) {
         roles[[x]] <<- tr[[x]]$attribs
@@ -121,10 +125,10 @@ test_that("All table body rows have role defined", {
 test_that("Confirm markup for responsive tables", {
     df <- iris[1:2, ]
     tbl <- datatable(data = df, options = list(responsive = TRUE))
-    tr <- tbl[[2]]$children[[2]]$children[[1]]
+    tr <- tbl$children[[2]]$children[[1]]
     spans <- c()
     lapply(seq_len(length(tr)), function(row) {
-        cells <- tr[[row]]$children[[1]]
+        cells <- tr[[row]]$children[[1]][[1]]
         spans_in_curr_row <- list()
         lapply(seq_len(length(cells)), function(col) {
             spans_in_curr_row[[col]] <<- cells[[col]]$children[[1]]$name
@@ -167,4 +171,69 @@ test_that("Inline elements are not rendered when responsive = FALSE", {
         spans[[row]] <<- sum(spans_in_curr_row)
     })
     expect_equal(0, sum(spans))
+})
+
+
+#'//////////////////////////////////////
+
+#' ~ 4 ~
+#' Evaluate cell level markup
+
+
+#' ~ a ~
+#' Do cells have the attribute `role = "gridcell"`?
+#' In this test, look make sure all cells have the attribute
+#' `role` and the value is "gridcell". Make sure the lengths
+#' of the attributes and cells match
+test_that("Table body cells have role attribute defined as 'gridcell'", {
+    df <- iris[1, ]
+    tbl <- datatable(data = df)
+    tbody <- tbl$children[[2]]
+    cells <- tbody$children[[1]][[1]]$children[[1]][[1]]
+    roles <- 0
+    lapply(seq_len(length(cells)), function(cell) {
+        html <- cells[[cell]]
+        if (html$attribs$role == "gridcell") {
+            roles <<- roles + 1
+        }
+    })
+    expect_equal(NCOL(df), roles)
+})
+
+
+#'//////////////////////////////////////
+
+#' ~ 5 ~
+#' test caption
+#' Using the input argument `caption` and option `caption_below`,
+#' evaluate the rendered caption. If the input argument is TRUE,
+#' the caption should be positioned below the table. However,
+#' the positioning is handled by adding or removing as css class
+#' that modifies the `caption-side` property. If the argument is
+#' TRUE, then the class `caption-side-bottom` is added to the
+#' <table> element. Therefore, this test will evaluate the
+#' returned css classes.
+
+#' ~ a ~
+#' Make sure the caption will be positioned before the table (default)
+test_that("Caption is positioned before the table", {
+    df <- iris[1, ]
+    tbl <- datatable(data = df, caption = "Test Caption")
+    expected_class <- "datatable row-highlighting caption-side-top"
+    actual_class <- as.character(tbl$attribs$class)
+    expect_equal(expected_class, actual_class)
+})
+
+#' ~ b ~
+#' Make sure the caption will be positioned after the table
+test_that("Caption is positioned after the table", {
+    df <- iris[1, ]
+    tbl <- datatable(
+        data = df,
+        caption = "Test Caption",
+        style = list(caption_below = TRUE)
+    )
+    expected_class <- "datatable row-highlighting caption-side-bottom"
+    actual_class <- as.character(tbl$attribs$class)
+    expect_equal(expected_class, actual_class)
 })
