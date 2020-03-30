@@ -1,0 +1,41 @@
+
+// parent element
+.progress-bar-parent {
+    position: relative;
+}
+
+// progress bar
+.progress-bar-container {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    
+    // additional container classes
+    // fixed position
+    &.progress-bar-fixed {
+        position: fixed;
+        z-index: 100;
+    }
+    
+    // position: fixed + top
+    &.position-top {
+        top: 0;
+        left: 0;
+    }
+
+    // position: fixed + bottom
+    .position-bottom {
+        bottom: 0;
+        left: 0;
+    }
+
+    /////////////////////////////////////////////
+    // progress bar
+    .progress-bar {
+        height: 13px;
+        background-color: #bdbdbd;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        transition: all 1s ease-in-out;
+    }
+}
