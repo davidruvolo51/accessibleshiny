@@ -3,10 +3,10 @@
 #' Create a new R6 progress bar.
 #' @return Create a new R6 progress bar
 #' @examples
-#' bar <- pbars::progress$new(min = 0, max = 12)
+#' appProgress <- pbars::progress$new(min = 0, max = 12)
 #' ui <- tagList(
 #'      ...
-#'      bar$ui(
+#'      appProgress$bar(
 #'          id = "complete",
 #'          fixed = TRUE,
 #'          position = "bottom",
@@ -20,39 +20,51 @@
 #'      )
 #' )
 #' server <- function(input, output, session) {
-#'      bar$init()
+#'      appProgress$init()
 #'      observeEvent(input$nextPage, {
-#'          bar$increase()
+#'          appProgress$increase()
 #'      })
 #' }
 #' shinyApp(ui, server)
 #' @export
 progress <- R6Class(
     classname = "shiny-progress-bar",
-
-    # public
     public = list(
 
-        # vars
         elem = NULL,
         start = NULL,
-        now = NULL,
+        current = NULL,
         min = NULL,
         max = NULL,
 
-        # init function
-        initialize = function(now = 0, min = 0, max = 7) {
-            stopifnot(is.numeric(now))
+#' \code{new}
+#' Create a new progress bar
+#' @return Create a new progress bar
+#' @param start the starting value for the progress bar
+#' @param min the minimum value for the progress bar (default is 0)
+#' @param max the maxium value for the progress bar (default is 7)
+#' @examples
+#' b <- b$new(start = 1, min = 1, max = 10)
+#' @keywords progress, new, initialize
+#' @export
+        initialize = function(start = 0, min = 0, max = 7) {
+            stopifnot(is.numeric(start))
             stopifnot(is.numeric(min))
             stopifnot(is.numeric(max))
-            self$start <- now
-            self$now <- now
+            self$start <- start
+            self$current <- start
             self$min <- min
             self$max <- max
         },
 
-        # component
-        ui = function(id = NULL, fixed = FALSE, position = "top", fill = NULL) {
+#' \code{bar}
+#' Generate a new progress bar in the shiny UI
+#' @param id the id of the progress bar
+#' @param fixed logical value to set of the positioning of the progress bar
+#' @param position if \code{fixed = TRUE}, the bar can be placed at the
+#'                top or bottom of the window (default is top)
+#' @param fill a color of the progress bar (default is #bdbdbd)
+        bar = function(id = NULL, fixed = FALSE, position = "top", fill = NULL) {
             stopifnot(!is.null(id))
             stopifnot(is.logical(fixed))
 
@@ -75,6 +87,7 @@ progress <- R6Class(
                 }
             }
 
+            # generate html markup using tags from htmltools
             b <- tags$div(
                 id = paste0(id, "-container"),
                 class = css,
@@ -83,7 +96,7 @@ progress <- R6Class(
                     class = "progress-bar",
                     style = style,
                     role = "progressbar",
-                    `aria-valuenow` = self$now,
+                    `aria-valuecurrent` = self$current,
                     `aria-valuemin` = self$min,
                     `aria-valuemax` = self$max,
                     `aria-valuetext` = self$text
@@ -94,13 +107,28 @@ progress <- R6Class(
             return(b)
         },
 
-        # start function
+#' \code{init}
+#' Initializes Progress Bar server-side
+#' @return Initializes Progress Bar server-side
+#' @param id the id of the progress bar
+#' @examples
+#' b <- progress$new()
+#' b$init()
+        # init progress bar server-side
         init = function(id = self$elem) {
             private$init_parent_element(id)
-            private$update_progress_bar(id, self$now, self$max)
+            private$update_progress_bar(id, self$current, self$max)
         },
-
-        # increment function
+#' \code{increase}
+#' Increase the internal counter by 1 or another number
+#' @return Increase the internal counter by 1 or another number
+#' @param id the id of the progress bar
+#' @param by the number to increases by (default 1)
+#' @examples
+#' b <- progress$new()
+#' b$increase()
+#' @keywords progress, increase
+#' @export
         increase = function(id = self$elem, by = 1) {
 
             # validate
@@ -109,24 +137,31 @@ progress <- R6Class(
             stopifnot(by > 0)
 
             # check to see if 'by' is out of bounds (only run if inbounds)
-            if (!((by + self$now) > self$max)) {
-                self$now <- self$now + by
-
-                # update
+            if (!((by + self$current) > self$max)) {
+                self$current <- self$current + by
                 private$update_progress_bar(
                     id = id,
-                    now = self$now,
+                    current = self$current,
                     max = self$max
                 )
             }
 
-            # when 'by' is out of bounds, reassign 'now' as 'max'
-            if ((by + self$now) > self$max) {
-                self$now <- self$max
+            # when 'by' is out of bounds, reassign 'current' as 'max'
+            if ((by + self$current) > self$max) {
+                self$current <- self$max
             }
         },
 
-        # descrease function
+#' \code{descrease}
+#' Decreases the internal counter by 1 or another number
+#' @return Decreases the internal counter by 1 or another number
+#' @param id the id of the progress bar
+#' @param by the number to decreases by (default 1)
+#' @examples
+#' b <- progress$new()
+#' b$decrease()
+#' @keywords progress, decrease
+#' @export
         decrease = function(id = self$elem, by = 1) {
 
             # validate
@@ -135,24 +170,33 @@ progress <- R6Class(
             stopifnot(by > 0)
 
             # check to see if 'by' is out of bounds (only run if inbounds)
-            if (!((self$now - by) < self$min)) {
-                self$now <- self$now - by
+            if (!((self$current - by) < self$min)) {
+                self$current <- self$current - by
 
                 # update
                 private$update_progress_bar(
                     id = id,
-                    now = self$now,
+                    current = self$current,
                     max = self$max
                 )
             }
 
-            # when 'by' is out of bounds, reassign 'now' as 'min'
-            if ((self$now - by) < self$min) {
-                self$now <- self$min
+            # when 'by' is out of bounds, reassign 'current' as 'min'
+            if ((self$current - by) < self$min) {
+                self$current <- self$min
             }
         },
 
-        # reset function
+#' \code{reset}
+#' Reset a progress bar to start or another value
+#' @return Reset a progress bar to start or another value
+#' @param id the id of the progress bar
+#' @param to the value to reset the bar to (defaults to min value or 0)
+#' @examples
+#' b <- progress$new(min = 1, max = 8)
+#' b$reset()
+#' @keywords progress, reset
+#' @export
         reset = function(id = self$elem, to = self$start) {
 
             # validate
@@ -165,26 +209,34 @@ progress <- R6Class(
             } else if (to > self$max) {
                 stop("value 'to' is greater than the max (", self$max, ")")
             } else {
-                # reset
-                self$now <- to
-                # update
+                # reset and update
+                self$current <- to
                 private$update_progress_bar(
                     id = id,
-                    now = self$now,
+                    current = self$current,
                     max = self$max
                 )
             }
         },
 
-        # print function
+#' \code{print}
+#' Print internal values
+#' @return Print internal values
+#' @examples
+#' b <- progress$new()
+#' b$print()
+#' @keywords progress, print
+#' @export
         print = function() {
-            print(
+            d <- structure(
                 list(
-                    now = self$now,
+                    current = self$current,
                     min = self$min,
                     max = self$max
-                )
+                ),
+                class = "progress-bar-data"
             )
+            print(d)
         }
     ),
 
@@ -192,17 +244,19 @@ progress <- R6Class(
     private = list(
 
         # init ui function
+        # getDefaultReactiveDomain from shiny
         init_parent_element = function(id) {
-            session <- shiny::getDefaultReactiveDomain()
+            session <- getDefaultReactiveDomain()
             session$sendCustomMessage("init_parent_element", id)
         },
 
         # send data function
-        update_progress_bar = function(id, now, max) {
-            session <- shiny::getDefaultReactiveDomain()
+        # getDefaultReactiveDomain from shiny
+        update_progress_bar = function(id, current, max) {
+            session <- getDefaultReactiveDomain()
             session$sendCustomMessage(
                 "update_progress_bar",
-                list(id, now, max)
+                list(id, current, max)
             )
         }
     )
