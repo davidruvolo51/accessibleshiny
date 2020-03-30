@@ -1,6 +1,8 @@
 export("datatable")
+export("progress")
 export("use_accessibleshiny")
 importFrom(purrr, map, pmap, imap)
 importFrom(rlang, list2)
 importFrom(htmltools, tags, HTML, htmlEscape, tagList, htmlDependency)
 importFrom(shiny, addResourcePath, removeResourcePath)
+importFrom(R6, R6Class)
