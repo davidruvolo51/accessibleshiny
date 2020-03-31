@@ -9,7 +9,7 @@
 		"clean": "rm -rf inst/assets/css/accessibleshiny.min.css",
 		"css": "parcel build inst/assets/css/index.scss -d inst/assets/css -o inst/assets/css/accessibleshiny.min.css --no-cache --no-source-maps",
 		"js": "babel inst/assets/js --out-file inst/assets/js/accessibleshiny.min.js --presets minify --no-comments",
-		"build" : "yarn css && yarn js",
+		"build": "yarn css && yarn js",
 		"document": "Rscript -e \"devtools::document()\"",
 		"uninstall": "Rscript -e \"devtools::uninstall()\"",
 		"test": "Rscript -e \"testthat::test_dir('tests/testthat/')\"",
@@ -49,7 +49,11 @@
 		"shiny"
 	],
 	"devDependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.9.0",
+		"@babel/preset-env": "^7.9.0",
 		"autoprefixer": "^9.7.4",
+		"babel-preset-minify": "^0.5.1",
 		"cssnano": "^4.1.10",
 		"postcss-modules": "^1.5.0",
 		"sass": "^1.26.3"

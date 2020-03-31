@@ -13,7 +13,7 @@ use_accessibleshiny <- function() {
         src = "assets",
         package = "accessibleshiny",
         stylesheet = "css/accessibleshiny.min.css",
-        script = "js/asscessibleshiny.min.js",
+        script = "js/accessibleshiny.min.js",
         all_files = FALSE
     )
 }

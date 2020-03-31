@@ -31,22 +31,18 @@ progress <- R6Class(
     classname = "shiny-progress-bar",
     public = list(
 
+        #' @section Internal Values
+        #' Internal values that can be used
+        #' to control progress bars
         elem = NULL,
         start = NULL,
         current = NULL,
         min = NULL,
         max = NULL,
 
-#' \code{new}
-#' Create a new progress bar
-#' @return Create a new progress bar
-#' @param start the starting value for the progress bar
-#' @param min the minimum value for the progress bar (default is 0)
-#' @param max the maxium value for the progress bar (default is 7)
-#' @examples
-#' b <- b$new(start = 1, min = 1, max = 10)
-#' @keywords progress, new, initialize
-#' @export
+        #' @param start the starting value for the progress bar
+        #' @param min the minimum value for the progress bar (default is 0)
+        #' @param max the maxium value for the progress bar (default is 7)
         initialize = function(start = 0, min = 0, max = 7) {
             stopifnot(is.numeric(start))
             stopifnot(is.numeric(min))
@@ -57,24 +53,18 @@ progress <- R6Class(
             self$max <- max
         },
 
-#' \code{bar}
-#' Generate a new progress bar in the shiny UI
-#' @param id the id of the progress bar
-#' @param fixed logical value to set of the positioning of the progress bar
-#' @param position if \code{fixed = TRUE}, the bar can be placed at the
-#'                top or bottom of the window (default is top)
-#' @param fill a color of the progress bar (default is #bdbdbd)
+
+        #' @param id the id of the progress bar
+        #' @param fixed logical value to set of the positioning of the pbar
+        #' @param position if \code{fixed = TRUE}, the bar can be placed at the
+        #'                top or bottom of the window (default is top)
+        #' @param fill a color of the progress bar (default is #bdbdbd)
         bar = function(id = NULL, fixed = FALSE, position = "top", fill = NULL) {
             stopifnot(!is.null(id))
             stopifnot(is.logical(fixed))
 
             # set id to state
             self$elem <- id
-
-            # add color
-            if (length(fill) > 0) {
-                style <- paste0("background-color: ", fill, ";")
-            }
 
             # process fixed and position
             css <- "progress-bar-container"
@@ -94,7 +84,6 @@ progress <- R6Class(
                 tags$div(
                     id = id,
                     class = "progress-bar",
-                    style = style,
                     role = "progressbar",
                     `aria-valuecurrent` = self$current,
                     `aria-valuemin` = self$min,
@@ -103,35 +92,28 @@ progress <- R6Class(
                 )
             )
 
+            # add color
+            if (length(fill) > 0) {
+                b$attribs$style <- paste0("background-color: ", fill, ";")
+            }
+
             # return
             return(b)
         },
 
-#' \code{init}
-#' Initializes Progress Bar server-side
-#' @return Initializes Progress Bar server-side
-#' @param id the id of the progress bar
-#' @examples
-#' b <- progress$new()
-#' b$init()
-        # init progress bar server-side
+        #' \code{init}
+        #' Initializes Progress Bar server-side
+        #' @param id the id of the progress bar
         init = function(id = self$elem) {
             private$init_parent_element(id)
             private$update_progress_bar(id, self$current, self$max)
         },
-#' \code{increase}
-#' Increase the internal counter by 1 or another number
-#' @return Increase the internal counter by 1 or another number
-#' @param id the id of the progress bar
-#' @param by the number to increases by (default 1)
-#' @examples
-#' b <- progress$new()
-#' b$increase()
-#' @keywords progress, increase
-#' @export
-        increase = function(id = self$elem, by = 1) {
 
-            # validate
+        #' \code{increase}
+        #' Increase the internal counter by 1 or another number
+        #' @param id the id of the progress bar
+        #' @param by the number to increases by (default 1)
+        increase = function(id = self$elem, by = 1) {
             stopifnot(!is.null(id))
             stopifnot(is.numeric(by))
             stopifnot(by > 0)
@@ -152,19 +134,11 @@ progress <- R6Class(
             }
         },
 
-#' \code{descrease}
-#' Decreases the internal counter by 1 or another number
-#' @return Decreases the internal counter by 1 or another number
-#' @param id the id of the progress bar
-#' @param by the number to decreases by (default 1)
-#' @examples
-#' b <- progress$new()
-#' b$decrease()
-#' @keywords progress, decrease
-#' @export
+        #' \code{descrease}
+        #' Decreases the internal counter by 1 or another number
+        #' @param id the id of the progress bar
+        #' @param by the number to decreases by (default 1)
         decrease = function(id = self$elem, by = 1) {
-
-            # validate
             stopifnot(!is.null(id))
             stopifnot(is.numeric(by))
             stopifnot(by > 0)
@@ -172,8 +146,6 @@ progress <- R6Class(
             # check to see if 'by' is out of bounds (only run if inbounds)
             if (!((self$current - by) < self$min)) {
                 self$current <- self$current - by
-
-                # update
                 private$update_progress_bar(
                     id = id,
                     current = self$current,
@@ -187,19 +159,11 @@ progress <- R6Class(
             }
         },
 
-#' \code{reset}
-#' Reset a progress bar to start or another value
-#' @return Reset a progress bar to start or another value
-#' @param id the id of the progress bar
-#' @param to the value to reset the bar to (defaults to min value or 0)
-#' @examples
-#' b <- progress$new(min = 1, max = 8)
-#' b$reset()
-#' @keywords progress, reset
-#' @export
+        #' \code{reset}
+        #' Reset a progress bar to start or another value
+        #' @param id the id of the progress bar
+        #' @param to the value to reset the bar to (defaults to min value or 0)
         reset = function(id = self$elem, to = self$start) {
-
-            # validate
             stopifnot(!is.null(id))
             stopifnot(is.numeric(to))
 
@@ -219,14 +183,8 @@ progress <- R6Class(
             }
         },
 
-#' \code{print}
-#' Print internal values
-#' @return Print internal values
-#' @examples
-#' b <- progress$new()
-#' b$print()
-#' @keywords progress, print
-#' @export
+        #' \code{print}
+        #' Print internal values
         print = function() {
             d <- structure(
                 list(
