@@ -63,12 +63,12 @@ datatable <- function(data, caption = NULL, ...) {
     stopifnot(!is.null(data))
 
     # validate input args
-    props <- datatable_helpers.validate_props(...)
+    props <- datatable_helpers$validate_props(...)
 
     # generate table markup
     tbl <- tags$table(
-        datatable_helpers.thead(data, options = props$options),
-        datatable_helpers.tbody(data, options = props$options)
+        datatable_helpers$thead(data, options = props$options),
+        datatable_helpers$tbody(data, options = props$options)
     )
 
     # update table attributes
