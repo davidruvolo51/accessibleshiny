@@ -13,26 +13,41 @@
 #' @param ... Other list object used to control the component. See the next
 #'      section and the wiki for more information.
 #'
-#' Using \code{...}, you can pass additional arguments that allow you to
-#' control the markup, css attributes, etc. The available options are
-#' \code{id}, \code{class}, \code{style}, and \code{options}. The later two
-#' must be entered as a list object.
-#' \code{id} a unique id to pass to the \code{<table>} markup
-#' \code{class} a string containing one or more css classnames to add to the
-#'      \code{<table class="">} attribute.
-#' \code{style} a list of options to control the appearance of the app
-#'      \code{row_highlighting} a logical value when true will highlight
-#'      odd rows
-#'      \code{caption_below} a logical argument to set the caption position
-#'              to below the table. By default, the position is set to
-#'              above the table (i.e., FALSE).
-#' \code{options} A list of options to pass on to the render table method
-#'      \code{responsive} A logical arg for turning on/off the rendering of
-#'             additional elements for a responsive tables (default = TRUE)
-#'      \code{row_headers} a logical argument when true sets the first cell
-#'             of every row as a header element (default = FALSE).
-#'      \code{html_escape} A logical argument when true will render cell values
-#'              as plain text or as html elements (default = TRUE; i.e., escaped)
+#' @section Optional Arguments
+#'
+#' There are a number of optional arguments that are availble. These arguments
+#' will allow you to control the html markup or styling of the accordion
+#' element. These arguments are listed below.
+#'
+#' \itemize{
+#'      \item \code{id}: a unique id to pass to the \code{<table>} markup
+#'      \item \code{class}: a string containing one or more css classnames
+#'          to add to the \code{<table class="">} attribute.
+#'      \item \code{style}: the style attributes can be used to control the
+#'                  appearance of the element. Arguments must be
+#'                 entered as a list: \code{style = list(...)}.
+#'      \itemize{
+#'          \item \code{row_highlighting}: a logical value to enable or
+#'              disable row highighting (default is TRUE)
+#'          \item \code{caption_below}: a logical argument that positions
+#'              the caption below the table (i.e., after). By default, the
+#'              caption is placed before the table (i.e., FALSE)
+#'      }
+#'      \item \code{options}: a list of arguments used to control the
+#'              structure of the accordion element. Arguments must be added as
+#'              a list: \code{options = list(...)}
+#'      \itemize{
+#'          \item \code{responsive}: A logical argument for enabling or
+#'              disabling the generation of the html markup that handles
+#'              the responsiveness of the datatable. Default is TRUE
+#'          \item \code{row_headers}: A logical argument that renders the first
+#'              cell of every row as a row header element (i.e. \code{<th>};
+#'              default is FALSE)
+#'          \item \code{html_escape}: A logical argument to render cell content
+#'              as text or as html elements. The default (TRUE) will render
+#'              content as text. Use FALSE to escape.
+#'      }
+#' }
 #'
 #' @examples
 #' datatable(data = iris)
