@@ -27,7 +27,7 @@ ui <- tagList(
      )
 )
 server <- function(input, output, session) {
-     appProgress$init()
+     appProgress$listen()
      observeEvent(input$nextPage, {
          appProgress$increase()
      })
@@ -39,7 +39,7 @@ shinyApp(ui, server)
 \itemize{
 \item \href{#method-new}{\code{progress$new()}}
 \item \href{#method-bar}{\code{progress$bar()}}
-\item \href{#method-init}{\code{progress$init()}}
+\item \href{#method-listen}{\code{progress$listen()}}
 \item \href{#method-increase}{\code{progress$increase()}}
 \item \href{#method-decrease}{\code{progress$decrease()}}
 \item \href{#method-reset}{\code{progress$reset()}}
@@ -49,6 +49,7 @@ shinyApp(ui, server)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{progress$new(start = 0, min = 0, max = 7)}\if{html}{\out{</div>}}
@@ -61,16 +62,25 @@ shinyApp(ui, server)
 
 \item{\code{min}}{the minimum value for the progress bar (default is 0)}
 
-\item{\code{max}}{the maxium value for the progress bar (default is 7)}
+\item{\code{max}}{the maxium value for the progress bar (default is 7)
+\code{bar}
+Create a new progress bar in the shiny UI}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-bar"></a>}}
+\if{latex}{\out{\hypertarget{method-bar}{}}}
 \subsection{Method \code{bar()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$bar(id = NULL, fixed = FALSE, position = "top", fill = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{progress$bar(
+  id = NULL,
+  fill = NULL,
+  fixed = FALSE,
+  position = "top",
+  yOffset = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -78,23 +88,28 @@ shinyApp(ui, server)
 \describe{
 \item{\code{id}}{the id of the progress bar}
 
+\item{\code{fill}}{a color of the progress bar (default is #bdbdbd)}
+
 \item{\code{fixed}}{logical value to set of the positioning of the pbar}
 
 \item{\code{position}}{if \code{fixed = TRUE}, the bar can be placed at the
 top or bottom of the window (default is top)}
 
-\item{\code{fill}}{a color of the progress bar (default is #bdbdbd)
-\code{init}
+\item{\code{yOffset}}{a css value to offset the y position of the progress
+     bar. This is useful if you want the progress bar to display
+     directly below a navigation bar or another html element
+\code{listen}
 Initializes Progress Bar server-side}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-init"></a>}}
-\subsection{Method \code{init()}}{
+\if{html}{\out{<a id="method-listen"></a>}}
+\if{latex}{\out{\hypertarget{method-listen}{}}}
+\subsection{Method \code{listen()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$init(id = self$elem)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{progress$listen(id = self$elem)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -109,6 +124,7 @@ Increase the internal counter by 1 or another number}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-increase"></a>}}
+\if{latex}{\out{\hypertarget{method-increase}{}}}
 \subsection{Method \code{increase()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{progress$increase(id = self$elem, by = 1)}\if{html}{\out{</div>}}
@@ -128,6 +144,7 @@ Decreases the internal counter by 1 or another number}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-decrease"></a>}}
+\if{latex}{\out{\hypertarget{method-decrease}{}}}
 \subsection{Method \code{decrease()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{progress$decrease(id = self$elem, by = 1)}\if{html}{\out{</div>}}
@@ -147,6 +164,7 @@ Reset a progress bar to start or another value}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reset"></a>}}
+\if{latex}{\out{\hypertarget{method-reset}{}}}
 \subsection{Method \code{reset()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{progress$reset(id = self$elem, to = self$start)}\if{html}{\out{</div>}}
@@ -166,14 +184,19 @@ Print internal values}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{progress$print()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Print internal values to the console
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
