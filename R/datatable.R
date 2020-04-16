@@ -6,14 +6,14 @@
 #' can also be used as an html table generator and the output can be
 #' written to file. This function takes the following arguments.
 #'
-#' @section Arugments
+#' @section Arugments:
 #'
 #' @param data A data object used to render the table (required)
 #' @param caption  A short description (1-2 lines) for the table (optional)
 #' @param ... Other list object used to control the component. See the next
 #'      section and the wiki for more information.
 #'
-#' @section Optional Arguments
+#' @section Optional Arguments:
 #'
 #' There are a number of optional arguments that are availble. These arguments
 #' will allow you to control the html markup or styling of the accordion

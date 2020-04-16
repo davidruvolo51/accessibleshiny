@@ -8,13 +8,13 @@
 #' title, question, etc.) and an html element (or \code{tagList} containing)
 #' two or more html elements.
 #'
-#' @section Arguments
+#' @section Arguments :
 #'
 #' @param title a text string containing a title for the collapsible section
 #' @param html an html element or a list of html elements
 #' @param ... other options to control the markup and style of the accordion
 #'
-#' @section Optional Arguments
+#' @section Optional Arguments :
 #'
 #' There are a number of optional arguments that are availble. These arguments
 #' will allow you to control the html markup or styling of the accordion

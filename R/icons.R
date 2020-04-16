@@ -1,12 +1,17 @@
-#' \code{icons}
+#' SVG Icons
+#'
 #' A set of svg icons
+#' @name icons
 #' @return A set of SVG icons
 #' @keywords icons
 #' @export
 icons <- list()
 
+
 #' \code{plus}
 #' A plus sign with a filled background
+#' @name icons$plus
+#' @usage icons$plus()
 #' @return A plus sign with a filled background
 #' @param id a unique ID for the icon
 #' @param class a css classname to assign to the icon
