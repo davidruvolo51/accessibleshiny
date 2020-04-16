@@ -1,3 +1,4 @@
+// progress bar handlers
 (function(){
 
     // cacluate data

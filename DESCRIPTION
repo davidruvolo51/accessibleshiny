@@ -23,6 +23,6 @@ Imports:
     purrr (>= 0.3.3),
     rlang (>= 0.4.5),
     R6 (>= 2.4.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: 
     testthat
