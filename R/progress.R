@@ -20,7 +20,7 @@
 #'      )
 #' )
 #' server <- function(input, output, session) {
-#'      appProgress$init()
+#'      appProgress$listen()
 #'      observeEvent(input$nextPage, {
 #'          appProgress$increase()
 #'      })
@@ -31,7 +31,7 @@ progress <- R6Class(
     classname = "shiny-progress-bar",
     public = list(
 
-        #' @section Internal Values
+        #' Internal Values:
         #' Internal values that can be used
         #' to control progress bars
         elem = NULL,
@@ -53,17 +53,19 @@ progress <- R6Class(
             self$max <- max
         },
 
-
+        #' \code{bar}
+        #' Create a new progress bar in the shiny UI
         #' @param id the id of the progress bar
+        #' @param fill a color of the progress bar (default is #bdbdbd)
         #' @param fixed logical value to set of the positioning of the pbar
         #' @param position if \code{fixed = TRUE}, the bar can be placed at the
         #'                top or bottom of the window (default is top)
-        #' @param fill a color of the progress bar (default is #bdbdbd)
-        bar = function(id = NULL, fixed = FALSE, position = "top", fill = NULL) {
+        #' @param yOffset a css value to offset the y position of the progress
+        #'      bar. This is useful if you want the progress bar to display
+        #'      directly below a navigation bar or another html element
+        bar = function(id = NULL, fill = NULL, fixed = FALSE, position = "top", yOffset = NULL) {
             stopifnot(!is.null(id))
             stopifnot(is.logical(fixed))
-
-            # set id to state
             self$elem <- id
 
             # process fixed and position
@@ -92,19 +94,29 @@ progress <- R6Class(
                 )
             )
 
-            # add color
+            # process background color
             if (length(fill) > 0) {
+                validateCssUnit(fill)
                 b$attribs$style <- paste0("background-color: ", fill, ";")
+            }
+
+            # process yOffset
+            if (length(yOffset) > 0) {
+                validateCssUnit(yOffset)
+                b$attribs$style <- paste0(
+                    b$attribs$style,
+                    "top: ", yOffset, ";"
+                )
             }
 
             # return
             return(b)
         },
 
-        #' \code{init}
+        #' \code{listen}
         #' Initializes Progress Bar server-side
         #' @param id the id of the progress bar
-        init = function(id = self$elem) {
+        listen = function(id = self$elem) {
             private$init_parent_element(id)
             private$update_progress_bar(id, self$current, self$max)
         },
@@ -185,6 +197,7 @@ progress <- R6Class(
 
         #' \code{print}
         #' Print internal values
+        #' @return Print internal values to the console
         print = function() {
             d <- structure(
                 list(
