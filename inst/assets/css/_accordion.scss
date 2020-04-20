@@ -53,11 +53,11 @@
                 transform: scale(0.6)rotate(45deg);
 
                 circle {
-                    fill: hsla(9, 100%, 45%, 1);
+                    fill: hsla(9, 100%, 45%, 0.1);
                 }
 
                 path {
-                    fill: hsla(9, 100%, 45%, 0.08);
+                    fill: hsla(9, 100%, 45%, 1);
                 }
 
             }

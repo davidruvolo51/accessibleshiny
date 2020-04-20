@@ -1,5 +1,6 @@
 export("datatable")
 export("progress")
+export("accordion")
 export("use_accessibleshiny")
 importFrom(purrr, map, pmap, imap)
 importFrom(rlang, list2)

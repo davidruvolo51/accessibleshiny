@@ -17,9 +17,10 @@ icons <- list()
 #' @param class a css classname to assign to the icon
 #' @param background_fill a background color for the icon (default: #3F454B)
 #' @param icon_color a color for the plus symbol (default: #ffffff)
+#' @param data_group a custom data attribute for use in the accordion function
 #' @keywords icons, plus
 #' @export
-icons$plus <- function(id = NULL, class = NULL, background_fill = "#3F454B", icon_color = "#ffffff") {
+icons$plus <- function(id = NULL, class = NULL, background_fill = "#3F454B", icon_color = "#ffffff", data_group = NULL) {
 
     # build svg element
     svg <- tag(
@@ -62,8 +63,9 @@ icons$plus <- function(id = NULL, class = NULL, background_fill = "#3F454B", ico
         )
     )
 
-    # process svg attributes
+    # process attributes
     if (length(id) > 0) svg$attribs$id <- id
+    if (length(data_group) > 0) svg$attribs$`data-group` <- data_group
     if (length(class) > 0) {
         svg$attribs$class <- paste0(svg$attribs$class, " ", class)
     }

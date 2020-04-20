@@ -119,6 +119,7 @@ accordion_helpers$heading <- function(title, props) {
     # build button
     b <- tags$button(
         id = paste0("accordion-btn-", props$attr$id),
+        class = "accordion-button",
         `data-group` = props$attr$id,
         `aria-controls` = "accordion-panel",
         `aria-expanded` = "false",
@@ -127,7 +128,8 @@ accordion_helpers$heading <- function(title, props) {
             id = paste0("icon-", props$attr$id),
             class = "accordion-icon",
             background_fill = props$style$background_fill,
-            icon_color = props$style$icon_fill
+            icon_color = props$style$icon_fill,
+            data_group = props$attr$id
         )
     )
 
@@ -166,6 +168,31 @@ accordion_helpers$content <- function(html, props) {
         s$attribs$class <- "accordion-section"
     }
     return(s)
+}
+
+# js
+# Define a function that generates the JS script for opening/closing
+# the accordion section
+accordion_helpers$js <- function(id) {
+    js <- paste0(
+        "(function() {",
+        "var acc_btn = document.querySelector(`button[data-group='", id, "'`);",
+        "var acc_svg = document.querySelector(`svg[data-group='", id, "'`);",
+        "var acc_html = document.querySelector(`section[data-group='", id, "'`);",
+        "acc_btn.addEventListener('click', function(event) {",
+        "acc_html.classList.toggle('accordion-hidden');",
+        "acc_svg.classList.toggle('rotated');",
+        "if (acc_btn.getAttribute('aria-expanded', 'value') === 'false') {",
+        "acc_btn.setAttribute('aria-expanded', true);",
+        "acc_html.removeAttribute('hidden');",
+        "} else {",
+        "acc_btn.setAttribute('aria-expanded', 'false');",
+        "acc_html.setAttribute('hidden', '');",
+        "}",
+        "});",
+        "})();"
+    )
+    return(tags$script(type = "text/javascript", js))
 }
 
 # print_id

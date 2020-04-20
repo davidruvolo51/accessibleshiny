@@ -2,11 +2,11 @@
 #' FILE: tests-datatable.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-01-28
-#' MODIFIED: 2020-03-26
+#' MODIFIED: 2020-04-20
 #' PURPOSE: unit testing for datatable() function
 #' STATUS: working; on.going
 #' PACKAGES: accessibleshiny; testthat
-#' COMMENTS: NA
+#' COMMENTS: Run from parent dir using `npm run test`
 #'////////////////////////////////////////////////////////////////////////////
 options(stringsAsFactors = FALSE)
 
@@ -22,27 +22,35 @@ library(accessibleshiny)
 # evaluate the opening <table> element
 test_that("Returned Element is an html table", {
     tbl <- datatable(data = iris[1:2, ])
-    elem <- as.character(tbl$name)
-    expect_identical("table", elem)
+    expect_identical(
+        object = as.character(tbl$name),
+        expected = "table",
+        label = "Returned element is not an html table"
+    )
 })
 
 # ~ b ~
 #' table : class attribute
 # evaluate default classnames applied to the table element
 test_that("Output has default css classes", {
-    ref_css <- "datatable row-highlighting caption-side-top test"
     tbl <- datatable(data = iris[1:2, ], class = "test")
-    elem_css <- as.character(tbl$attribs$class)
-    expect_equal(ref_css, elem_css)
+    expect_equal(
+        object = as.character(tbl$attribs$class),
+        expected = "datatable row-highlighting caption-side-top test",
+        label = "Table does not have expected css classes"
+    )
 })
 
 # ~ c ~
 # table : id attribute
 # table id is present
-test_that("Table is rendered with a unique id", {
+test_that("Table is rendered with a unique ID", {
     tbl <- datatable(data = iris[1:2, ], id = "test")
-    tbl_id <- tbl$attribs$id
-    expect_identical("test", tbl_id)
+    expect_identical(
+        object = tbl$attribs$id,
+        expected = "test",
+        label = "Table does not have a unique ID"
+    )
 })
 
 # ~ d ~
@@ -50,8 +58,11 @@ test_that("Table is rendered with a unique id", {
 #' table has header (thead) and body (tbody) element
 test_that("Table returns header and body", {
     tbl <- datatable(data = iris[1:2, ])
-    tbl_elems <- length(tbl$children)
-    expect_equal(2, tbl_elems)
+    expect_equal(
+        object = length(tbl$children),
+        expected = 2,
+        label = "The table did not have the expected elements: head and body"
+    )
 })
 
 #'////////////////////////////////////////
@@ -68,7 +79,11 @@ test_that("Table returns header and body", {
 test_that("Role for table header row(s) has been defined", {
     tbl <- datatable(data = iris[1:2, ])
     tbl_role <- as.character(tbl$children[[1]]$children[[1]]$attribs$role)
-    expect_identical("row", tbl_role)
+    expect_identical(
+        object = tbl_role,
+        expected = "row",
+        label = "Role attributes in table header have not been defined"
+    )
 })
 
 # ~ b ~
@@ -88,7 +103,11 @@ test_that("All table headers have scope defined", {
     lapply(seq_len(length(thead)), function(x) {
         scopes[[x]] <<- thead[[x]]$attribs
     })
-    expect_equal(NCOL(df), length(scopes))
+    expect_equal(
+        object = length(scopes),
+        expected = NCOL(df),
+        label = "All table headers do not have scopes defined"
+    )
 })
 
 #'////////////////////////////////////////
@@ -110,7 +129,11 @@ test_that("All table body rows have role defined", {
     lapply(seq_len(length(tr)), function(x) {
         roles[[x]] <<- tr[[x]]$attribs
     })
-    expect_equal(NROW(df), length(roles))
+    expect_equal(
+        object = length(roles),
+        expected = NROW(df),
+        label = "All Table rows do not have a role defined"
+    )
 })
 
 # ~ b ~
@@ -137,7 +160,11 @@ test_that("Confirm markup for responsive tables", {
     })
     expected_html_cells <- NROW(df) * NCOL(df)
     actual_html_cells <- sum(spans)
-    expect_equal(expected_html_cells, actual_html_cells)
+    expect_equal(
+        object = actual_html_cells,
+        expected = expected_html_cells,
+        label = "Responsive markup is not properly generated"
+    )
 })
 
 # ~ c ~
@@ -170,7 +197,11 @@ test_that("Inline elements are not rendered when responsive = FALSE", {
         })
         spans[[row]] <<- sum(spans_in_curr_row)
     })
-    expect_equal(0, sum(spans))
+    expect_equal(
+        object= sum(spans),
+        expected = 0,
+        label = "Inline elements were generated despite the FALSE setting"
+    )
 })
 
 
@@ -197,7 +228,11 @@ test_that("Table body cells have role attribute defined as 'gridcell'", {
             roles <<- roles + 1
         }
     })
-    expect_equal(NCOL(df), roles)
+    expect_equal(
+        object = roles,
+        expected = NCOL(df),
+        label = "Table cells do not have a role attribute"
+    )
 })
 
 
@@ -221,7 +256,11 @@ test_that("Caption is positioned before the table", {
     tbl <- datatable(data = df, caption = "Test Caption")
     expected_class <- "datatable row-highlighting caption-side-top"
     actual_class <- as.character(tbl$attribs$class)
-    expect_equal(expected_class, actual_class)
+    expect_equal(
+        object = actual_class,
+        expected = expected_class,
+        label = "Caption is not positioned before the table"
+    )
 })
 
 #' ~ b ~
@@ -235,5 +274,9 @@ test_that("Caption is positioned after the table", {
     )
     expected_class <- "datatable row-highlighting caption-side-bottom"
     actual_class <- as.character(tbl$attribs$class)
-    expect_equal(expected_class, actual_class)
+    expect_equal(
+        object = actual_class,
+        expected = expected_class,
+        label = "Caption is not positioned after the table"
+    )
 })

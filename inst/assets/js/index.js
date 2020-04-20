@@ -1,4 +1,6 @@
 // progress bar handlers
+// define a few functions that updates the progress bar. These functions should
+// calculate the width needed to update based on the relative screen size
 (function(){
 
     // cacluate data

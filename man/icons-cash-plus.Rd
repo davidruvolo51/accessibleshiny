@@ -15,6 +15,8 @@ icons$plus()
 \item{background_fill}{a background color for the icon (default: #3F454B)}
 
 \item{icon_color}{a color for the plus symbol (default: #ffffff)}
+
+\item{data_group}{a custom data attribute for use in the accordion function}
 }
 \value{
 A plus sign with a filled background
