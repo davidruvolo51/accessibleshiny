@@ -1,9 +1,9 @@
 {
 	"name": "accessibleshiny",
-	"version": "0.1.41",
+	"version": "0.1.5",
 	"author": "dcruvolo",
 	"license": "ISC",
-	"description": "library of accessible ui components for shiny",
+	"description": "library of responsive, accessible ui components for shiny",
 	"main": "index.js",
 	"scripts": {
 		"clean": "rm -rf inst/assets/css/accessibleshiny.min.css",
