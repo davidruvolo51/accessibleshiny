@@ -10,8 +10,8 @@ The `[package_name]` package is a collection of UI components for use in shiny a
 Here are some of the components I am working on.
 
 - [x] Responsive Datatables
-- [ ] Progress Bars (e.g., pages complete, scrolling, etc.)
-- [ ] Collapsible Accordian Boxes
+- [x] Progress Bars (i.e., for items complete)
+- [x] Accordions
 - [ ] Radio Input Buttons
 - [ ] Checkbox Buttons
 

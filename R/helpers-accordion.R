@@ -55,12 +55,12 @@ accordion_helpers$validate_props <- function(...) {
 
             # background fill for icon
             if (!is.null(args$style$icon_background)) {
-                style$background_fill <- args$style$background_fill
+                style$background_fill <- args$style$icon_background
             }
 
             # fill for icon symbol
-            if (!is.null(args$style$icon_fill)) {
-                stle$icon_fill <- args$style$icon_fill
+            if (!is.null(args$style$icon_color)) {
+                style$icon_fill <- args$style$icon_color
             }
         }
 
@@ -136,6 +136,7 @@ accordion_helpers$heading <- function(title, props) {
     # process state
     if (props$options$start_open) {
         b$attribs$`aria-expanded` <- "true"
+        b$children[[2]]$attribs$class <- "icon accordion-icon rotated"
     }
 
     # append button to heading
@@ -164,7 +165,7 @@ accordion_helpers$content <- function(html, props) {
     )
     # process open state
     if (props$options$start_open) {
-        s$attribs$hidden <- "false"
+        s$attribs$hidden <- NULL
         s$attribs$class <- "accordion-section"
     }
     return(s)
@@ -187,7 +188,7 @@ accordion_helpers$js <- function(id) {
         "acc_html.removeAttribute('hidden');",
         "} else {",
         "acc_btn.setAttribute('aria-expanded', 'false');",
-        "acc_html.setAttribute('hidden', '');",
+        "acc_html.setAttribute('hidden', 'true');",
         "}",
         "});",
         "})();"
