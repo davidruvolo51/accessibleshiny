@@ -9,10 +9,11 @@
 use_accessibleshiny <- function() {
     htmlDependency(
         name = "datatable",
-        version = "0.1.41",
+        version = "0.1.5",
         src = "assets",
         package = "accessibleshiny",
         stylesheet = "css/accessibleshiny.min.css",
+        script = "js/accessibleshiny.min.js",
         all_files = FALSE
     )
 }

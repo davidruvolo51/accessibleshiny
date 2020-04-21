@@ -1,0 +1,75 @@
+// visually hidden class
+.accordion-hidden {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+// accordion heading styles (includes button)
+.accordion-heading {
+    display: block;
+    margin: 0;
+    padding: 0;
+    
+    .accordion-button {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        border: none;
+        position: relative;
+        background: none;
+        background-color: none;
+        margin: 0;
+        padding: 0;
+        font-size: inherit;
+        font-weight: normal;
+        text-align: left;
+
+        svg {
+            transform: scale(0.6);
+        }
+
+        .accordion-icon {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            margin-top: -12px;
+            right: 6px;
+            transition: all 0.3s;
+            
+            circle {
+                fill: #d9e3f2;
+            }
+
+            path {
+                fill: #507dbc;
+            }
+
+            &.rotated {
+                transform: scale(0.6)rotate(45deg);
+
+                circle {
+                    fill: hsla(9, 100%, 45%, 0.1);
+                }
+
+                path {
+                    fill: hsla(9, 100%, 45%, 1);
+                }
+
+            }
+        }
+    }
+}
+
+// accordion content
+.accordion-content {
+    margin: 0;
+    margin-bottom: 16px;
+    padding: 1em;
+    border-radius: 4px;
+    border: 1px solid #f6f6f6;
+}

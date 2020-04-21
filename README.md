@@ -1,14 +1,19 @@
-> The package is working, but I would wait before implementing into any production application before all underlying methods have been thoroughly tested.
-
 # Accessible Shiny
 
-The accessible shiny package contains a series of accessible ui components for use in shiny applications. This project is in the early days of development and more fun things are on the way! 
+The `accessibleshiny` package is a collection of UI components for use in shiny applications. These components focus on the following:
 
-## Current Features
+1. Good accessiblity practices
+2. Responsive design
 
-- [x] Responsive Datatable
-- ...
+## Features (to do list)
 
+Here are some of the components I am working on.
+
+- [x] Responsive Datatables
+- [x] Progress Bars (i.e., for items complete)
+- [x] Accordions
+- [ ] Radio Input Buttons
+- [ ] Checkbox Buttons
 
 Please refer to the wiki for more information about package development and function reference.
 
@@ -20,7 +25,6 @@ You can install the `accessibleshiny` package using the `devtools` package.
 install.packages("devtools")
 devtools::install_github("davidruvolo51/accessibleshiny")
 ```
-
 
 ## Example
 
