@@ -12,9 +12,9 @@ icons$plus()
 
 \item{class}{a css classname to assign to the icon}
 
-\item{background_fill}{a background color for the icon (default: #3F454B)}
+\item{background_fill}{a background color for the icon (default: #f6f6f6)}
 
-\item{icon_color}{a color for the plus symbol (default: #ffffff)}
+\item{icon_color}{a color for the plus symbol (default: #3f454b)}
 
 \item{data_group}{a custom data attribute for use in the accordion function}
 }
