@@ -11,58 +11,36 @@
 
 // accordion heading styles (includes button)
 .accordion-heading {
-    display: block;
-    margin: 0;
+	display: block;
+	margin: 0;
     padding: 0;
-    
-    .accordion-button {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        border: none;
-        position: relative;
-        background: none;
-        background-color: none;
-        margin: 0;
-        padding: 0;
-        font-size: inherit;
-        font-weight: normal;
-        text-align: left;
+    cursor: pointer;
 
-        svg {
-            transform: scale(0.6);
-        }
+	.accordion-button {
+		display: inline-flex;
+		justify-content: flex-start;
+		align-items: center;
+		border: none;
+		position: relative;
+		background: none;
+		background-color: none;
+		margin: 0;
+		padding: 0;
+		font-size: inherit;
 
-        .accordion-icon {
-            position: relative;
-            margin: 0;
-            padding: 0;
-            margin-top: -12px;
-            right: 6px;
-            transition: all 0.3s;
-            
-            circle {
-                fill: #d9e3f2;
-            }
+		.accordion-icon {
+			position: relative;
+			top: 2px;
+			margin-left: 6px;
+			transform: rotate(0);
+			transform-origin: center center;
+			transition: all 0.3s ease-in-out;
 
-            path {
-                fill: #507dbc;
-            }
-
-            &.rotated {
-                transform: scale(0.6)rotate(45deg);
-
-                circle {
-                    fill: hsla(9, 100%, 45%, 0.1);
-                }
-
-                path {
-                    fill: hsla(9, 100%, 45%, 1);
-                }
-
-            }
-        }
-    }
+			&.rotated {
+				transform: rotate(-45deg);
+			}
+		}
+	}
 }
 
 // accordion content
