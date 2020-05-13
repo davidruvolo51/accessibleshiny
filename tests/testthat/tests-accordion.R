@@ -2,7 +2,7 @@
 #' FILE: tests-accordion.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-04-20
-#' MODIFIED: 2020-04-21
+#' MODIFIED: 2020-05-13
 #' PURPOSE: unit testing for accordion() function
 #' STATUS: working; on.going
 #' PACKAGES: accessibleshiny; testthat; htmltools
@@ -182,9 +182,9 @@ test_that("SVG Icon has user-defined fill color", {
     # extract color attribute from <path> element
     status <- 0
     path <- a[[1]]$children$children[[2]]$children[[2]]
-    if (length(path$attribs$fill) > 0) {
+    if (length(path$attribs$stroke) > 0) {
         status <- status + 1
-        if (path$attribs$fill == "#bde4a7") {
+        if (path$attribs$stroke == "#bde4a7") {
             status <- status + 1
         }
     }
