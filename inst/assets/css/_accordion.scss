@@ -1,20 +1,19 @@
 // visually hidden class
 .accordion-hidden {
-    position: absolute;
-    clip: rect(1px 1px 1px 1px);
-    clip: rect(1px, 1px, 1px, 1px);
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    white-space: nowrap;
+	position: absolute;
+	clip: rect(1px 1px 1px 1px);
+	clip: rect(1px, 1px, 1px, 1px);
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 // accordion heading styles (includes button)
 .accordion-heading {
 	display: block;
 	margin: 0;
-    padding: 0;
-    cursor: pointer;
+	padding: 0;
 
 	.accordion-button {
 		display: inline-flex;
@@ -27,6 +26,7 @@
 		margin: 0;
 		padding: 0;
 		font-size: inherit;
+		cursor: pointer;
 
 		.accordion-icon {
 			position: relative;
@@ -45,9 +45,9 @@
 
 // accordion content
 .accordion-content {
-    margin: 0;
-    margin-bottom: 16px;
-    padding: 1em;
-    border-radius: 4px;
-    border: 1px solid #f6f6f6;
+	margin: 0;
+	margin-bottom: 16px;
+	padding: 1em;
+	border-radius: 4px;
+	border: 1px solid #f6f6f6;
 }

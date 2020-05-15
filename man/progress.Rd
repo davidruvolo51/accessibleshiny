@@ -2,213 +2,154 @@
 % Please edit documentation in R/progress.R
 \name{progress}
 \alias{progress}
-\title{\code{Progress}}
+\title{\code{progress}}
+\usage{
+progress(start = 0, min = 0, max = 7)
+}
 \value{
-Create a new R6 progress bar
+Create a new progress bar
 }
 \description{
-Create a new R6 progress bar.
+\code{progress}
+}
+\details{
+# Progress Bars
+
+Create a new progress bar in your shiny app. This progress bar was designed
+for apps that many pages that are viewed in a given order. This may be
+useful apps that have a series of instructions screens or that are
+designed for qualitative data collection (i.e., survey data). For example,
+let's say that an app has 10 instruction pages. The user is instructed to
+read through all pages and use the navigation buttons (next and back) to
+move between pages. The progress bar can be useful in this situation as it
+visually shows how many pages are left.
+
+## Methods
+
+The primary function is progress. This function must be called outside
+the shiny app. This enables you to use the component in the UI and server.
+Assign the progress bar component to a new object, and then you can use
+any of the following functions. For demonstration purposes, I will create
+a new counter (mybar) and use it to explain the underlying methods.
+
+```
+mybar <- progress(start = 0, min = 0, max = 10)
+```
+
+* `mybar$bar(id = "mybar")`: This method generates the
+         HTML markup for the progress bar element. A unique ID is
+         required.
+* `mybar$increase()`: This method increases the progress
+         bar by 1 (default) or another value.
+* `mybar$descrease()`: This method decreases the progress
+         bar by 1 (default) or another value.
+* `mybar$reset()`: This method resets the progress bar
+         to the initial value (defined by `progress(...)) or other
+         value.
+* `mybar$print()`: This method prints all internal values
+         (i.e., ID, min, max, start).
+
+These methods are described in the following sections.
+
+### progress
+
+The function `progress` is used for initializing a new instance of the
+progress bar component. Define a new object outside the shiny app; ideally,
+in the `global.R` file or at the top of `app.R`. The `bar`
+function takes the following parameters
+
+* `start`: the starting position of the progress bar
+* `min`: the min value of the progress bar (i.e., floor)
+* `max`: the max value of the progress bar (i.e., ceiling)
+
+```{r}
+mybar <- progress(max = 12)
+```
+
+### bar
+
+In the shiny UI, you can create the HTML markup using the `bar`
+function. There are a few styling and layout options that you can use. An
+ID is required.
+
+* `id`: A unique ID for the progress bar
+* `fill`: A background color for the progress bar
+* `fixed`: logical value to set of the positioning of the progress bar
+* `position`: if `fixed = TRUE`, then the bar can be placed at the "top" or
+     "bottom" of the window (default is top).
+* `yOffset`: a css value to offset the y position of the progress bar. This
+     is useful if you want the progress bar to display directly below a
+     navigation bar or another html element
+
+```{r}
+mybar$bar(id = "mybar", fixed = TRUE, position = "bottom")
+```
+
+### listen
+
+In the shiny server, it is required to intialize the progress bar. Use the
+following function in your server. There are no arguments for this method.
+
+```
+mybar$listen()
+```
+
+### `increase()` and `decrease()`
+
+To update the progress bar you can use the functions `mybar$increase()`
+or `mybar$decrease()`. Both functions take the following argument.
+
+* `by`: A value that adjusts the progress bar's counter. The default is 1.
+     If you are using another value, it must be within the min and max
+     values defined by `progress()`
+
+### reset
+
+The method `reset()` can be used to reset the progress bar to its
+initial state (defined by `progress`) or another value.
+
+*`to`: A numeric value that resets the progress bar. The
+     default value 0, which is defined by the `progress` function.
+     If you are using a new value, it must be within the min and max
+     values.
+
+### print
+
+Use the function `mybar$print()` to view the values associated with
+your progress bar.
 }
 \examples{
-appProgress <- pbars::progress$new(min = 0, max = 12)
+
+```{r}
+library(shiny)
+
+mybar <- accessibleshiny::progress(max = 10)
+
 ui <- tagList(
-     ...
-     appProgress$bar(
-         id = "complete",
-         fixed = TRUE,
-         position = "bottom",
-         fill = "#006992"
-     ),
-     ...,
-     tags$button(
-         id = "nextPage",
-         class = "action-button shiny-bound-input",
-         "Next Page"
-     )
+    accessibleshiny::use_accessibleshiny(),
+    tags$main(
+        style = "display: block; height: 50vh; margin-top: 50px",
+        actionButton("increaseBar", "Next"),
+        actionButton("descreaseBar", "Previous")
+    ),
+    mybar$bar(
+        id = "bar1",
+        fixed = TRUE
+    )
 )
-server <- function(input, output, session) {
-     appProgress$listen()
-     observeEvent(input$nextPage, {
-         appProgress$increase()
-     })
+
+server <- function(input, output) {
+    mybar$listen()
+
+    observeEvent(input$increaseBar, {
+        mybar$increase()
+    })
+
+    observeEvent(input$descreaseBar, {
+        mybar$decrease()
+    })
 }
+
 shinyApp(ui, server)
-}
-\section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-new}{\code{progress$new()}}
-\item \href{#method-bar}{\code{progress$bar()}}
-\item \href{#method-listen}{\code{progress$listen()}}
-\item \href{#method-increase}{\code{progress$increase()}}
-\item \href{#method-decrease}{\code{progress$decrease()}}
-\item \href{#method-reset}{\code{progress$reset()}}
-\item \href{#method-print}{\code{progress$print()}}
-\item \href{#method-clone}{\code{progress$clone()}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
-\subsection{Method \code{new()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$new(start = 0, min = 0, max = 7)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{start}}{the starting value for the progress bar}
-
-\item{\code{min}}{the minimum value for the progress bar (default is 0)}
-
-\item{\code{max}}{the maxium value for the progress bar (default is 7)
-\code{bar}
-Create a new progress bar in the shiny UI}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-bar"></a>}}
-\if{latex}{\out{\hypertarget{method-bar}{}}}
-\subsection{Method \code{bar()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$bar(
-  id = NULL,
-  fill = NULL,
-  fixed = FALSE,
-  position = "top",
-  yOffset = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{the id of the progress bar}
-
-\item{\code{fill}}{a color of the progress bar (default is #bdbdbd)}
-
-\item{\code{fixed}}{logical value to set of the positioning of the pbar}
-
-\item{\code{position}}{if \code{fixed = TRUE}, the bar can be placed at the
-top or bottom of the window (default is top)}
-
-\item{\code{yOffset}}{a css value to offset the y position of the progress
-     bar. This is useful if you want the progress bar to display
-     directly below a navigation bar or another html element
-\code{listen}
-Initializes Progress Bar server-side}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-listen"></a>}}
-\if{latex}{\out{\hypertarget{method-listen}{}}}
-\subsection{Method \code{listen()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$listen(id = self$elem)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{the id of the progress bar
-\code{increase}
-Increase the internal counter by 1 or another number}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-increase"></a>}}
-\if{latex}{\out{\hypertarget{method-increase}{}}}
-\subsection{Method \code{increase()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$increase(id = self$elem, by = 1)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{the id of the progress bar}
-
-\item{\code{by}}{the number to increases by (default 1)
-\code{descrease}
-Decreases the internal counter by 1 or another number}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-decrease"></a>}}
-\if{latex}{\out{\hypertarget{method-decrease}{}}}
-\subsection{Method \code{decrease()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$decrease(id = self$elem, by = 1)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{the id of the progress bar}
-
-\item{\code{by}}{the number to decreases by (default 1)
-\code{reset}
-Reset a progress bar to start or another value}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reset"></a>}}
-\if{latex}{\out{\hypertarget{method-reset}{}}}
-\subsection{Method \code{reset()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$reset(id = self$elem, to = self$start)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{the id of the progress bar}
-
-\item{\code{to}}{the value to reset the bar to (defaults to min value or 0)
-\code{print}
-Print internal values}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$print()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-Print internal values to the console
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{progress$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
+```
 }

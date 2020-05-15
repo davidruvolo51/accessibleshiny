@@ -104,8 +104,7 @@ accordion <- function(title, html, ...) {
     # build child elements
     el <- tagList(
         accordion_helpers$heading(title, props = props),
-        accordion_helpers$content(html, prop = props),
-        accordion_helpers$js(id = props$attr$id)
+        accordion_helpers$content(html, prop = props)
     )
 
     # print id?
