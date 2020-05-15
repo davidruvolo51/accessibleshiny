@@ -7,3 +7,5 @@ package-lock.json
 .cache
 accessibleshiny.code-workspace
 ^inst/assets/css/*.scss$
+.babelrc
+.postcssrc

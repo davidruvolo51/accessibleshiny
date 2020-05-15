@@ -1,40 +1,40 @@
 {
 	"name": "accessibleshiny",
-	"version": "0.1.5",
+	"version": "0.1.51",
 	"author": "dcruvolo",
 	"license": "ISC",
 	"description": "library of responsive, accessible ui components for shiny",
 	"main": "index.js",
+	"keywords": [
+		"css",
+		"r",
+		"shiny"
+	],
 	"scripts": {
-		"clean": "rm -rf inst/assets/css/accessibleshiny.min.css",
 		"css": "parcel build inst/assets/css/index.scss -d inst/assets/css -o inst/assets/css/accessibleshiny.min.css --no-cache --no-source-maps",
-		"js": "babel inst/assets/js --out-file inst/assets/js/accessibleshiny.min.js --presets minify --no-comments",
-		"build": "npm run css && npm run js",
+		"js": "parcel build inst/assets/js/index.js -d inst/assets/js -o inst/assets/js/accessibleshiny.min.js --no-cache --no-source-maps",
+		"css_clean": "rm -rf inst/assets/css/accessibleshiny.min.css",
+		"js_clean": "rm -rf inst/assets/js/accessibleshiny.min.js",
+		"clean": "yarn css_clean && yarn js_clean",
+		"build": "yarn css && yarn js",
 		"document": "Rscript -e \"devtools::document()\"",
 		"uninstall": "Rscript -e \"devtools::uninstall()\"",
 		"test": "Rscript -e \"testthat::test_dir('tests/testthat/')\"",
 		"package": "Rscript -e \"devtools::build()\" && Rscript -e \"devtools::install()\""
 	},
 	"dependencies": {},
-	"postcss": {
-		"modules": false,
-		"plugins": {
-			"autoprefixer": {
-				"overrideBrowserslist": [
-					">1%",
-					"last 4 versions",
-					"Firefox ESR",
-					"not ie < 9"
-				],
-				"flexbox": "no-2009"
-			},
-			"cssnano": {
-				"calc": true,
-				"discardComments": {
-					"removeAll": true
-				}
-			}
-		}
+	"devDependencies": {
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.0.0-0",
+		"@babel/plugin-transform-runtime": "^7.9.6",
+		"@babel/preset-env": "^7.9.6",
+		"@babel/preset-react": "^7.9.4",
+		"autoprefixer": "^9.7.6",
+		"babel-preset-minify": "^0.5.1",
+		"cssnano": "^4.1.10",
+		"parcel": "1.12.4",
+		"postcss-modules": "^1.5.0",
+		"sass": "^1.26.5"
 	},
 	"repository": {
 		"type": "git",
@@ -42,20 +42,5 @@
 	},
 	"bugs": {
 		"url": "https://github.com/davidruvolo51/accessibleshiny/issues"
-	},
-	"keywords": [
-		"css",
-		"r",
-		"shiny"
-	],
-	"devDependencies": {
-		"@babel/cli": "^7.8.4",
-		"@babel/core": "^7.9.0",
-		"@babel/preset-env": "^7.9.5",
-		"autoprefixer": "^9.7.6",
-		"babel-preset-minify": "^0.5.1",
-		"cssnano": "^4.1.10",
-		"postcss-modules": "^1.5.0",
-		"sass": "^1.26.3"
 	}
 }
