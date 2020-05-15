@@ -2,7 +2,7 @@
 #' FILE: tests-accordion.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-04-20
-#' MODIFIED: 2020-05-13
+#' MODIFIED: 2020-05-15
 #' PURPOSE: unit testing for accordion() function
 #' STATUS: working; on.going
 #' PACKAGES: accessibleshiny; testthat; htmltools
@@ -42,7 +42,7 @@ test_that("Output is an html element", {
 
 #' ~ b ~
 #' accordion: elements
-#' The returned output has the required elements (h4, section, script)
+#' The returned output has the required elements (h4, section)
 test_that("Output has correct elements", {
 
     # build component
@@ -52,8 +52,8 @@ test_that("Output has correct elements", {
     )
 
     # evaluate
-    actual <- c(a[[1]]$name, a[[2]]$name, a[[3]]$name)
-    expected <- c("h4", "section", "script")
+    actual <- c(a[[1]]$name, a[[2]]$name)
+    expected <- c("h4", "section")
 
     # test
     expect_identical(
