@@ -5,7 +5,7 @@
 \alias{icons}
 \title{SVG Icons}
 \format{
-An object of class \code{list} of length 1.
+An object of class \code{list} of length 5.
 }
 \usage{
 icons

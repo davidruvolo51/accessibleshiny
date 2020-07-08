@@ -7,21 +7,97 @@
 #' @export
 icons <- list()
 
+
+#' \code{checkmark}
+#' @name icon$checkmark
+#' @usage icon$checkmark()
+#' @return Create an svg icon of a checkmark
+#' @param id a unique ID to be applied to the svg element
+#' @param class a css class to be applied to the svg element
+#' @param background_fill a color to be applied to the inner svg element
+#' @param icon_color a color to be applied to the inner svg element
+#' @param aria_hidden a logical value for hiding elements
+#'      (Useful for purely aesthetic elements)
+#' @keywords icons checkmark
+#' @importFrom htmltools tag tagList
+#' @export
+icons$checkmark <- function(
+    id = NULL,
+    class = NULL,
+    background_fill = "#f6f6f6",
+    icon_color = "#3f454b",
+    data_group = NULL,
+    aria_hidden = TRUE
+) {
+    # validate
+    stopifnot(is.logical(aria_hidden))
+
+    # parent
+    svg <- tag(
+        `_tag_name` = "svg",
+        list(
+            "aria-hidden" = tolower(as.character(aria_hidden)),
+            "class" = "accessibleshiny-icon icon-checkmark",
+            "width" = "25",
+            "height" = "25",
+            "viewBox" = "0 0 25 25",
+            "version" = "1.1",
+            "xmlns" = "http://www.w3.org/2000/svg",
+            "xmlns:xlink" = "http://www.w3.org/1999/xlink"
+        )
+    )
+
+    # append id, class, data_group
+    if (!is.null(id)) svg$attribs$id <- id
+    if (!is.null(data_group)) svg$attribs$`data-group` <- data_group
+    if (!is.null(class)) {
+        svg$attribs$class <- paste0(svg$attribs$class, " ", class)
+    }
+
+    # append children
+    svg$children <- tagList(
+        tag(
+            `_tag_name` = "circle",
+            list(
+                "fill" = background_fill,
+                "cx" = "12.5",
+                "cy" = "12.5",
+                "r" = "12.5"
+            )
+        ),
+        tag(
+            `_tag_name` = "polyline",
+            list(
+                "fill" = "none",
+                "stroke" = icon_color,
+                "stroke-width" = "2",
+                "stroke-linecap" = "round",
+                "stroke-linejoin" = "round",
+                "points" = "6,13 11.5,19 18.7,6.5"
+            )
+        )
+    )
+
+    # return
+    return(svg)
+}
+
+
 #' \code{chevron}
 #' @name icon$chevron
 #' @usage icon$chevron
 #' @return An svg chevron
-#' @param id a unique ID for the icon
-#' @param class a css classname to assign to the icon
+#' @param id a unique ID to be applied to the svg element
+#' @param class a css class to be applied to the svg element
 #' @param icon_fill a color that fills the icon shape
 #'           (useful when closed = TRUE)
-#' @param icon_color a color for the plus symbol
+#' @param icon_color a color to be applied to the inner svg element
 #' @param closed a logical arg that created a closed shape (default: false)
 #' @param direction a value that specifies the direction the chevron points to
 #'          ("bottom", "top", "left", "right")
 #' @param data_group a custom data attribute
-#' @param aria_hidden a logical value for hiding elements from screen readers.
-#'      (Useful for purely aesthetic elements; default = true)
+#' @param aria_hidden a logical value for hiding elements
+#'      (Useful for purely aesthetic elements)
 #' @keywords icons chevron
 #' @importFrom htmltools tag tagList
 #' @export
@@ -62,7 +138,7 @@ icons$chevron <- function(
         list(
             "aria-hidden" = tolower(as.character(aria_hidden)),
             "class" = paste0(
-                "icon icon-chevron icon-chevron-",
+                "accessibleshiny-icon icon-chevron icon-chevron-",
                 tolower(direction)
             ),
             "width" = "20",
@@ -113,13 +189,13 @@ icons$chevron <- function(
 #' @name icons$plus
 #' @usage icons$plus()
 #' @return A plus sign with a filled background
-#' @param id a unique ID for the icon
-#' @param class a css classname to assign to the icon
-#' @param background_fill a background color for the icon (default: #f6f6f6)
-#' @param icon_color a color for the plus symbol (default: #3f454b)
+#' @param id a unique ID to be applied to the svg element
+#' @param class a css class to be applied to the svg element
+#' @param background_fill a color to be applied to the inner svg element
+#' @param icon_color a color to be applied to the inner svg element
 #' @param data_group a custom data attribute for use in the accordion function
-#' @param aria_hidden a logical value for hiding elements from screen readers.
-#'          (Useful for non-interactive elements; default = TRUE)
+#' @param aria_hidden a logical value for hiding elements
+#'      (Useful for purely aesthetic elements)
 #' @keywords icons plus
 #' @importFrom htmltools tag tagList
 #' @export
@@ -140,7 +216,7 @@ icons$plus <- function(
         `_tag_name` = "svg",
         list(
             "aria-hidden" = tolower(as.character(aria_hidden)),
-            "class" = "icon icon-plus",
+            "class" = "accessibleshiny-icon icon-plus",
             "width" = "25",
             "height" = "25",
             "viewBox" = "0 0 25 25",
@@ -179,7 +255,7 @@ icons$plus <- function(
                 "class" = "icon-plus-symbol icon-plus-line",
                 "stroke" = icon_color,
                 "stroke-linecap" = "round",
-                "stroke-width" = "2.5",
+                "stroke-width" = "2",
                 "x1" = "12.5",
                 "y1" = "5",
                 "x2" = "12.5",
@@ -194,7 +270,7 @@ icons$plus <- function(
                 "class" = "icon-plus-symbol icon-plus-line",
                 "stroke" = icon_color,
                 "stroke-linecap" = "round",
-                "stroke-width" = "2.5",
+                "stroke-width" = "2",
                 "x1" = "5",
                 "y1" = "12.5",
                 "x2" = "20",
@@ -211,12 +287,12 @@ icons$plus <- function(
 #' @return create a restart icon
 #' @name icons$restart
 #' @usage icons$restart()
-#' @param id a unique ID for the icon
-#' @param class a css class to assign to the icon
-#' @param icon_color a color for the icon
+#' @param id a unique ID to be applied to the svg element
+#' @param class a css class to be applied to the svg element
+#' @param icon_color a color to be applied to the inner svg element
 #' @param data_group a custom data attribute useful for subgroups of icons
-#' @param aria_hidden a logical value for hiding elements from screen readers.
-#'      (Useful for purely aesthetic elements; default = true)
+#' @param aria_hidden a logical value for hiding elements
+#'      (Useful for purely aesthetic elements)
 #' @keywords icons restart resfresh
 #' @importFrom htmltools tag tagList
 #' @export
@@ -234,7 +310,7 @@ icons$restart <- function(
     svg <- tag(
         `_tag_name` = "svg",
         list(
-            "class" = "icon icon-restart",
+            "class" = "accessibleshiny-icon icon-restart",
             "width" = "50",
             "height" = "50",
             "viewBox" = "0 0 50 50",
@@ -291,17 +367,16 @@ icons$restart <- function(
 }
 
 #' \code{warning}
-#' A warning icon
 #' @return create an svg warning icon
 #' @name icons$warning
 #' @usage icons$warning()
-#' @param id a unique Id for the icon
-#' @param class a css classname to assign to the icon
-#' @param background_fill a background color for the icon (default: #f6f6f6)
-#' @param icon_color a color for the plus symbol (default: #3f454b)
+#' @param id a unique ID to be applied to the svg element
+#' @param class a css class to be applied to the svg element
+#' @param background_fill a color to be applied to the inner svg element
+#' @param icon_color a color to be applied to the inner svg element
 #' @param data_group a custom data attribute useful for subgroups of icons
-#' @param aria_hidden a logical value for hiding elements from screen readers.
-#'          (Useful for non-interactive elements; default = TRUE)
+#' @param aria_hidden a logical value for hiding elements
+#'      (Useful for purely aesthetic elements)
 #' @keywords icons warning
 #' @importFrom htmltools tag tagList
 #' @export
@@ -321,7 +396,7 @@ icons$warning <- function(
     svg <- tag(
         `_tag_name` = "svg",
         list(
-            "class" = "icon icon-warning",
+            "class" = "accessibleshiny-icon icon-warning",
             "width" = "50",
             "height" = "50",
             "viewBox" = "0 0 50 50",
@@ -389,5 +464,4 @@ icons$warning <- function(
 
     # return
     return(svg)
-
 }
