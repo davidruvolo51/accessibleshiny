@@ -67,37 +67,37 @@ Shiny.addCustomMessageHandler("init_parent_element", function (value) {
 
 // ~ 2a ~
 // function to open an close accordion toggle
-function setAccordionToggle(id) {
+// function setAccordionToggle(id) {
 
-    // select accordion elements
-    var acc_btn = document.querySelector(`button[data-group='${id}']`);
-    var acc_svg = document.querySelector(`svg[data-group='${id}']`);
-    var acc_html = document.querySelector(`section[data-group='${id}']`);
+//     // select accordion elements
+//     var acc_btn = document.querySelector(`button[data-group='${id}']`);
+//     var acc_svg = document.querySelector(`svg[data-group='${id}']`);
+//     var acc_html = document.querySelector(`section[data-group='${id}']`);
 
-    // update classes
-    acc_html.classList.toggle('accordion-hidden');
-    acc_svg.classList.toggle('rotated');
-    if (acc_btn.getAttribute('aria-expanded', 'value') === 'false') {
-        acc_btn.setAttribute('aria-expanded', true);
-        acc_html.removeAttribute('hidden');
-    } else {
-        acc_btn.setAttribute('aria-expanded', 'false');
-        acc_html.setAttribute('hidden', 'true');
-    }
-}
+//     // update classes
+//     acc_html.classList.toggle('accordion-hidden');
+//     acc_svg.classList.toggle('rotated');
+//     if (acc_btn.getAttribute('aria-expanded', 'value') === 'false') {
+//         acc_btn.setAttribute('aria-expanded', true);
+//         acc_html.removeAttribute('hidden');
+//     } else {
+//         acc_btn.setAttribute('aria-expanded', 'false');
+//         acc_html.setAttribute('hidden', 'true');
+//     }
+// }
 
-// ~ 2b ~
-// function that binds toggle function to all accordion elements
-function useAccordionToggles() {
-    const btns = document.querySelectorAll("button[data-controls='accordion-toggle']");
-    btns.forEach((btn) => {
-        btn.addEventListener("click", () => { 
-            let id = btn.getAttribute("data-group");
-            setAccordionToggle(id);
-        });
-    });
-}
+// // ~ 2b ~
+// // function that binds toggle function to all accordion elements
+// function useAccordionToggles() {
+//     const btns = document.querySelectorAll("button[data-controls='accordion-toggle']");
+//     btns.forEach((btn) => {
+//         btn.addEventListener("click", () => { 
+//             let id = btn.getAttribute("data-group");
+//             setAccordionToggle(id);
+//         });
+//     });
+// }
 
-// ~ 2c ~
-// Run when DOMContentLoaded
-window.addEventListener("DOMContentLoaded", () => { useAccordionToggles() });
+// // ~ 2c ~
+// // Run when DOMContentLoaded
+// window.addEventListener("DOMContentLoaded", () => { useAccordionToggles() });

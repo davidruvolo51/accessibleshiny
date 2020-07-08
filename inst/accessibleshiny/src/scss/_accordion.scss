@@ -1,0 +1,61 @@
+// accordion component
+.accordion {
+	font-family: inherit;
+	font-size: inherit;
+	background-color: inherit;
+	color: inherit;
+
+	// accordion heading styles (includes button)
+	.accordion-heading {
+		display: block;
+		margin: 0;
+		padding: 0;
+		font-family: inherit;
+
+		// reset button styles
+		.accordion-button {
+			border: none;
+			position: relative;
+			background: none;
+			background-color: none;
+			margin: 0;
+			padding: 0;
+			cursor: pointer;
+			font-size: inherit;
+			text-align: left;
+
+			// add spacing to button label (internal text)
+			.accordion-button-label {
+				word-break: break-word;
+			}
+
+			// style icon + adjust for reduced motion
+			$icon-size: 26px;
+			.accordion-button-icon {
+				position: relative;
+				top: 4px;
+				width: $icon-size;
+				height: $icon-size;
+				transform: rotate(0);
+				transform-origin: center;
+				transition: all 0.3s ease-in-out;
+
+				// eliminate transition
+				@media (prefers-reduced-motion) {
+					transition: all 1ms ease-in-out;
+				}
+
+				// rotate
+				&.rotated {
+					transform: rotate(180deg);
+				}
+			}
+		}
+	}
+
+	// accordion content
+	.accordion-section {
+		margin: 0;
+		padding: 0;
+	}
+}
