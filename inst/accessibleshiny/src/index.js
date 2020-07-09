@@ -13,8 +13,16 @@
 import "./scss/index.scss"
 
 
-// import bindings
+// import modules
+import _setDocMeta from "./js/_setDocMeta"
 import Accordion from "./js/_accordion"
+
+////////////////////////////////////////
+
+// functions to run on DOMLOADED
+window.addEventListener("DOMContentLoaded", function(e) {
+    _setDocMeta();
+}, { once: true })
 
 
 // register bindings
