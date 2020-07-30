@@ -1,115 +1,23 @@
 # Accessible Shiny
 
-The `accessibleshiny` package is a collection of UI components for use in shiny applications. These components focus on the following:
+*The `accessibleshiny` package is in development. If you would like to get involved, let me know.*
 
-1. Good accessiblity practices
-2. Responsive design
+## What's going on here?
 
-## Features (to do list)
+The `accessibleshiny` package is a collection of UI components, tools, and methods for improving the accessibility of shiny applications. The components in this package are built with the following concepts in mind.
 
-Here are some of the components I am working on.
+1. **Web Accessibility:** It is important that Shiny applications can be accessed and used by individuals that use assistive web technologies, such as screen readers, digital braille displays, or other devices/browser extensions. This does not only include input elements and images, but also application UI layouts and data visualizations.
+2. **Responsive Design:** In addition to creating components that are accessible, creating responsive content can help improve the accessibility app Shiny apps. The components in this package are optimized for different screen sizes.
+3. **Customizable:** Lastly, these components can be customized through CSS to fit the design of your application (e.g., organizational branding, prebuilt themes, etc.).
 
-- [x] Responsive Datatables
-- [x] Progress Bars (i.e., for items complete)
-- [x] Accordions
-- [ ] Radio Input Buttons
-- [ ] Checkbox Buttons
+## What components will be included in this package?
 
-Please refer to the wiki for more information about package development and function reference.
+Here are some of the components that I have planned.
 
-## Installation
-
-You can install the `accessibleshiny` package using the `devtools` package.
-
-```r
-install.packages("devtools")
-devtools::install_github("davidruvolo51/accessibleshiny")
-```
-
-## Example
-
-Here's how to create a responsive datatable using this package.
-
-```r
-library(shiny)
-library(tidyverse)
-
-# source birds dataset from tidytuesday 2019-06-18
-birds <- read.csv(
-    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-18/bird_counts.csv"
-)
-
-# summarize and find the top 25 birds
-bird_summary <- birds %>%
-    group_by(species) %>%
-    summarize(
-        total_count = sum(how_many_counted, na.rm = TRUE)
-    ) %>%
-    ungroup() %>%
-    mutate(
-        total = sum(total_count),
-        rate = round(100 * (total_count / total), 2)
-    ) %>%
-    select(-total) %>%
-    arrange(-total_count) %>%
-    slice(1:25) %>%
-    mutate(species = paste0(
-        "<a href='http://www.google.com/search?q=",
-        gsub(" ", "%20", species),
-        "'>",
-        species,
-        "</a>"
-    ))
-
-
-# ui
-ui <- tagList(
-    accessibleshiny::use_accessibleshiny(),
-    tags$head(
-        tags$style(
-            "html, body{
-                padding: 0;
-                margin: 0;
-                font-family: Helvetica, sans-serif;
-                font-size: 16pt;
-            }",
-            "main {
-                width: 90%;
-                margin: 0 auto;
-            }",
-            ".column-2, .column-3 {
-                text-align: left;
-            }",
-            "@media (min-width: 912px) {",
-                "main {
-                    max-width: 912px;
-                }",
-                ".column-2, .column-3 {
-                    text-align: center;
-                }",
-            "}"
-        )
-    ),
-    tags$main(
-        tags$h2("Responsive Datatable Example"),
-        uiOutput("tbl")
-    )
-)
-
-
-# server
-server <- function(input, output) {
-    output$tbl <- renderUI({
-        accessibleshiny::datatable(
-            data = bird_summary,
-            caption = "Top 25 Most Reported Birds in the Christmas Bird Count since 1921",
-            options = list(
-                html_escape = FALSE
-            )
-        )
-    })
-}
-
-# run app
-shinyApp(ui, server)
-```
+- Responsive tables
+- Progress Bars (for items complete; TBD)
+- Accordions
+- Radio Input Buttons
+- Checkbox Buttons
+- Creating internal links (to other tabs)
+- and more!
