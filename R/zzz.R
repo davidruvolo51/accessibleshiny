@@ -2,9 +2,9 @@
 # add resources
 .onLoad <- function(libname, pkgname) {
     addResourcePath(
-        prefix = "assets",
+        prefix = "accessibleshiny",
         directoryPath = system.file(
-            "assets",
+            "accessibleshiny",
             package = "accessibleshiny"
         )
     )
@@ -12,5 +12,5 @@
 
 # remove resources
 .onUnload <- function(libname, pkgname) {
-    removeResourcePath(prefix = "assets")
+    removeResourcePath(prefix = "accessibleshiny")
 }
