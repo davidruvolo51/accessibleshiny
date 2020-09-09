@@ -2,7 +2,7 @@
 // FILE: _accordion.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-07-08
-// MODIFIED: 2020-07-08
+// MODIFIED: 2020-09-09
 // PURPOSE: accordion button input binding
 // DEPENDENCIES: Shiny assets
 // STATUS: in.progress
@@ -12,7 +12,6 @@
 // toggle is clicked. ARIA attributes will also be adjusted. Return current
 // state for use in the server (if needed by the user).
 ////////////////////////////////////////////////////////////////////////////////
-// BEGIN
 
 // create new binding
 var Accordion = new Shiny.InputBinding();
@@ -23,26 +22,26 @@ $.extend(Accordion, {
         return $(scope).find(".accordion");
     },
 
-    // initialize: init component
+    // initialize: return state if needed in the server (i.e., isOpen)
     initialize: function(el) {
-        return $(el).find(".accordion-button").attr("aria-expanded").toUpperCase();
+        return $(el).find("button.accordion__toggle").attr("aria-expanded") === true;
     },
 
-    // getValue: return component's current state
+    // getValue: return state if needed (i.e., isOpen)
     getValue: function(el) {
-        return $(el).find(".accordion-button").attr("aria-expanded").toUpperCase();
+        return $(el).find("button.accordion__toggle").attr("aria-expanded") === true;
     },
 
     // subscribe: create an register DOM events
     subscribe: function(el, callback) {
 
-        // pull elements
-        var btn = $(el).find(".accordion-button");
-        var icon = btn.find(".accordion-button-icon");
-        var section = $(el).find(".accordion-section");
-        
-        // onClick event
-        btn.on("click", function(e) {
+        // define function that handles state
+        function toggleAccordion() {
+
+            // find elements
+            var btn = $(el).find(".accordion__toggle");
+            var icon = $(el).find(".toggle__icon");
+            var section = $(el).find(".accordion__content");
 
             // toggle: component state + ARIA attributes
             if (btn.attr("aria-expanded") === "false") {
@@ -57,13 +56,28 @@ $.extend(Accordion, {
 
             // return state (if needed in the server)
             callback();
+        }
+        
+        // onClick
+        $(el).on("click", "button.accordion__toggle", function(e) {
+            toggleAccordion();
         });
+    },
+
+    // receiveMessage: triggered by server-side functions
+    receiveMessage: function(el, message) {
+
+        // reset accordion to it's default closed state
+        if (message === "reset") {
+            $(el).find(".accordion__toggle").attr("aria-expanded", "false");
+            $(el).find(".accordion__content").attr("hidden", "");
+            $(el).find(".toggle__icon").removeClass("rotated");
+        }
     },
 
     // unsubscribe: clean up
     unsubscribe: function(el) {
-        $(el).off(".Accorion");
-        $(el).off("click");
+        $(el).off(".Accordion");
     }
 })
 
