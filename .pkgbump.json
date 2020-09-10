@@ -1,0 +1,10 @@
+{
+  "name": "pkgbump.config",
+  "updated": "2020-09-09 18:06:07",
+  "n": 3,
+  "files": ["DESCRIPTION", "package.json", "R/use_accessibleshiny.R"],
+  "patterns": {
+    "R": "version = .\\d+.\\d+.\\d+.|version=.\\d+.\\d+.\\d+.",
+    "DESCRIPTION": "Version:"
+  }
+}
