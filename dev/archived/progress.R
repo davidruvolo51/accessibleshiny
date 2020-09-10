@@ -152,7 +152,7 @@ progress <- function(start = 0, min = 0, max = 7) {
 #' R6 Class for progress bar
 #' @return R6 Class for progress bar
 #' @export
-pbar <- R6Class(
+pbar <- R6::R6Class(
     classname = "shiny-progress-bar",
     public = list(
 

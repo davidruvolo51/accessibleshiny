@@ -9,3 +9,4 @@ accessibleshiny.code-workspace
 ^inst/assets/css/*.scss$
 .babelrc
 .postcssrc
+^\.pkgbump\.json$

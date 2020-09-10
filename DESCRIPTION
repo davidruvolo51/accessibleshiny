@@ -1,29 +1,20 @@
 Package: accessibleshiny
-Type: Package
-Title: An accessible components extension for shiny applications
-Version: 0.1.6
-Author: dcruvolo
-Maintainer: dcruvolo <yourself@somewhere.net>
-Description: This package provides a series of UI components for creating 
-    accessible shiny applications. This is important for applications that are
-    used by a wider-population (e.g., department, organization, public). The UI 
-    components in this package are built on Web Content Accessibility Guidelines (WCAG) 
-    at the core and allow for custom styling. The components include page layouts,
-    inputs, figures, tables and forms. See documentation and website for more
-    information.
-License: What license is it under?
-URL: https://github.com/davidruvolo51/accessibleshiny
-BugReports: https://github.com/davidruvolo51/accessibleshiny/issues
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.1
+Authors@R: 
+    person(given = "David",
+           family = "Ruvolo",
+           role = c("aut", "cre"),
+           email = "dcruvolo@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.6.0)
-Imports:
-    htmltools (>= 0.4.0),
-    shiny (>= 1.4.0),
-    purrr (>= 0.3.3),
-    rlang (>= 0.4.5),
-    R6 (>= 2.4.0),
-    rheroicons
-RoxygenNote: 7.1.0
-Suggests: 
-    testthat
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    shiny,
+    htmltools,
+    cli,
+    rheroicons (>= 0.2.1)

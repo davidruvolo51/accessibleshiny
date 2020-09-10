@@ -1,48 +1,40 @@
 {
-	"name": "accessibleshiny",
-	"version": "0.1.51",
-	"author": "dcruvolo",
-	"license": "ISC",
-	"description": "library of responsive, accessible ui components for shiny",
-	"main": "index.js",
-	"keywords": [
-		"css",
-		"r",
-		"shiny"
-	],
-	"scripts": {
-		"shiny": "Rscript -e \"shiny::runApp(appDir = 'tests/shiny-dev/', launch.browser = FALSE, port = 8000)\"",
-		"dev": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
-		"build": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
-		"start": "concurrently \"npm run shiny\" \"npm run dev\"",
-		"document": "Rscript -e \"devtools::check_man()\"",
-		"rcheck": "Rscript -e \"devtools::check()\"",
-		"uninstall": "Rscript -e \"devtools::uninstall()\"",
-		"test": "Rscript -e \"testthat::test_dir('tests/testthat/')\"",
-		"package": "Rscript -e \"devtools::build()\" && Rscript -e \"devtools::install()\""
-	},
-	"dependencies": {
-		"scss": "^0.2.4"
-	},
-	"devDependencies": {
-		"@babel/cli": "^7.10.4",
-		"@babel/core": "^7.10.4",
-		"@babel/plugin-transform-runtime": "^7.10.4",
-		"@babel/preset-env": "^7.10.4",
-		"@babel/preset-react": "^7.10.4",
-		"autoprefixer": "^9.8.4",
-		"babel-preset-minify": "^0.5.1",
-		"concurrently": "^5.2.0",
-		"cssnano": "^4.1.10",
-		"parcel": "1.12.4",
-		"postcss-modules": "^1.5.0",
-		"sass": "^1.26.10"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/davidruvolo51/accessibleshiny"
-	},
-	"bugs": {
-		"url": "https://github.com/davidruvolo51/accessibleshiny/issues"
-	}
+  "name": "accessibleshiny",
+  "version": "0.0.1",
+  "author": "dcruvolo",
+  "license": "ISC",
+  "description": "library of responsive, accessible ui components for shiny",
+  "main": "index.js",
+  "keywords": [
+    "css",
+    "r",
+    "shiny"
+  ],
+  "scripts": {
+    "shiny": "Rscript -e \"shiny::runApp(appDir = 'dev/dev-app/', launch.browser = FALSE, port = 8000)\"",
+    "start": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
+    "build": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
+    "clean": "rm -rf inst/accessibleshiny/accessibleshiny.min.*",
+    "test": "Rscript -e \"testthat::test_dir('tests/testthat/')\""
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "autoprefixer": "^9.8.4",
+    "babel-preset-minify": "^0.5.1",
+    "cssnano": "^4.1.10",
+    "parcel": "1.12.4",
+    "postcss-modules": "^1.5.0",
+    "sass": "^1.26.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidruvolo51/accessibleshiny"
+  },
+  "bugs": {
+    "url": "https://github.com/davidruvolo51/accessibleshiny/issues"
+  }
 }

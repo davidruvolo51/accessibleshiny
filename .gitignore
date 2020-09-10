@@ -5,3 +5,4 @@
 .sass-cache/
 .cache/
 node_modules/
+.yarn
