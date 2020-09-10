@@ -1,4 +1,3 @@
-
 #' \code{accordion}
 #'
 #' Create an accordion element for use in shiny apps. This function returns
@@ -15,6 +14,8 @@
 #'      on of the following headings: h1, h2, h3, h4, h5, h6
 #' @param classnames a string containing css classes. Using this argument,
 #'      you can pass your own class names
+#' @param style a theme for the accordion component. Use either `flat`
+#'      (default) or `focused` (more hover and focus states)
 #'
 #' **Notes on `heading_level`** By default, the title is rendered into
 #' a `h3` element. This element may not always work in all
@@ -70,35 +71,44 @@ accordion <- function(
     title,
     content,
     heading_level = "h3",
-    classnames = NULL
+    classnames = NULL,
+    style = "flat"
 ) {
 
-    # validate
-    .validate__accordion__args(
-        inputId = inputId,
-        title = title,
-        content = content,
-        heading_level = heading_level,
-        classnames = classnames
+    # validate html headings
+    stopifnot(
+        "input for 'heading_level' is invalid. Use: h1 through h6" = {
+            heading_level %in% c("h1", "h2", "h3", "h4", "h5", "h6")
+        }
+    )
+    stopifnot(
+        "input for `style` is invalid. Use `flat` or `focused`" = {
+            style %in% c("flat", "focused")
+        }
     )
 
     # define ids
-    ids <- accordion_helpers$set_html_ids(inputId = inputId)
+    ids <- .accordion__helpers$ui__ids(inputId = inputId)
 
     # build child elements
     el <- tags$div(
         id = ids$group,
-        class = "accordion",
-        accordion_helpers$heading(
+        class = paste0("accordion ", "accordion__", style),
+        .accordion__helpers$ui__heading(
             ids = ids,
             title = title,
             heading_level = heading_level
         ),
-        accordion_helpers$content(
+        .accordion__helpers$ui__content(
             ids = ids,
             content = content
         )
     )
+
+    # append classnames (if applicable)
+    if (!is.null(classnames)) {
+        el$attribs$class <- paste0(el$attribs$class, " ", classnames)
+    }
 
     # return
     return(el)
@@ -119,49 +129,4 @@ reset_accordion <- function(inputId) {
         inputId = inputId,
         message = "reset"
     )
-}
-
-
-#' validate accordion input args
-#'
-#' @param inputId a unique ID for the accordion component
-#' @param title a text string containing a title for the collapsible section
-#' @param content an html element or a list of html elements
-#' @param heading_level adjust the HTML heading level; default is "h3". Use
-#'      on of the following headings: h1, h2, h3, h4, h5, h6
-#' @param classnames a string containing css classes. Using this argument,
-#'      you can pass your own class names
-#'
-#' @noRd
-.validate__accordion__args <- function(inputId, title, content, heading_level, classnames) {
-
-    # validate input for `inputId`
-    if (!is.character(inputId)) {
-        cli::cli_alert_danger("value for `inputId` must be a string")
-    }
-
-    # validate input for `title`
-    if (!is.character(title)) {
-        cli::cli_alert_danger("value for `title` must be a string")
-    }
-
-    if (is.character(title) & title == "") {
-        cli::cli_alert_danger("value for `title` is empty")
-    }
-
-    # validate input for `content`
-    if (is.null(content)) {
-        cli::cli_alert_danger("value for `content` is missing")
-    }
-
-    # validate html headings
-    valid_html_headings <- c("h1", "h2", "h3", "h4", "h5", "h6")
-    if (!heading_level %in% valid_html_headings) {
-        cli::cli_alert_danger(
-            paste0(
-                "input for 'heading_level' is invalid. ",
-                "Select: h1, h2, h3, h4, h5, or h6"
-            )
-        )
-    }
 }

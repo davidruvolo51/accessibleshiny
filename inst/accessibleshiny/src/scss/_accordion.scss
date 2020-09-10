@@ -7,13 +7,7 @@
 	padding: 16px 12px;
 	border: 2px solid transparent;
 	border-radius: $border-radius;
-	box-shadow: $box-shadow;
 	box-sizing: border-box;
-
-	&:hover,
-	&:focus-within {
-		border: 2px solid $primary;
-	}
 
 	// accordion heading styles (includes button)
 	.accordion__heading {
@@ -60,6 +54,7 @@
 		.toggle__icon {
 			width: $icon-size;
 			height: $icon-size;
+			padding: 2px;
 			transform: rotate(0);
 			transform-origin: center;
 			transition: transform 0.3s ease-in-out;
@@ -78,9 +73,50 @@
 		margin-left: $leftOffest;
 		color: currentColor;
 	}
+
+	// accordion theme: flat
+	// minimal hover and focus states
+	&.accordion__flat {
+		box-shadow: none;
+		&:hover,
+		&:focus-within {
+			.accordion__heading {
+				.accordion__toggle {
+					.toggle__label {
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
+
+	// accordion theme: focused
+	// add a bit more detail: box shadow, hover and focus-within states
+	&.accordion__focused {
+		box-shadow: $box-shadow;
+
+		.accordion__heading {
+			.toggle__icon {
+				border-radius: 50%;
+			}
+		}
+		&:hover,
+		&:focus-within {
+			border-color: $primary;
+			.accordion__heading {
+				.toggle__label {
+					text-decoration: underline;
+				}
+				.toggle__icon {
+					background-color: $primary;
+					color: $light;
+				}
+			}
+		}
+	}
 }
 
-// eliminate transition for accessibility support
+// adhere to reduced motion setting
 @media (prefers-reduced-motion) {
 	.accordion {
 		// enforce instant rotation for button icon

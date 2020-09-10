@@ -1,28 +1,31 @@
-#' accordion_helpers
+#' Accordion Helpers
 #'
 #' Create a series of secondary functions that generate child elements of the
 #' accordion and process arguments. These functions are added to a nested list
-#' object that is called inthe main function.
+#' object that is called inthe main function. Functions that are used to
+#' generate UI elements should be placed in .accordion__helpers$ui$...
 #'
 #' @noRd
-accordion_helpers <- list()
+.accordion__helpers <- list()
 
 
-#' set_html_ids
+#' Set Namespace IDs for component
 #'
 #' Define a function that generates the IDs and data attributes for properly
-#' linking elements across helper functions
+#' linking elements across helper functions. This function should be run
+#' in the parent `accordion` function, and then passed down to individual
+#' helper functions.
 #'
 #' @param inputId a user defined
 #'
 #' @noRd
-accordion_helpers$set_html_ids <- function(inputId) {
+.accordion__helpers$ui__ids <- function(inputId) {
     ns <- shiny::NS(namespace = inputId)
     ids <- list(
         group = inputId,
-        heading_id = ns("accordionHeading"),
-        button_id = ns("accordionBtn"),
-        content_id = ns("accordionSection")
+        heading_id = ns("accordion-heading"),
+        button_id = ns("accordion-btn"),
+        content_id = ns("accordion-section")
     )
     return(ids)
 }
@@ -41,7 +44,7 @@ accordion_helpers$set_html_ids <- function(inputId) {
 #' @importFrom htmltools tags tagList
 #'
 #' @noRd
-accordion_helpers$heading <- function(ids, title, heading_level) {
+.accordion__helpers$ui__heading <- function(ids, title, heading_level) {
     tags[[heading_level]](
         id = ids$heading_id,
         class = "accordion__heading",
@@ -76,11 +79,12 @@ accordion_helpers$heading <- function(ids, title, heading_level) {
 #' @param content user defined html element or tagList of elements
 #'
 #' @noRd
-accordion_helpers$content <- function(ids, content) {
+.accordion__helpers$ui__content <- function(ids, content) {
     tags$section(
         id = ids$content_id,
         class = "accordion__content",
         `aria-labelledby` = ids$heading_id,
+        `data-accordion-group` = ids$group,
         hidden = "",
         content
     )

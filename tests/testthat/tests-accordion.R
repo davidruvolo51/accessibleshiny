@@ -2,11 +2,11 @@
 #' FILE: tests-accordion.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-04-20
-#' MODIFIED: 2020-05-15
+#' MODIFIED: 2020-09-10
 #' PURPOSE: unit testing for accordion() function
 #' STATUS: working; on.going
-#' PACKAGES: accessibleshiny; testthat; htmltools
-#' COMMENTS: Run from parent dir using `npm run test`
+#' PACKAGES: accessibleshiny; testthat; htmltools; stringr
+#' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
 options(stringsAsFactors = FALSE)
 
@@ -22,18 +22,16 @@ library(stringr)
 #' ~ a ~
 #' accordion: exists
 #' make sure an html element is returned
-test_that("Output is an html element", {
-
-    # build component
-    a <- accordion(
-        title = "What does hello world mean?",
-        html = tags$p("Hello world is a generic message")
-    )
-
-    # test
+test_that("Confirm output is an HTML element", {
     expect_identical(
-        object = class(a)[1],
-        expected = "shiny.tag.list",
+        object = class(
+            accordion(
+                inputId = "hello-world-def",
+                title = "What does hello world mean?",
+                content = tags$p("Hello world is a generic message")
+            )
+        ),
+        expected = "shiny.tag",
         label = "Accordion element is not an html element"
     )
 })
@@ -42,24 +40,75 @@ test_that("Output is an html element", {
 
 #' ~ b ~
 #' accordion: elements
-#' The returned output has the required elements (h4, section)
-test_that("Output has correct elements", {
+#' The returned output has the required elements (h3, section)
+test_that("Assessment of basic structure", {
 
     # build component
     a <- accordion(
+        inputId = "hello-world-def",
         title = "What does hello world mean?",
-        html = tags$p("Hello world is a generic message")
+        content = tags$p("Hello world is a generic message")
     )
-
-    # evaluate
-    actual <- c(a[[1]]$name, a[[2]]$name)
-    expected <- c("h4", "section")
 
     # test
     expect_identical(
-        object = actual,
-        expected = expected,
+        object = c(a$children[[1]]$name, a$children[[2]]$name),
+        expected = c("h3", "section"),
         label = "Accordion does not have the correct html elements"
+    )
+})
+
+
+#' ~ c ~
+#' Confirm `hidden` and `aria-expanded` attributes
+test_that("Confirmation of `hidden` and `aria-expanded`", {
+    a <- accordion(
+        inputId = "hello-world-def",
+        title = "What does hello world mean?",
+        content = tags$p("Hello world is a generic message")
+    )
+
+    attrib_score <- 0
+
+    if (length(a$children[[1]]$children[[1]]$attribs$`aria-expanded`)) {
+        attrib_score <- attrib_score + 1
+    }
+
+    if (length(a$children[[2]]$attribs$hidden)) {
+        attrib_score <- attrib_score + 1
+    }
+
+    expect_equal(
+        object = attrib_score,
+        expected = 2,
+        label = paste0(
+            "Attributes `hidden` and/or `aria-expanded` are not properly ",
+            "added."
+        )
+    )
+})
+
+
+#' ~ d ~
+#' Confirm that the value for `aria-controls` matches the ID of the section
+test_that("Confirmation of `aria-controls`", {
+    a <- accordion(
+        inputId = "hello-world-def",
+        title = "What does hello world mean?",
+        content = tags$p("Hello world is a generic message")
+    )
+
+    expect_equal(
+        object = (
+            a$children[[1]]$children[[1]]$attribs$`aria-controls` ==
+            a$children[[2]]$attribs$id
+        ),
+        expected = TRUE,
+        label = paste0(
+            "Value for `aria-controls` does not match the value ",
+            "of section ID. This means that the elements are not ",
+            "properly linked."
+        )
     )
 })
 
@@ -71,13 +120,13 @@ test_that("Output has correct elements", {
 #' Make sure the returned output element(s) have a unique ID
 #' It is important to evaluate the unique ID that is generated as
 #' it is used in the JS function that opens/close
-test_that("Outputs have a unique grouping ID", {
+test_that("Validation of grouping IDs", {
 
     # build component
     a <- accordion(
+        inputId = "hello-world-def",
         title = "What does 'hello world' mean?",
-        html = tags$p("Hello world is a generic message"),
-        id = "hello-world-def"
+        content = tags$p("Hello world is a generic message"),
     )
 
     # select elements that should have the grouping ID
@@ -86,31 +135,25 @@ test_that("Outputs have a unique grouping ID", {
     count <- 0
 
     # find attribute for header (parent level first)
-    if (length(a[[1]]$attribs$`data-group`) > 0) {
-        if (a[[1]]$attribs$`data-group` == "hello-world-def") {
+    h <- a$children[[1]]
+    if (length(h$attribs$`data-accordion-group`) > 0) {
+        if (h$attribs$`data-accordion-group` == "hello-world-def") {
             count <- count + 1
         }
     }
 
     # Does <section data-group=''> value match expected?
-    if (length(a[[2]]$attribs$`data-group`) > 0) {
-        if (a[[2]]$attribs$`data-group` == "hello-world-def") {
+    section <- a$children[[2]]
+    if (length(section$attribs$`data-accordion-group`) > 0) {
+        if (section$attribs$`data-accordion-group` == "hello-world-def") {
             count <- count + 1
         }
     }
 
     # Does the <button> element have the same grouping ID?
-    btn <- a[[1]]$children
-    if (length(btn$attribs$`data-group`) > 0) {
-        if (btn$attribs$`data-group` == "hello-world-def") {
-            count <- count + 1
-        }
-    }
-
-    # Does the <svg> element have the same grouping ID
-    svg <- btn$children[[2]]
-    if (length(svg$attribs$`data-group`) > 0) {
-        if (svg$attribs$`data-group` == "hello-world-def") {
+    btn <- a$children[[1]]$children[[1]]
+    if (length(btn$attribs$`data-accordion-group`) > 0) {
+        if (btn$attribs$`data-accordion-group` == "hello-world-def") {
             count <- count + 1
         }
     }
@@ -118,8 +161,11 @@ test_that("Outputs have a unique grouping ID", {
     # test
     expect_equal(
         object = count,
-        expected = 4,
-        label = "Outputs do not have a unique grouping ID"
+        expected = 3,
+        label = paste0(
+            "Custom data attribute `data-accordion-group` is not properly",
+            " added to child elements."
+        )
     )
 })
 
@@ -128,75 +174,55 @@ test_that("Outputs have a unique grouping ID", {
 #' ~ 3 ~
 #' Evaluate Optional Style Arguments
 
+#' ~ a ~
+#' Evaluate Style Argument
+#' The accordion component has optional style arguments that allow users to
+#' modify the apperance of the accordion. Styles included are `flat` and
+#' `focused`.
+test_that("Validation of `style` argument", {
+
+    # build components
+    styles <- c("flat", "focused")
+    sty_score <- 0
+    sapply(seq_len(length(styles)), function(index) {
+        elem <- accordion(
+            inputId = "hello-world-def",
+            title = "What does 'hello world' mean?",
+            content = tags$p("Hello world is a generic message"),
+            style = styles[index]
+        )
+
+        if (stringr::str_detect(elem$attribs$class, styles[index])) {
+            sty_score <<- sty_score + 1
+        }
+    })
+
+    # test
+    expect_equal(
+        object = sty_score,
+        expected = length(styles),
+        label = "Styles classnames are now properly added"
+    )
+})
+
 #' ~ b ~
-#' Evaluate Icon Background
-#' The accordion component has optional style arguments that allow users to
-#' modify the apperance of the accordion toggle on-the-fly. Evaluate the
-#' optional argument: icon_background to ensure values are passed
-#' down accordingly.
-test_that("SVG Icon has user-defined background color", {
-
-    # build component
-    a <- accordion(
-        title = "What does 'hello world' mean?",
-        html = tags$p("Hello world is a generic message"),
-        style = list(
-            icon_background = "#bde4a7"
-        )
-    )
-
-    # extract color attribute from <circle> element
-    status <- 0
-    circle <- a[[1]]$children$children[[2]]$children[[1]]
-    if (length(circle$attribs$fill) > 0) {
-        status <- status + 1
-        if (circle$attribs$fill == "#bde4a7") {
-            status <- status + 1
-        }
-    }
-
-    # test
-    expect_equal(
-        object = status,
-        expected = 2,
-        label = "SVG icon does not have user-defined background color"
+#' Evaluate Classnames argument
+#'
+#' The `classnames` argument can be used for passing user-defined css
+#' classnames to the parent element of the accordion element (i.e., div)
+#'
+test_that("Validation of `classnames`", {
+    expect_identical(
+        object = accordion(
+            inputId = "hello-world-def",
+            title = "What does 'hello world' mean?",
+            content = tags$p("Hello world is a generic message"),
+            classnames = "dark-theme my-custom-classname"
+        )$attribs$class,
+        expected = "accordion accordion__flat dark-theme my-custom-classname",
+        label = "`classnames` input is not added to parent element"
     )
 })
-
-#' ~ c ~
-#' Evaluate Icon Fill Color
-#' The accordion component has optional style arguments that allow users to
-#' modify the apperance of the accordion toggle on-the-fly. Evaluate the
-#' optional argument: icon_color to ensure values are passed down accordingly.
-test_that("SVG Icon has user-defined fill color", {
-
-    # build component
-    a <- accordion(
-        title = "What does 'hello world' mean?",
-        html = tags$p("Hello world is a generic message"),
-        style = list(
-            icon_color = "#bde4a7"
-        )
-    )
-
-    # extract color attribute from <path> element
-    status <- 0
-    path <- a[[1]]$children$children[[2]]$children[[2]]
-    if (length(path$attribs$stroke) > 0) {
-        status <- status + 1
-        if (path$attribs$stroke == "#bde4a7") {
-            status <- status + 1
-        }
-    }
-
-    # test
-    expect_equal(
-        object = status,
-        expected = 2,
-        label = "SVG Icon does not user-defined fill color"
-    )
-})
-
 
 #'//////////////////////////////////////
 
@@ -210,7 +236,7 @@ test_that("SVG Icon has user-defined fill color", {
 #' work with the user's document structure (i.e., hierarchy). The option
 #' `heading_level` allows users to choose which heading element they want
 #' (i.e., h1:6). This test ensures the function accepts proper html elements.
-test_that("Heading elements are properly changed", {
+test_that("Validation of `heading_level`", {
 
     # headings
     h <- c("h1", "h2", "h3", "h4", "h5", "h6")
@@ -219,15 +245,14 @@ test_that("Heading elements are properly changed", {
 
         # build temp element
         elem <- accordion(
+            inputId = "hello-world-def",
             title = "What does 'hello world' mean?",
-            html = tags$p("Hello world is a generic message"),
-            options = list(
-                heading_level = h[index]
-            )
+            content = tags$p("Hello world is a generic message"),
+            heading_level = h[index]
         )
 
         # eval markup
-        if (elem[[1]]$name == h[index]) {
+        if (elem$children[[1]]$name == h[index]) {
             h_score <<- h_score + 1
         }
     })
@@ -237,57 +262,5 @@ test_that("Heading elements are properly changed", {
         object = h_score,
         expected = length(h),
         label = "Heading elements do not match user-defined heading levels"
-    )
-})
-
-
-#' ~ b ~
-#' Evaluate Starting Option
-#' The argument `start_open` allows users to render the accordion component
-#' open. However, it we need to make sure the all classes and attributes are
-#' properly defined. This test evaluates the component and returns a score
-#' for each correct modified property. The total must be: 4
-test_that("Accordion rendered Open", {
-
-    # build component
-    a <- accordion(
-        title = "What does 'hello world' mean?",
-        html = tags$p("Hello world is a generic message"),
-        options = list(
-            start_open = TRUE
-        )
-    )
-
-    # score
-    score <- 0
-
-    # Button should have `aria-expanded = 'true'`
-    btn <- a[[1]]$children
-    if (btn$attribs$`aria-expanded` == "true") score <- score + 1
-
-    # SVG should have `class = "... rotated"`
-    svg <- a[[1]]$children$children[[2]]
-    svg_classes <- stringr::str_split(svg$attribs$class, " ")[[1]]
-    if (svg_classes[length(svg_classes)] == "rotated") {
-        score <- score + 1
-    }
-
-    # Section should have `class = '... accordion-hidden'`
-    section <- a[[2]]
-    section_classes <- stringr::str_split(section$attribs$class, " ")[[1]]
-    if (!"accordion-hidden" %in% section_classes) {
-        score <- score + 1
-    }
-
-    # Section should not have attribute `hidden`
-    if (length(section$attribs$hidden) == 0) {
-        score <- score + 1
-    }
-
-    # test
-    expect_equal(
-        object = score,
-        expected = 4,
-        label = "Accordion is not properly rendered as 'open'"
     )
 })
