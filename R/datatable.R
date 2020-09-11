@@ -9,54 +9,29 @@
 #' @section Arugments:
 #'
 #' @param data A data object used to render the table (required)
-#' @param caption  A short description (1-2 lines) for the table (optional)
-#' @param ... Other list object used to control the component. See the next
-#'      section and the wiki for more information.
-#'
-#' @section Optional Arguments:
-#'
-#' There are a number of optional arguments that are availble. These arguments
-#' will allow you to control the html markup or styling of the accordion
-#' element. These arguments are listed below.
-#'
-#' \itemize{
-#'      \item \code{id}: a unique id to pass to the \code{<table>} markup
-#'      \item \code{class}: a string containing one or more css classnames
-#'          to add to the \code{<table class="">} attribute.
-#'      \item \code{style}: the style attributes can be used to control the
-#'                  appearance of the element. Arguments must be
-#'                 entered as a list: \code{style = list(...)}.
-#'      \itemize{
-#'          \item \code{row_highlighting}: a logical value to enable or
-#'              disable row highighting (default is TRUE)
-#'          \item \code{caption_below}: a logical argument that positions
-#'              the caption below the table (i.e., after). By default, the
-#'              caption is placed before the table (i.e., FALSE)
-#'      }
-#'      \item \code{options}: a list of arguments used to control the
-#'              structure of the accordion element. Arguments must be added as
-#'              a list: \code{options = list(...)}
-#'      \itemize{
-#'          \item \code{responsive}: A logical argument for enabling or
-#'              disabling the generation of the html markup that handles
-#'              the responsiveness of the datatable. Default is TRUE
-#'          \item \code{row_headers}: A logical argument that renders the first
-#'              cell of every row as a row header element (i.e. \code{<th>};
-#'              default is FALSE)
-#'          \item \code{html_escape}: A logical argument to render cell content
-#'              as text or as html elements. The default (TRUE) will render
-#'              content as text. Use FALSE to escape.
-#'      }
-#' }
+#' @param caption A short description (1-2 lines) for the table (optional)
+#' @param caption_placement change the position of the caption in relation to
+#'      the table. Choices are "top" (default) or "bottom".
+#' @param id a unique ID to pass to \code{<table id="..">}
+#' @param classnames a string containing one or more css classes to pass to
+#'      \code{<table class="..">}
+#' @param row_highlighting If `TRUE` (default), whenever the mouse hovers over
+#'      a cell, the entire row will be highlighted
+#' @param row_headers If `TRUE`, the first cell in each table row will be
+#'      rendered as a row header (\code{<th>}; default: `FALSE`).
+#' @param is_responsive If `TRUE` (default), the HTML structure of the table
+#'      will be responsive.
+#' @param html_escape If `TRUE` (default), all cell content will be rendered
+#'      as plain text.
 #'
 #' @examples
 #' datatable(data = iris)
 #'
-#' datatable(data = iris, id = "iris-table", class = "dark-theme")
+#' datatable(data = iris, id = "iris-table", classnames = "dark-theme")
 #'
-#' datatable(data = iris, options = list(responsive = FALSE))
+#' datatable(data = iris, is_responsive = FALSE)
 #'
-#' datatable(id = "iris", data = iris, options = list(row_headers = TRUE))
+#' datatable(data = iris, id = "iris", row_headers = TRUE)
 #'
 #' df <- iris
 #' df$link <- paste0(
@@ -66,37 +41,73 @@
 #'     df$link,
 #'     "</a>"
 #' )
-#' tbl <- datatable(data = iris, options = list(html_escape = FALSE))
+#' tbl <- datatable(data = iris, html_escape = FALSE)
 #' writeLines(as.character(tbl), "~/Desktop/iris_table.html")
-#' @return Returns an html object, i.e., shiny tagList. Use
-#'         \code{options = list(...)} for addtional rendering options.
-#' @keywords datatable a11y
+#'
 #' @author dcruvolo
-datatable <- function(data, caption = NULL, ...) {
-
-    # validate if data.frame
-    stopifnot(!is.null(data))
+#'
+#' @return Create a responsive datatable
+#'
+#' @export
+datatable <- function(
+    data,
+    caption = NULL,
+    caption_placement = "top",
+    id = NULL,
+    classnames = NULL,
+    row_highlighting = TRUE,
+    row_headers = FALSE,
+    is_responsive = TRUE,
+    html_escape = TRUE
+) {
 
     # validate input args
-    props <- datatable_helpers$validate_props(...)
+    stopifnot("value for `caption_placement` must be 'top' or 'bottom'" = !caption_placement %in% c("top", "bottom"))
+    stopifnot("`row_highlighting` must be TRUE or FALSE" = is.logical(row_highlighting))
+    stopifnot("`row_headers` must be TRUE or FALSE" = is.logical(row_headers))
+    stopifnot("`is_responsive` must be TRUE or FALSE" = is.logical(is_responsive))
+    stopifnot("`html_escape` must be TRUE or FALSE" = is.logical(html_escape))
+
+    # build value for class attribute
+    css <- .datatable__helpers$validate__classnames(
+        caption_status = ifelse(is.null(caption), FALSE, TRUE),
+        caption_placement = caption_placement,
+        row_highlighting = row_headers
+    )
+
+    # gather options
+    config <- list(
+        is_responsive = is_responsive,
+        html_escape = html_escape,
+        row_headers = row_headers
+    )
 
     # generate table markup
     tbl <- tags$table(
-        datatable_helpers$thead(data, options = props$options),
-        datatable_helpers$tbody(data, options = props$options)
+        class = css,
+        .datatable__helpers$ui__thead(data, config = config),
+        .datatable__helpers$ui__tbody(data, config = config)
     )
-
-    # update table attributes
-    tbl$attribs <- props$attribs
 
     # append caption
     if (length(caption) > 0) {
+        stopifnot("value for `caption` must be a string")
         tbl$children <- list(
             tags$caption(
                 as.character(caption)
             ),
             tbl$children
         )
+    }
+
+    # add `id` and `class`
+    if (!is.null(id)) {
+        stopifnot("value for `id` must be a string")
+        tbl$attribs$id <- id
+    }
+    if (!is.null(classnames)) {
+        stopifnot("value for `class` must be a string")
+        tbl$attribs$class <- paste0(tbl$attribs$class, " ", classnames)
     }
 
     # return
