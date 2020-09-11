@@ -1,7 +1,14 @@
 
-# add resources
+#' onLoad
+#'
+#' Load resources on package load
+#'
+#' @param libname required argument
+#' @param pkgname required argument
+#'
+#' @noRd
 .onLoad <- function(libname, pkgname) {
-    addResourcePath(
+    shiny::addResourcePath(
         prefix = "accessibleshiny",
         directoryPath = system.file(
             "accessibleshiny",
@@ -10,7 +17,14 @@
     )
 }
 
-# remove resources
+#' onUnload
+#'
+#' remove resources
+#'
+#' @param libname required argument
+#' @param pkgname required argument
+#'
+#' @noRd
 .onUnload <- function(libname, pkgname) {
-    removeResourcePath(prefix = "accessibleshiny")
+    shiny::removeResourcePath(prefix = "accessibleshiny")
 }
