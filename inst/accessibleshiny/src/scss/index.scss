@@ -1,1 +1,20 @@
-@import "_datatable", "_progressbars", "_accordion";
+
+// import palette
+@import "_palette_20";
+
+// define variables
+$dark: #252525;
+$text: #3f454b;
+$primary: $light-blue-700;
+$light: $cool-grey-050;
+$semi-light: $cool-grey-200;
+$border-radius: 6px;
+$shadow: hsla(0, 0%, 0%, 0.2);
+$primary-box-shadow: 0 0 6px 2px $primary;
+$box-shadow: 0 0 6px 4px hsla(0, 0%, 0%, 0.2);
+$leftOffest: 21px;
+$breakpoint: 972px;
+
+
+// import components
+@import "_datatable", "_accordion";

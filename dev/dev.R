@@ -27,8 +27,7 @@ usethis::use_package("shiny")
 usethis::use_package("htmltools")
 usethis::use_package("purrr")
 usethis::use_package("rlang")
-usethis::use_package("R6")
-usethis::use_package("cli")
+# usethis::use_package("R6")
 usethis::use_package("rheroicons", min_version = TRUE)
 
 
@@ -37,6 +36,7 @@ devtools::check_man()
 shiny::runApp(appDir = "dev/dev-app", port = 8000, launch.browser = FALSE)
 
 # tests
+devtools::test()
 devtools::check()
 
 # pkgbump

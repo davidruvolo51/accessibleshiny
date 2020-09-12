@@ -16,5 +16,6 @@ RoxygenNote: 7.1.1
 Imports: 
     shiny,
     htmltools,
-    cli,
-    rheroicons (>= 0.2.1)
+    rheroicons (>= 0.2.1),
+    purrr,
+    rlang
