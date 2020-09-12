@@ -2,17 +2,42 @@
 % Please edit documentation in R/use_accessibleshiny.R
 \name{use_accessibleshiny}
 \alias{use_accessibleshiny}
-\title{load_dependencies}
+\title{use_accessibleshiny}
 \usage{
-use_accessibleshiny()
+use_accessibleshiny(title = "", lang = "en", direction = "ltr")
+}
+\arguments{
+\item{title}{a title for the document}
+
+\item{lang}{specify the language that the document is written in}
+
+\item{direction}{specify the direction in which the document should be read
+Use "rtl" (right to left), "ltr" (left to right), or "auto"}
 }
 \value{
-Load package dependencies
+load package assets into the app and define the document attributes
 }
 \description{
-When called, this function attaches the css files in the <head> of the html
-document.
+Primary function for initiating the accessible shiny package client side.
+This function is required in order to use this package. You can also use
+this function to document attributes, such as language and Open Graph Data
 }
 \examples{
-use_accessiblyshiny()
+if (interactive()) {
+  ui <- tagList(
+    accessibleshiny::use_accessibleshiny(),
+    tags$h1("Hello, world!")
+  )
+
+  server <- function(input, output, session) {
+  }
+
+  shinyApp(ui, server)
+}
+
+}
+\references{
+\url{https://developer.mozilla.org/en-US/docs/Web/API/Document/title}
+\url{https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir}
+\url{https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang}
 }

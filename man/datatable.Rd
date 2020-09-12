@@ -16,7 +16,7 @@ section and the wiki for more information.}
 }
 \value{
 Returns an html object, i.e., shiny tagList. Use
-        \code{options = list(...)} for addtional rendering options.
+\code{options = list(...)} for addtional rendering options.
 }
 \description{
 The \code{datatable} function creates an accessible, responsive table from a
@@ -37,33 +37,33 @@ will allow you to control the html markup or styling of the accordion
 element. These arguments are listed below.
 
 \itemize{
-     \item \code{id}: a unique id to pass to the \code{<table>} markup
-     \item \code{class}: a string containing one or more css classnames
-         to add to the \code{<table class="">} attribute.
-     \item \code{style}: the style attributes can be used to control the
-                 appearance of the element. Arguments must be
-                entered as a list: \code{style = list(...)}.
-     \itemize{
-         \item \code{row_highlighting}: a logical value to enable or
-             disable row highighting (default is TRUE)
-         \item \code{caption_below}: a logical argument that positions
-             the caption below the table (i.e., after). By default, the
-             caption is placed before the table (i.e., FALSE)
-     }
-     \item \code{options}: a list of arguments used to control the
-             structure of the accordion element. Arguments must be added as
-             a list: \code{options = list(...)}
-     \itemize{
-         \item \code{responsive}: A logical argument for enabling or
-             disabling the generation of the html markup that handles
-             the responsiveness of the datatable. Default is TRUE
-         \item \code{row_headers}: A logical argument that renders the first
-             cell of every row as a row header element (i.e. \code{<th>};
-             default is FALSE)
-         \item \code{html_escape}: A logical argument to render cell content
-             as text or as html elements. The default (TRUE) will render
-             content as text. Use FALSE to escape.
-     }
+\item \code{id}: a unique id to pass to the \code{<table>} markup
+\item \code{class}: a string containing one or more css classnames
+to add to the \code{<table class="">} attribute.
+\item \code{style}: the style attributes can be used to control the
+appearance of the element. Arguments must be
+entered as a list: \code{style = list(...)}.
+\itemize{
+\item \code{row_highlighting}: a logical value to enable or
+disable row highighting (default is TRUE)
+\item \code{caption_below}: a logical argument that positions
+the caption below the table (i.e., after). By default, the
+caption is placed before the table (i.e., FALSE)
+}
+\item \code{options}: a list of arguments used to control the
+structure of the accordion element. Arguments must be added as
+a list: \code{options = list(...)}
+\itemize{
+\item \code{responsive}: A logical argument for enabling or
+disabling the generation of the html markup that handles
+the responsiveness of the datatable. Default is TRUE
+\item \code{row_headers}: A logical argument that renders the first
+cell of every row as a row header element (i.e. \code{<th>};
+default is FALSE)
+\item \code{html_escape}: A logical argument to render cell content
+as text or as html elements. The default (TRUE) will render
+content as text. Use FALSE to escape.
+}
 }
 }
 
