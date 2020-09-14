@@ -43,18 +43,16 @@ $dark: #2b2b2b;
 				padding: 16px 12px;
 
 				.hidden-colname {
-					display: inline-block;
-					clip: rect(1px 1px 1px 1px);
-					clip: rect(1px, 1px, 1px, 1px);
-					width: 1px;
-					height: 1px;
-					overflow: hidden;
-					white-space: nowrap;
+					display: none;
+				}
+
+				&.cell-align-right {
+					text-align: right;
 				}
 			}
 		}
 	}
-	
+
 	// child styles when classes added at the parent level
 	&.row-highlighting {
 		tbody {
@@ -78,38 +76,42 @@ $dark: #2b2b2b;
 }
 
 @media (max-width: 892px) {
-	.datatable {
+	.datatable-responsive {
+			// smaller devices: visually hide table header
+			thead {
+				position: absolute;
+				clip: rect(1px 1px 1px 1px);
+				clip: rect(1px, 1px, 1px, 1px);
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
 
-		// smaller devices: visually hide table header
-		thead {
-			position: absolute;
-			clip: rect(1px 1px 1px 1px);
-			clip: rect(1px, 1px, 1px, 1px);
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-			white-space: nowrap;
-		}
+			// smaller devices: show inline column names
+			tbody {
+				tr {
+					th,
+					td {
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+						padding: 4px 0;
+						padding-left: 12px;
 
-		// smaller devices: show inline column names
-		tbody {
-			tr {
-				th,
-				td {
-					display: flex;
-					justify-content: flex-start;
-					align-items: center;
-					padding: 4px 0;
-					padding-left: 12px;
+						.hidden-colname {
+							display: inline-block;
+							clip: auto;
+							width: 50%;
+							height: 100%;
+							text-overflow: ellipsis;
+						}
 
-					.hidden-colname {
-						display: inline-block;
-						clip: auto;
-						width: 50%;
-						height: 100%;
+						&.cell-align-right {
+							text-align: left;
+						}
 					}
 				}
 			}
-		}
 	}
 }

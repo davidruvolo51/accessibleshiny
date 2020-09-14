@@ -52,7 +52,7 @@
 datatable <- function(
     data,
     caption = NULL,
-    caption_placement = "top",
+    caption_placement = NULL,
     id = NULL,
     classnames = NULL,
     row_highlighting = TRUE,
@@ -62,17 +62,20 @@ datatable <- function(
 ) {
 
     # validate input args
-    stopifnot("value for `caption_placement` must be 'top' or 'bottom'" = !caption_placement %in% c("top", "bottom"))
     stopifnot("`row_highlighting` must be TRUE or FALSE" = is.logical(row_highlighting))
     stopifnot("`row_headers` must be TRUE or FALSE" = is.logical(row_headers))
     stopifnot("`is_responsive` must be TRUE or FALSE" = is.logical(is_responsive))
     stopifnot("`html_escape` must be TRUE or FALSE" = is.logical(html_escape))
+    if (!is.null(caption_placement)) {
+        stopifnot("`caption_placement` must be 'top' or 'bottom'" = caption_placement %in% c("top", "bottom"))
+    }
 
     # build value for class attribute
     css <- .datatable__helpers$validate__classnames(
         caption_status = ifelse(is.null(caption), FALSE, TRUE),
-        caption_placement = caption_placement,
-        row_highlighting = row_headers
+        caption_placement = ifelse(is.null(caption_placement), "top", caption_placement),
+        row_highlighting = row_highlighting,
+        is_responsive = is_responsive
     )
 
     # gather options
@@ -91,7 +94,7 @@ datatable <- function(
 
     # append caption
     if (length(caption) > 0) {
-        stopifnot("value for `caption` must be a string")
+        stopifnot("value for `caption` must be a string" = is.character(caption))
         tbl$children <- list(
             tags$caption(
                 as.character(caption)
@@ -102,11 +105,11 @@ datatable <- function(
 
     # add `id` and `class`
     if (!is.null(id)) {
-        stopifnot("value for `id` must be a string")
+        stopifnot("value for `id` must be a string" = is.character(id))
         tbl$attribs$id <- id
     }
     if (!is.null(classnames)) {
-        stopifnot("value for `class` must be a string")
+        stopifnot("value for `class` must be a string" = is.character(classnames))
         tbl$attribs$class <- paste0(tbl$attribs$class, " ", classnames)
     }
 

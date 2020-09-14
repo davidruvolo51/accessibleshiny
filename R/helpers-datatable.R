@@ -13,20 +13,34 @@
 #' @param caption_status if TRUE, then caption is used
 #' @param caption_placement string indicating how the caption is positioned
 #' @param row_highlighting if TRUE, rows will be highlighted when hovered
+#' @param is_responsive If `TRUE` (default), responsive markup will be returned
+#'
+#' @examples
+#' .datatable__helpers$validate__classnames(
+#'   caption_status = TRUE,
+#'   caption_placement = "top",
+#'   row_highlighting = TRUE
+#' )
 #'
 #' @noRd
 .datatable__helpers$validate__classnames <- function(
     caption_status,
     caption_placement,
-    row_highlighting
+    row_highlighting,
+    is_responsive
 ) {
     base <- c("datatable")
+    if (is_responsive) {
+        base[length(base) + 1] <- "datatable-responsive"
+    }
+    
     if (caption_status) {
         base[length(base) + 1] <- paste0("caption-side-", caption_placement)
     }
     if (row_highlighting) {
         base[length(base) + 1] <- "row-highlighting"
     }
+
     paste0(base, collapse = " ")
 }
 
@@ -43,18 +57,28 @@
 #' @param index an integer value indicating `nth of max` (from parent func)
 #' @param value the value of the current data point (row, col)
 #'
+#' @examples
+#' .datatable__helpers$set__cell__attribs(1, "test-value")
+#'
 #' @noRd
 .datatable__helpers$set__cell__attribs <- function(index, value) {
     value_class <- class(value)
     attr <- list(
         class = c(
-            paste0("column-", index),
-            paste0("datatype-", tolower(value_class))
+            paste0("column-", index)
         ),
         `data-value` = as.character(value)
     )
 
-    if (value_class == "numeric") {
+    if (is.na(value_class) | is.null(value_class)) {
+        attr$class[2] <- "datatype-na"
+    }
+
+    if (!is.na(value_class) | !is.null(value_class)) {
+        attr$class[2] <- paste0("datatype-", tolower(value_class))
+    }
+
+    if (value_class %in% c("integer", "numeric", "double")) {
         if (value > 0) {
             attr$class[3] <- "value-positive"
         }
@@ -64,14 +88,16 @@
         if (value == 0) {
             attr$class[3] <- "value-zero"
         }
+        attr$class[4] <- "cell-align-right"
     }
 
     if (value_class == "logical") {
+        attr$class[2] <- paste0("datatype-", tolower(value_class))
         attr$class[3] <- paste0("value-", tolower(value))
     }
 
 
-    attr$class <- paste0(attr$class, " ")
+    attr$class <- paste0(attr$class, collapse = " ")
     return(attr)
 }
 
@@ -99,11 +125,11 @@
 
         # Is the option htmlEscape TRUE?
         if (!config$html_escape) {
-            cell_value <- HTML(d)
+            cell_value <- htmltools::HTML(d)
         }
 
         if (config$html_escape) {
-            cell_value <- htmlEscape(d)
+            cell_value <- htmltools::htmlEscape(d)
         }
 
         # Is the option row_headers set to TRUE
@@ -117,7 +143,7 @@
         }
 
         # Is the responsive option set to TRUE?
-        if (configs$responsive) {
+        if (config$is_responsive) {
             cell$children <- list(
                 tags$span(
                     class = "hidden-colname",
@@ -129,7 +155,7 @@
         }
 
         # run cell attributes and attached
-        attr <- .datatable_helpers$set__cell__attribs(index, d)
+        attr <- .datatable__helpers$set__cell__attribs(index, d)
         cell$attribs$class <- attr$class
         cell$attribs$`data-value` <- attr$`data-value`
 
@@ -146,10 +172,9 @@
 #'
 #' @param ... input data from map
 #' @param config internal configuration object
-#' @param colnames current column name
 #'
 #' @noRd
-.datatable__helpers$ui__tbody__tr <- function(..., config, colnames) {
+.datatable__helpers$ui__tbody__tr <- function(..., config) {
     args <- rlang::list2(...)
     cells <- purrr::pmap(
         args,
@@ -167,11 +192,20 @@
 #' @param data input data
 #' @param config internal configuration object
 #'
+#' @examples
+#' d <- as.data.frame(dplyr::starwars[1:10, 1:11])
+#' c <- list(
+#'   is_responsive = TRUE,
+#'   html_escape = TRUE,
+#'   row_headers = FALSE
+#' )
+#' .datatable__helpers$ui__tbody(d, c)
+#'
 #' @noRd
 .datatable__helpers$ui__tbody <- function(data, config) {
     body <- purrr::pmap(
         data,
-        ~ datatable_helpers$tbody_rows(..., config = config)
+        ~ .datatable__helpers$ui__tbody__tr(..., config = config)
     )
     tags$tbody(role = "presentation", body)
 }
@@ -184,8 +218,8 @@
 #' @param data input dataset
 #' @param config internal configuration object
 #'
-#' @noRd 
-.datatable__helpers$ui__thead <- function(data, options) {
+#' @noRd
+.datatable__helpers$ui__thead <- function(data, config) {
     index <- 1
     headers <- purrr::map(names(data), function(c) {
 
@@ -193,11 +227,11 @@
         col <- as.character(c)
 
         # define cell content based on options$html_escape
-        if (!options$html_escape) {
-            cell_value <- HTML(c)
+        if (!config$html_escape) {
+            cell_value <- htmltools::HTML(c)
         }
-        if (options$html_escape) {
-            cell_value <- htmlEscape(c)
+        if (config$html_escape) {
+            cell_value <- htmltools::htmlEscape(c)
         }
 
         # build cell <th> with attribs
