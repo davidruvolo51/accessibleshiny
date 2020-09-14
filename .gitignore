@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-.sass-cache/
-.cache/
-node_modules/
+.sass-cache
+.cache
+node_modules
 .yarn

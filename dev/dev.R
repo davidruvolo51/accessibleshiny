@@ -2,7 +2,7 @@
 #' FILE: dev.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-09-09
-#' MODIFIED: 2020-09-09
+#' MODIFIED: 2020-09-14
 #' PURPOSE: pkg management
 #' STATUS: ongoing
 #' PACKAGES: usethis; pkgbump
@@ -31,6 +31,11 @@ usethis::use_package("rlang")
 usethis::use_package("rheroicons", min_version = TRUE)
 
 
+#'//////////////////////////////////////
+
+#' ~ 1 ~
+#' Package Development and Testing
+
 # development
 devtools::check_man()
 shiny::runApp(appDir = "dev/dev-app", port = 8000, launch.browser = FALSE)
@@ -38,6 +43,14 @@ shiny::runApp(appDir = "dev/dev-app", port = 8000, launch.browser = FALSE)
 # tests
 devtools::test()
 devtools::check()
+
+
+
+#'//////////////////////////////////////
+
+
+#' ~ 99 ~
+#' Package Management
 
 # pkgbump
 pkgbump::set_pkgbump(
@@ -49,3 +62,33 @@ pkgbump::set_pkgbump(
 )
 
 pkgbump::pkgbump(version = "0.0.1")
+
+
+
+# ignore files
+.ignore <- c(
+    ".Rproj.user",
+    ".Rhistory",
+    ".RData",
+    ".Ruserdata",
+    ".sass-cache",
+    ".cache",
+    "node_modules",
+    ".yarn"
+)
+usethis::use_git_ignore(.ignore)
+usethis::use_build_ignore(
+    files = c(
+        .ignore,
+        "dev",
+        "inst/src",
+        "accessibleshiny.code-workspace",
+        ".postcssrc",
+        ".babelrc",
+        "package.json",
+        "yarn.lock",
+        ".pkgbump.json"
+    )
+)
+
+
