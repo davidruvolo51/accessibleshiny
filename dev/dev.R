@@ -74,7 +74,8 @@ pkgbump::pkgbump(version = "0.0.1")
     ".sass-cache",
     ".cache",
     "node_modules",
-    ".yarn"
+    ".yarn",
+    ".DS_Store"
 )
 usethis::use_git_ignore(.ignore)
 usethis::use_build_ignore(

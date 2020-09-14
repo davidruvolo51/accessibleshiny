@@ -15,6 +15,7 @@ suppressPackageStartupMessages(library(shiny))
 # load all
 devtools::load_all()
 
+birds <- read.csv("data/birds_summary.csv")
 
 # add Resource Path
 shiny::addResourcePath(
@@ -57,27 +58,42 @@ ui <- tagList(
     ),
     tags$main(
         tags$h1("Test App"),
-        accordion(
-            inputId = "what-is-shiny",
-            title = "What is Shiny?",
-            content = tagList(
-                tags$p(
-                    "Shiny is an R package that makes it easy to build",
-                    "interactive web apps straight from R. You can host",
-                    "standalone apps on a webpage or embed them in R Markdown",
-                    "documents or build dashboards. You can also extend your",
-                    "Shiny apps with CSS themes, htmlwidgets, and JavaScript",
-                    "actions."
-                ),
-                tags$cite("Rstudio.org")
-            ),
-            style = "focused"
+
+        # Responsive Datatable Component
+        datatable(
+            data = birds[1:10, ],
+            caption = "Bird Counts",
+            caption_placement = "top",
+            id = "bird-data-reporting-rates",
+            classnames = "example-classname",
+            row_highlighting = TRUE,
+            row_headers = TRUE,
+            is_responsive = F,
+            html_escape = TRUE
         ),
-        tags$button(
-            id = "reset",
-            class = "shiny-bound-input action-button",
-            "Reset"
-        )
+
+        # Accordion Component Example
+        # accordion(
+        #     inputId = "what-is-shiny",
+        #     title = "What is Shiny?",
+        #     content = tagList(
+        #         tags$p(
+        #             "Shiny is an R package that makes it easy to build",
+        #             "interactive web apps straight from R. You can host",
+        #             "standalone apps on a webpage or embed them in R Markdown",
+        #             "documents or build dashboards. You can also extend your",
+        #             "Shiny apps with CSS themes, htmlwidgets, and JavaScript",
+        #             "actions."
+        #         ),
+        #         tags$cite("Rstudio.org")
+        #     ),
+        #     style = "focused"
+        # ),
+        # tags$button(
+        #     id = "reset",
+        #     class = "shiny-bound-input action-button",
+        #     "Reset"
+        # )
     ),
     tags$script(src = "accessibleshiny/accessibleshiny.min.js")
 )
