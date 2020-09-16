@@ -30,6 +30,10 @@ $dark: #2b2b2b;
 				letter-spacing: 2px;
 				border-bottom: 1px solid $dark;
 				color: $dark;
+
+				&[data-col-align="right"] {
+					text-align: right;
+				}
 			}
 		}
 	}
@@ -42,11 +46,11 @@ $dark: #2b2b2b;
 				font-weight: 400;
 				padding: 16px 12px;
 
-				.hidden-colname {
+				.hidden__colname {
 					display: none;
 				}
 
-				&.cell-align-right {
+				&[data-col-align="right"] {
 					text-align: right;
 				}
 			}
@@ -54,7 +58,7 @@ $dark: #2b2b2b;
 	}
 
 	// child styles when classes added at the parent level
-	&.row-highlighting {
+	&.row__highlighting {
 		tbody {
 			tr:nth-child(even) {
 				background-color: $light;
@@ -63,55 +67,77 @@ $dark: #2b2b2b;
 	}
 
 	// classes for caption
-	&.caption-side-top {
+	&.caption__side__top {
 		caption {
 			caption-side: top;
 		}
 	}
-	&.caption-side-bottom {
+	&.caption__side__bottom {
 		caption {
 			caption-side: bottom;
 		}
 	}
-}
 
-@media (max-width: 892px) {
-	.datatable-responsive {
-			// smaller devices: visually hide table header
-			thead {
-				position: absolute;
-				clip: rect(1px 1px 1px 1px);
-				clip: rect(1px, 1px, 1px, 1px);
-				width: 1px;
-				height: 1px;
-				overflow: hidden;
-				white-space: nowrap;
-			}
-
-			// smaller devices: show inline column names
-			tbody {
-				tr {
-					th,
-					td {
-						display: flex;
-						justify-content: flex-start;
-						align-items: center;
-						padding: 4px 0;
-						padding-left: 12px;
-
-						.hidden-colname {
-							display: inline-block;
-							clip: auto;
-							width: 50%;
-							height: 100%;
-							text-overflow: ellipsis;
-						}
-
-						&.cell-align-right {
-							text-align: left;
-						}
+	.datatable__responsive {
+		thead {
+			tr {
+				th {
+					&[data-col-align="right"] {
+						text-align: right;
 					}
 				}
 			}
+		}
+		tbody {
+			tr {
+				th,
+				td {
+					&[data-col-align="right"] {
+						text-align: right;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 812px) {
+	.datatable__responsive {
+		// smaller devices: visually hide table header
+		thead {
+			position: absolute;
+			clip: rect(1px 1px 1px 1px);
+			clip: rect(1px, 1px, 1px, 1px);
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		// smaller devices: show inline column names
+		tbody {
+			tr {
+				th,
+				td {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					padding: 4px 0;
+					padding-left: 12px;
+
+					.hidden__colname {
+						display: inline-block;
+						clip: auto;
+						width: 50%;
+						height: 100%;
+						text-overflow: ellipsis;
+					}
+
+					&[data-col-align="right"] {
+						text-align: left;
+					}
+				}
+			}
+		}
 	}
 }
