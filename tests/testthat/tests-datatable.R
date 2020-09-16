@@ -2,17 +2,24 @@
 #' FILE: tests-datatable.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-01-28
-#' MODIFIED: 2020-04-20
+#' MODIFIED: 2020-09-16
 #' PURPOSE: unit testing for datatable() function
 #' STATUS: working; on.going
 #' PACKAGES: accessibleshiny; testthat
-#' COMMENTS: Run from parent dir using `npm run test`
+#' COMMENTS: Run from `dev/dev.R`
 #'////////////////////////////////////////////////////////////////////////////
-options(stringsAsFactors = FALSE)
 
 # pkgs
 library(testthat)
 library(accessibleshiny)
+
+
+# create sample dataset
+df <- data.frame(
+    group = sample(LETTERS[1:3], 5, replace = TRUE),
+    xvar = rnorm(5, mean = 15, sd = 2),
+    yvar = rnorm(5, mean = 35, sd = 2)
+)
 
 # ~ 1 ~
 # evaluate table component
@@ -21,9 +28,8 @@ library(accessibleshiny)
 #' table : exists
 # evaluate the opening <table> element
 test_that("Returned Element is an html table", {
-    tbl <- datatable(data = iris[1:2, ])
     expect_identical(
-        object = as.character(tbl$name),
+        object = datatable(data = df)$name,
         expected = "table",
         label = "Returned element is not an html table"
     )
@@ -33,10 +39,17 @@ test_that("Returned Element is an html table", {
 #' table : class attribute
 # evaluate default classnames applied to the table element
 test_that("Output has default css classes", {
-    tbl <- datatable(data = iris[1:2, ], class = "test")
     expect_equal(
-        object = as.character(tbl$attribs$class),
-        expected = "datatable row-highlighting caption-side-top test",
+        object = strsplit(
+            x = datatable(data = df, classnames = "test")$attribs$class,
+            split = " "
+        )[[1]],
+        expected = c(
+            "datatable",
+            "datatable__responsive",
+            "row__highlighting",
+            "test"
+        ),
         label = "Table does not have expected css classes"
     )
 })
@@ -45,11 +58,10 @@ test_that("Output has default css classes", {
 # table : id attribute
 # table id is present
 test_that("Table is rendered with a unique ID", {
-    tbl <- datatable(data = iris[1:2, ], id = "test")
     expect_identical(
-        object = tbl$attribs$id,
-        expected = "test",
-        label = "Table does not have a unique ID"
+        object = datatable(data = df, id = "myTable")$attribs$id,
+        expected = "myTable",
+        label = "Table is not rendered with the ID attribute"
     )
 })
 
@@ -57,11 +69,14 @@ test_that("Table is rendered with a unique ID", {
 #' table > thead + tbody
 #' table has header (thead) and body (tbody) element
 test_that("Table returns header and body", {
-    tbl <- datatable(data = iris[1:2, ])
+    tbl <- datatable(data = df)$children
     expect_equal(
-        object = length(tbl$children),
-        expected = 2,
-        label = "The table did not have the expected elements: head and body"
+        object = c(
+            tbl[[1]]$name,
+            tbl[[2]]$name
+        ),
+        expected = c("thead", "tbody"),
+        label = "Table is not rendered with basic elements: head and body"
     )
 })
 
@@ -77,7 +92,7 @@ test_that("Table returns header and body", {
 #' role="row" defined. Since there is only one row in the header
 #' we can extract the first element van the header
 test_that("Role for table header row(s) has been defined", {
-    tbl <- datatable(data = iris[1:2, ])
+    tbl <- datatable(data = df)
     tbl_role <- as.character(tbl$children[[1]]$children[[1]]$attribs$role)
     expect_identical(
         object = tbl_role,
@@ -96,7 +111,6 @@ test_that("Role for table header row(s) has been defined", {
 #' This is important responsive tables will modify the display properties
 #' and we need to make sure the cells are linked to the headers.
 test_that("All table headers have scope defined", {
-    df <- iris[1:2, ]
     tbl <- datatable(data = df)
     thead <- tbl$children[[1]]$children[[1]]$children[[1]]
     scopes <- list()
@@ -122,7 +136,6 @@ test_that("All table headers have scope defined", {
 #' test, the number of <tr> with the attribute "row" should match the
 #' number of rows in of the input dataset.
 test_that("All table body rows have role defined", {
-    df <- iris[1:2, ]
     tbl <- datatable(data = df)
     tr <- tbl$children[[2]]$children[[1]]
     roles <- list()
@@ -146,8 +159,7 @@ test_that("All table body rows have role defined", {
 #' from assistive web devices. This test will confirm that the <span> element
 #' is present for all rows and cells.
 test_that("Confirm markup for responsive tables", {
-    df <- iris[1:2, ]
-    tbl <- datatable(data = df, options = list(responsive = TRUE))
+    tbl <- datatable(data = df, is_responsive = TRUE)
     tr <- tbl$children[[2]]$children[[1]]
     spans <- c()
     lapply(seq_len(length(tr)), function(row) {
@@ -159,7 +171,7 @@ test_that("Confirm markup for responsive tables", {
         spans[[row]] <<- length(spans_in_curr_row)
     })
     expected_html_cells <- NROW(df) * NCOL(df)
-    actual_html_cells <- sum(spans)
+    actual_html_cells <- sum(as.numeric(spans))
     expect_equal(
         object = actual_html_cells,
         expected = expected_html_cells,
@@ -180,9 +192,8 @@ test_that("Confirm markup for responsive tables", {
 #' number is greater than 0, then the test will fail as this indicates that
 #' there are child elements present.
 test_that("Inline elements are not rendered when responsive = FALSE", {
-    df <- iris[1:2, ]
-    tbl <- datatable(data = df, options = list(responsive = FALSE))
-    tr <- tbl[[2]]$children[[2]]$children[[1]]
+    tbl <- datatable(data = df, is_responsive = FALSE)
+    tr <- tbl$children[[2]]$children[[1]]
     spans <- c()
     lapply(seq_len(length(tr)), function(row) {
         cells <- tr[[row]]$children[[1]]
@@ -195,10 +206,10 @@ test_that("Inline elements are not rendered when responsive = FALSE", {
                 spans_in_curr_row[[col]] <<- 1
             }
         })
-        spans[[row]] <<- sum(spans_in_curr_row)
+        spans[[row]] <<- sum(as.numeric(spans_in_curr_row))
     })
     expect_equal(
-        object= sum(spans),
+        object = sum(as.numeric(spans)),
         expected = 0,
         label = "Inline elements were generated despite the FALSE setting"
     )
@@ -217,7 +228,6 @@ test_that("Inline elements are not rendered when responsive = FALSE", {
 #' `role` and the value is "gridcell". Make sure the lengths
 #' of the attributes and cells match
 test_that("Table body cells have role attribute defined as 'gridcell'", {
-    df <- iris[1, ]
     tbl <- datatable(data = df)
     tbody <- tbl$children[[2]]
     cells <- tbody$children[[1]][[1]]$children[[1]][[1]]
@@ -252,13 +262,21 @@ test_that("Table body cells have role attribute defined as 'gridcell'", {
 #' ~ a ~
 #' Make sure the caption will be positioned before the table (default)
 test_that("Caption is positioned before the table", {
-    df <- iris[1, ]
-    tbl <- datatable(data = df, caption = "Test Caption")
-    expected_class <- "datatable row-highlighting caption-side-top"
-    actual_class <- as.character(tbl$attribs$class)
     expect_equal(
-        object = actual_class,
-        expected = expected_class,
+        object = strsplit(
+            x = datatable(
+                data = df,
+                caption = "Test Caption",
+                caption_placement = "top"
+            )$attribs$class,
+            split = " "
+        )[[1]],
+        expected = c(
+            "datatable",
+            "datatable__responsive",
+            "caption__side__top",
+            "row__highlighting"
+        ),
         label = "Caption is not positioned before the table"
     )
 })
@@ -266,17 +284,21 @@ test_that("Caption is positioned before the table", {
 #' ~ b ~
 #' Make sure the caption will be positioned after the table
 test_that("Caption is positioned after the table", {
-    df <- iris[1, ]
-    tbl <- datatable(
-        data = df,
-        caption = "Test Caption",
-        style = list(caption_below = TRUE)
-    )
-    expected_class <- "datatable row-highlighting caption-side-bottom"
-    actual_class <- as.character(tbl$attribs$class)
     expect_equal(
-        object = actual_class,
-        expected = expected_class,
-        label = "Caption is not positioned after the table"
+        object = strsplit(
+            x = datatable(
+                data = df,
+                caption = "Test Caption",
+                caption_placement = "bottom"
+            )$attribs$class,
+            split = " "
+        )[[1]],
+        expected = c(
+            "datatable",
+            "datatable__responsive",
+            "caption__side__bottom",
+            "row__highlighting"
+        ),
+        label = "Caption is not positioned before the table"
     )
 })
