@@ -31,14 +31,14 @@
 ) {
     base <- c("datatable")
     if (is_responsive) {
-        base[length(base) + 1] <- "datatable-responsive"
+        base[length(base) + 1] <- "datatable__responsive"
     }
-    
+
     if (caption_status) {
-        base[length(base) + 1] <- paste0("caption-side-", caption_placement)
+        base[length(base) + 1] <- paste0("caption__side__", caption_placement)
     }
     if (row_highlighting) {
-        base[length(base) + 1] <- "row-highlighting"
+        base[length(base) + 1] <- "row__highlighting"
     }
 
     paste0(base, collapse = " ")
@@ -64,40 +64,26 @@
 .datatable__helpers$set__cell__attribs <- function(index, value) {
     value_class <- class(value)
     attr <- list(
-        class = c(
-            paste0("column-", index)
-        ),
-        `data-value` = as.character(value)
+        `data-col` = index,
+        `data-col-align` = "left",
+        `data-value` = value,
+        `data-value-class` = value_class,
+        `data-value-num-type` = "NaN"
     )
 
-    if (is.na(value_class) | is.null(value_class)) {
-        attr$class[2] <- "datatype-na"
-    }
-
-    if (!is.na(value_class) | !is.null(value_class)) {
-        attr$class[2] <- paste0("datatype-", tolower(value_class))
-    }
-
     if (value_class %in% c("integer", "numeric", "double")) {
+        attr$`data-col-align` <- "right"
         if (value > 0) {
-            attr$class[3] <- "value-positive"
+            attr$`data-value-num-type` <- "positive"
         }
         if (value < 0) {
-            attr$class[3] <- "value-negative"
+            attr$`data-value-num-type` <- "negative"
         }
         if (value == 0) {
-            attr$class[3] <- "value-zero"
+            attr$`data-value-num-type` <- "zero"
         }
-        attr$class[4] <- "cell-align-right"
     }
 
-    if (value_class == "logical") {
-        attr$class[2] <- paste0("datatype-", tolower(value_class))
-        attr$class[3] <- paste0("value-", tolower(value))
-    }
-
-
-    attr$class <- paste0(attr$class, collapse = " ")
     return(attr)
 }
 
@@ -118,12 +104,11 @@
 .datatable__helpers$ui__tbody__td <- function(..., config) {
     args <- rlang::list2(...)
     index <- 1
+    alignment <- c()
     cells <- purrr::imap(args, function(d, .x) {
-
-        # coerce column names to char
         colname <- as.character(.x)
 
-        # Is the option htmlEscape TRUE?
+
         if (!config$html_escape) {
             cell_value <- htmltools::HTML(d)
         }
@@ -142,11 +127,11 @@
             cell$attribs$role <- "gridcell"
         }
 
-        # Is the responsive option set to TRUE?
+
         if (config$is_responsive) {
             cell$children <- list(
                 tags$span(
-                    class = "hidden-colname",
+                    class = "hidden__colname",
                     `aria-hidden` = "true",
                     colname
                 ),
@@ -154,10 +139,16 @@
             )
         }
 
-        # run cell attributes and attached
+
         attr <- .datatable__helpers$set__cell__attribs(index, d)
-        cell$attribs$class <- attr$class
+        cell$attribs$`data-col` <- attr$`data-col`
+        cell$attribs$`data-col-name` <- colname
+        cell$attribs$`data-col-align` <- attr$`data-col-align`
         cell$attribs$`data-value` <- attr$`data-value`
+        cell$attribs$`data-value-class` <- attr$`data-value-class`
+        if (attr$`data-value-num-type` != "NaN") {
+            cell$attribs$`data-value-num-type` <- attr$`data-value-num-type`
+        }
 
         index <<- index + 1
         return(cell)
@@ -180,7 +171,7 @@
         args,
         ~ .datatable__helpers$ui__tbody__td(..., config = config)
     )
-    tags$tr(cells, role = "row")
+    return(tags$tr(cells, role = "row"))
 }
 
 #' Generate Table Body
@@ -207,13 +198,14 @@
         data,
         ~ .datatable__helpers$ui__tbody__tr(..., config = config)
     )
-    tags$tbody(role = "presentation", body)
+    return(tags$tbody(role = "presentation", body))
 }
 
 #' Generate Table Head
 #'
 #' This function generates the html markup for the table header element
-#' based on user defined options.
+#' based on user defined options. Class for the column is determined by
+#' assessing the class of each cell in the first row of the input dataset.
 #'
 #' @param data input dataset
 #' @param config internal configuration object
@@ -222,11 +214,9 @@
 .datatable__helpers$ui__thead <- function(data, config) {
     index <- 1
     headers <- purrr::map(names(data), function(c) {
-
-        # coerce name as character
         col <- as.character(c)
 
-        # define cell content based on options$html_escape
+
         if (!config$html_escape) {
             cell_value <- htmltools::HTML(c)
         }
@@ -234,19 +224,21 @@
             cell_value <- htmltools::htmlEscape(c)
         }
 
-        # build cell <th> with attribs
-        c <- tags$th(cell_value)
-        c$attribs <- list(
-            class = paste0(
-                "column-", index,
-                " colname-", col
-            ),
+        c <- tags$th(
             role = "columnheader",
-            scope = "col"
+            scope = "col",
+            cell_value
         )
+
+        attr <- .datatable__helpers$set__cell__attribs(index, data[1, index])
+        c$attribs$`data-col` <- attr$`data-col`
+        c$attribs$`data-col-name` <- col
+        c$attribs$`data-col-align` <- attr$`data-col-align`
+    
         index <<- index + 1
         return(c)
     })
     row <- tags$tr(role = "row", headers)
     tags$thead(role = "presentation", row)
 }
+
