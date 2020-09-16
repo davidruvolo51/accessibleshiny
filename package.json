@@ -13,7 +13,7 @@
   "scripts": {
     "shiny": "Rscript -e \"shiny::runApp(appDir = 'dev/dev-app/', launch.browser = FALSE, port = 8000)\"",
     "start": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
-    "build": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
+    "build": "parcel build inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
     "clean": "rm -rf inst/accessibleshiny/accessibleshiny.min.*",
     "test": "Rscript -e \"testthat::test_dir('tests/testthat/')\""
   },
