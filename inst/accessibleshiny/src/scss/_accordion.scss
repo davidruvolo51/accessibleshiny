@@ -102,13 +102,13 @@
 		}
 		&:hover,
 		&:focus-within {
-			border-color: $primary;
+			border-color: $dark;
 			.accordion__heading {
 				.toggle__label {
 					text-decoration: underline;
 				}
 				.toggle__icon {
-					background-color: $primary;
+					background-color: $dark;
 					color: $light;
 				}
 			}

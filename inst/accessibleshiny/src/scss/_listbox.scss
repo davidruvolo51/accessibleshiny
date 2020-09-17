@@ -1,11 +1,3 @@
-// define colors
-$text: #3f454b;
-$dark: #252525;
-$medium: #dad6d6;
-$light: #f6f6f6;
-$shadow: hsla(0, 0%, 0%, 0.18);
-
-// parent selector
 .listbox {
     padding: 0;
     margin: 0;
@@ -119,6 +111,10 @@ $shadow: hsla(0, 0%, 0%, 0.18);
             &:focus {
                 background-color: $medium;
                 color: $dark;
+
+                .option__text {
+                    text-decoration: underline;
+                }
             }
 
             // when button is selected
