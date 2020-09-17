@@ -120,18 +120,20 @@ listbox <- function(
 #' The initial state, is the first available option.
 #'
 #' @param inputId the ID of the listbox to reset
-#' @param option the name of the option to select. If blank, the first element
-#'          is selected
+#' @param value the name of the option to select (i.e.,
+#'      `listbox(choices = c(...))`) or a value (i.e.,
+#'      `listbox(values = c(...))`). If `value` is left blank, then the
+#'      first option is selected.
 #'
 #' @return Reset a listbox to the first or named option
 #'
 #' @export
-reset_listbox <- function(inputId, option = NULL) {
+reset_listbox <- function(inputId, value = NULL) {
 
-    opt <- ""
-    if (!is.null(option)) {
-        stopifnot("'option' must be a string" = is.character(option))
-        opt <- option
+    val <- ""
+    if (!is.null(value)) {
+        stopifnot("'option' must be a string" = is.character(value))
+        val <- value
     }
 
     session <- shiny::getDefaultReactiveDomain()
@@ -139,7 +141,7 @@ reset_listbox <- function(inputId, option = NULL) {
         inputId = inputId,
         message = list(
             type = "reset",
-            option = opt
+            value = val
         )
     )
 }

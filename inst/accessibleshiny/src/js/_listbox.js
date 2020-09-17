@@ -186,12 +186,35 @@ $.extend(listbox, {
         if (message.type === "reset") {
 
             // select first option if unnamed
-            if (message.option === "") {
+            if (message.value === "") {
+                var current = $(el).find("li[aria-selected='true']");
+                current.removeAttr("aria-selected");
                 this.initialize(el);
             }
 
-            if (message.option !== "") {
-                console.log("message")
+            if (message.value !== "") {
+
+                var current = $(el).find("li[aria-selected='true']");
+                current.removeAttr("aria-selected");
+
+                // select list and desired option
+                var list = $(el).find("ul[role='listbox']");
+                var item = $(el).find(`li[data-option='${message.value}'], li[data-value='${message.value}']`);
+
+                if(!item.length) {
+                    console.error("Error in 'reset_lisbox': cannot find option with supplied value");
+                }
+
+                // update ARIA attributes
+                list.attr("aria-activedescendant", item.attr("id"))
+                item.attr("aria-selected", "true");
+
+                // add the value of the first item to the parent container (i.e., <fieldset>)
+                // to a custom data attribute
+                $(el).attr("data-value", item.attr("id"));
+
+                // update displayed text
+                $(el).find(".toggle__text").text(item.attr("data-option"));
             }
         }
     },
