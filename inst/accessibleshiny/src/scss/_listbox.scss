@@ -1,0 +1,161 @@
+// define colors
+$text: #3f454b;
+$dark: #252525;
+$medium: #dad6d6;
+$light: #f6f6f6;
+$shadow: hsla(0, 0%, 0%, 0.18);
+
+// parent selector
+.listbox {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 300px;
+    position: relative;
+
+    // reset buttons
+    button {
+        display: block;
+        margin: 0;
+        padding: 6px 0;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: inherit;
+        cursor: pointer;
+    }
+
+    // <legend>
+    .listbox__title {
+        margin: 0;
+        padding: 0;
+    }
+
+    // input label
+    .listbox__label {
+        display: block;
+        padding: 0;
+        margin: 6px 0;
+        font-size: 13pt;
+    }
+
+    // select input toggle
+    .listbox__toggle {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: #ffffff;
+        border: 1px solid $text;
+
+        .toggle__text {
+            width: 75%;
+            max-width: 450px;
+            padding: 6px;
+            padding-left: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .toggle__icon {
+            width: 25%;
+            max-width: 50px;
+            transform: rotate(0deg);
+            transform-origin: center;
+            transition: all 0.3s ease-in-out;
+
+            &.rotated {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    // drop down list
+    .listbox__list {
+        list-style: none;
+        position: absolute;
+        width: 99.3%;
+        max-height: 200px;
+        overflow-y: scroll;
+        padding: 0;
+        margin: 0;
+        top: 100%;
+        left: 0;
+        border: 1px solid $medium;
+        z-index: 2;
+        box-shadow: 0 12px 9px 3px $shadow;
+
+        // individual items
+        .listbox__option {
+            border-bottom: 1px solid $medium;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: left;
+            padding: 8px 0;
+            background-color: #ffffff;
+            cursor: pointer;
+
+            // text
+            .option__text {
+                width: 80%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            // inner icon
+            .option__icon {
+                margin: 0;
+                margin-left: 12px;
+                margin-right: 12px;
+                opacity: 0;
+            }
+
+            // states
+            &:hover,
+            &:focus {
+                background-color: $medium;
+                color: $dark;
+            }
+
+            // when button is selected
+            &[aria-selected="true"] {
+                background-color: $dark;
+                color: $light;
+
+                // make sure icon is visible
+                .option__icon {
+                    opacity: 1;
+                }
+            }
+
+            // remove top border for first element
+            &:first-child {
+                border-top: 1px solid $medium;
+            }
+
+            // remove border for last element
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        &.hidden {
+            display: none;
+        }
+    }
+}
+
+// reduce motion
+@media screen and (prefers-reduced-motion: reduce) {
+    .listbox {
+        .listbox__toggle {
+            .toggle__icon {
+                transition: none;
+            }
+        }
+    }
+}

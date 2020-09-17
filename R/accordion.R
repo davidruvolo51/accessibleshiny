@@ -56,10 +56,17 @@
 #'           ),
 #'           tags$cite("Rstudio.org")
 #'         )
-#'       )
+#'       ),
+#'      tags$button(
+#'        id = "reset",
+#'        class = "shiny-bound-input action-button",
+#'        "Reset Accordion"
+#'      )
 #'     )
 #'   )
-#'   server <- function(input, output) {}
+#'   server <- function(input, output) {
+#'      observeEvent(input$reset, reset_accordion("what-is-shiny"))
+#'   }
 #'   shinyApp(ui, server)
 #' }
 #'

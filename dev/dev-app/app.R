@@ -12,6 +12,7 @@
 # pkgs
 suppressPackageStartupMessages(library(shiny))
 
+
 # load all
 devtools::load_all()
 
@@ -59,18 +60,55 @@ ui <- tagList(
     tags$main(
         tags$h1("Test App"),
 
-        # Responsive Datatable Component
-        datatable(
-            data = birds[1:10, ],
-            caption = "Bird Counts",
-            caption_placement = "top",
-            id = "bird-data-reporting-rates",
-            classnames = "example-classname",
-            row_highlighting = TRUE,
-            row_headers = TRUE,
-            is_responsive = F,
-            html_escape = TRUE
+        # Listbox Component
+        listbox(
+            inputId = "popularTech",
+            title = "The Most Popular Technologies",
+            label = "Select a technology",
+            options = c(
+                "JavaScript",
+                "HTML/CSS",
+                "SQL",
+                "Python",
+                "Java",
+                "Bash/Shell/Powershell",
+                "C#",
+                "PHP",
+                "Typescript",
+                "C++"
+            ),
+            values = c(
+                "js",
+                "html_css",
+                "sql",
+                "py",
+                "java",
+                "bsh_sh_powershell",
+                "csharp",
+                "php",
+                "typescript",
+                "cpp"
+            ),
+            classnames = "my-listbox-style"
         ),
+        tags$button(
+            id = "reset",
+            class = "shiny-bound-input action-button",
+            "Reset"
+        )
+
+        # Responsive Datatable Component
+        # datatable(
+        #     data = birds[1:10, ],
+        #     caption = "Bird Counts",
+        #     caption_placement = "top",
+        #     id = "bird-data-reporting-rates",
+        #     classnames = "example-classname",
+        #     row_highlighting = TRUE,
+        #     row_headers = TRUE,
+        #     is_responsive = TRUE,
+        #     html_escape = TRUE
+        # ),
 
         # Accordion Component Example
         # accordion(
@@ -100,9 +138,8 @@ ui <- tagList(
 
 # server
 server <- function(input, output, session) {
-    observeEvent(input$reset, {
-        reset_accordion("what-is-shiny")
-    })
+    #' observeEvent(input$reset, reset_accordion("what-is-shiny"))
+    observeEvent(input$reset, reset_listbox("popularTech"))
 }
 
 

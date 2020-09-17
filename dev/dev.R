@@ -2,7 +2,7 @@
 #' FILE: dev.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-09-09
-#' MODIFIED: 2020-09-14
+#' MODIFIED: 2020-09-16
 #' PURPOSE: pkg management
 #' STATUS: ongoing
 #' PACKAGES: usethis; pkgbump
@@ -43,6 +43,17 @@ shiny::runApp(appDir = "dev/dev-app", port = 8000, launch.browser = FALSE)
 # tests
 devtools::test()
 devtools::check()
+
+
+#'//////////////////////////////////////
+
+#' ~ 2 ~
+#' Misc Checks
+
+# birds <- read.csv("dev/dev-app/data/birds_summary.csv")
+
+# devtools::load_all()
+# datatable(data = birds[1, ], caption = "Bird Counts")
 
 
 
@@ -91,5 +102,3 @@ usethis::use_build_ignore(
         ".pkgbump.json"
     )
 )
-
-
