@@ -94,6 +94,7 @@ $.extend(listbox, {
             var newElem = elem;
             newElem.attr("aria-selected", "true");
             newElem.addClass("focus");
+            newElem.position().top;
 
             // update menu attribute
             var menu = $(el).find("ul[role='listbox']");
@@ -104,8 +105,13 @@ $.extend(listbox, {
             $(el).find(".toggle__text").text(elem.attr("data-option"));
 
             // run callback (i.e., getValue)
-            callback();
-            
+            callback();   
+        }
+
+        function updateScroll(parent, target) {
+            parent.animate({
+                scrollTop: parent.scrollTop() - parent.offset().top + target.offset().top
+            }, 350);
         }
 
         // event: when menu toggle is clicked
@@ -114,7 +120,8 @@ $.extend(listbox, {
         });
 
         // event: watch for keydowns
-        $(el).on("keydown", "ul[role='listbox']", function(e) {
+        var listbox = $(el).find("ul[role='listbox'");
+        listbox.on("keydown", function(e) {
             switch(e.keyCode) {
 
                 // on keydown: ArrowUp - code 38
@@ -124,6 +131,7 @@ $.extend(listbox, {
                         var newElem = current.prev();
                         current.removeAttr("aria-selected");
                         updateInput(newElem);
+                        updateScroll(listbox, newElem);
                     }
                     break;
 
@@ -134,6 +142,7 @@ $.extend(listbox, {
                         var newElem = current.next();
                         current.removeAttr("aria-selected");
                         updateInput(newElem);
+                        updateScroll(listbox, newElem);
                     }
                     break;
 
@@ -143,6 +152,7 @@ $.extend(listbox, {
                     var first = $(el).find("li[role='option']").first();
                     current.removeAttr("aria-selected");
                     updateInput(first);
+                    updateScroll(listbox, first);
                     break;
 
                 // on keydown: End - code 35
@@ -151,6 +161,7 @@ $.extend(listbox, {
                     var last = $(el).find("li[role='option']").last();
                     current.removeAttr("aria-selected");
                     updateInput(last);
+                    updateScroll(listbox, last);
                     break;
                 
                 // on keydown: Escape - code 27

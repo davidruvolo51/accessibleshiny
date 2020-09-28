@@ -146,7 +146,7 @@
 }
 
 // reduce motion
-@media screen and (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion) {
     .listbox {
         .listbox__toggle {
             .toggle__icon {
