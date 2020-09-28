@@ -1,10 +1,10 @@
 {
-    "presets": ["@babel/preset-env", "@babel/react"],
-    "plugins": [
-        ["@babel/plugin-transform-runtime",
+  "presets": [
+      [
+          "@babel/preset-env",
           {
-            "regenerator": true
+              "modules": false
           }
-        ]
       ]
-  }
+  ]
+}

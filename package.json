@@ -11,24 +11,31 @@
     "shiny"
   ],
   "scripts": {
+    "start": "webpack-dev-server --env dev",
+    "build": "webpack --env prod",
     "shiny": "Rscript -e \"shiny::runApp(appDir = 'dev/dev-app/', launch.browser = FALSE, port = 8000)\"",
-    "start": "parcel inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
-    "build": "parcel build inst/accessibleshiny/src/index.js -d inst/accessibleshiny -o inst/accessibleshiny/accessibleshiny.min.js --no-cache --no-source-maps",
-    "clean": "rm -rf inst/accessibleshiny/accessibleshiny.min.*",
     "test": "Rscript -e \"testthat::test_dir('tests/testthat/')\""
   },
   "devDependencies": {
-    "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
-    "autoprefixer": "^9.8.4",
-    "babel-preset-minify": "^0.5.1",
-    "cssnano": "^4.1.10",
-    "parcel": "1.12.4",
-    "postcss-modules": "^1.5.0",
-    "sass": "^1.26.10"
+    "autoprefixer": "9.8.6",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^4.3.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "postcss-combine-media-query": "^1.0.1",
+    "postcss-loader": "^4.0.2",
+    "postcss-modules": "^3.2.2",
+    "sass": "^1.26.11",
+    "sass-loader": "^10.0.2",
+    "terser-webpack-plugin": "^4.2.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.1.4"
   },
   "repository": {
     "type": "git",
