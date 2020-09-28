@@ -54,7 +54,7 @@ use_accessibleshiny <- function(title = "", lang = "en", direction = "ltr") {
             htmlDependency(
                 version = "0.0.1",
                 name = "accessibleshiny",
-                src = "accessibleshiny/",
+                src = "accessibleshiny/public/",
                 package = "accessibleshiny",
                 stylesheet = "accessibleshiny.min.css",
                 script = "accessibleshiny.min.js",
