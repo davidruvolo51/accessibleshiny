@@ -1,4 +1,4 @@
-#' \code{progress}
+#' \code{progressbar}
 #'
 #' @details # Progress Bars
 #'
@@ -141,46 +141,52 @@
 #' ```
 #' @return Create a new progress bar
 #' @export
-progress <- function(start = 0, min = 0, max = 7) {
+progressbar <- function(start = 0, min = 0, max = 7) {
     stopifnot(is.numeric(start))
     stopifnot(is.numeric(min))
     stopifnot(is.numeric(max))
     return(pbar$new(start = start, min = min, max = max))
 }
 
-#' \code{pbar} 
+#' \code{pbar}
+#'
 #' R6 Class for progress bar
+#'
 #' @return R6 Class for progress bar
-#' @export
 pbar <- R6::R6Class(
     classname = "shiny-progress-bar",
     public = list(
 
-        #' \code{elem}
-        #' ID of the progress bar defined by \code{bar()}
+        #' @field elem ID of the progress bar defined by \code{bar()}
         elem = NULL,
 
-        #' \code{start}
-        #' The starting position for the progress bar
+        #' @field start the starting position for the progress bar
         start = NULL,
 
-        #' \code{current}
-        #' The current state of the progress bar
+        #' @field current the current state of the progress bar
         current = NULL,
 
-        #' \code{min}
-        #' The minimum value of the progress bar (i.e., floor)
+        #' @field min the minimum value of the progress bar
         min = NULL,
 
-        #' \code{max}
-        #' The maximum value of the progress bar (i.e., ceiling)
+        #' @param max The maximum value of the progress bar
         max = NULL,
 
-        #' \code{new}
+        #' @field text text formula that updates the `aria-valuetext`
+        text = "{start} of {max}",
+
+        #' @description
+        #'
         #' Create a new progress bar
+        #'
         #' @param start the starting progress
         #' @param min the minimum value of the progress bar
         #' @param max the maximum value of the progress bar
+        #'
+        #' @examples
+        #' mybar <- progress(start = 0, min = 0, max = 10)
+        #'
+        #' @return Create a new progress bar
         initialize = function(start = 0, min = 0, max = 7) {
             stopifnot(is.numeric(start))
             stopifnot(is.numeric(min))
@@ -191,63 +197,75 @@ pbar <- R6::R6Class(
             self$max <- max
         },
 
-        #' \code{bar}
+        #' @description bar
+        #'
         #' Create a new progress bar in the shiny UI
-        #' @param id A unique ID for the progress bar
-        #' @param fill A color used to style the progress bar
-        #' @param fixed A logical value that is used to fix the progress to the
+        #'
+        #' @param id a unique identifier for the progress bar
+        #' @param fill color used to style the progress bar
+        #' @param fixed If `TRUE`, the progress bar will be fixed to the
         #'      top or bottom of the parent element
         #' @param position If `fixed = TRUE`, then the argument position
         #'      can be used to fix the progress bar to the "top" or "bottom" of
         #'      the parent element.
         #' @param yOffset A CSS value used to adjust the y position of the
         #'       progress bar relative to the parent element
+        #' @parma text formula for updating the aria text
+        #' @param classnames string containing one or more css classes
+        #'
+        #' @example
+        #' mybar$bar(inputId = "mybar", fill = "#2d7ddd", fixed = TRUE)
         bar = function(
-            id = NULL, fill = NULL,
-            fixed = FALSE, position = "top", yOffset = NULL
+            inputId,
+            fill = NULL,
+            fixed = FALSE,
+            position = "top",
+            yOffset = NULL,
+            text = "{now} of {max}",
+            classnames = NULL
         ) {
             stopifnot(!is.null(id))
             stopifnot(is.logical(fixed))
             self$elem <- id
 
             # process fixed and position
-            css <- "progress-bar-container"
+            css <- "progressbar"
             if (isTRUE(fixed)) {
-                css <- paste0(css, " progress-bar-fixed")
+                css <- paste0(css, " progressbar__fixed")
                 if (!position %in% c("top", "bottom")) {
                     stop("position is invalid. Enter 'top' or 'bottom'")
                 } else {
-                    css <- paste0(css, " position-", position)
+                    css <- paste0(css, " position__", position)
                 }
             }
 
-            # build progress bar container
-            b <- tags$div(
-                id = paste0(id, "-container"),
-                class = css
-            )
+            if (!is.null(classnames)) {
+                css <- paste0(css, " ", classnames)
+            }
 
             # build progress bar
             pb <- tags$div(
                     id = id,
-                    class = "progress-bar",
+                    class = css,
                     role = "progressbar",
                     `aria-valuecurrent` = self$current,
                     `aria-valuemin` = self$min,
                     `aria-valuemax` = self$max,
-                    `aria-valuetext` = self$text
+                    `aria-valuetext` = self$text,
+                    tags$div(class = "bar")
             )
 
             # process background color
             if (length(fill) > 0) {
-                #validateCssUnit(fill)
-                pb$attribs$style <- paste0("background-color: ", fill, ";")
+                pb$children[[1]$attribs$style <- paste0(
+                    "background-color: ", fill, ";"
+                )
             }
 
             # process yOffset
             if (length(yOffset) > 0) {
-                #validateCssUnit(yOffset)
-                b$attribs$style <- paste0(
+                htmltools::validateCssUnit(yOffset)
+                pb$attribs$style <- paste0(
                     b$attribs$style,
                     "top: ", yOffset, ";"
                 )
@@ -263,8 +281,8 @@ pbar <- R6::R6Class(
         #' \code{listen}
         #' Initializes the progress bar within the shiny server
         listen = function() {
-            private$init_parent_element(self$elem)
-            private$update_progress_bar(self$elem, self$current, self$max)
+            private$init__progressbar(self$elem)
+            private$update__progressbar(self$elem, self$current, self$max)
         },
 
         #' \code{increase}
@@ -277,7 +295,7 @@ pbar <- R6::R6Class(
             # check to see if 'by' is out of bounds (only run if inbounds)
             if (!((by + self$current) > self$max)) {
                 self$current <- self$current + by
-                private$update_progress_bar(
+                private$update__progressbar(
                     id = self$elem,
                     current = self$current,
                     max = self$max
@@ -300,7 +318,7 @@ pbar <- R6::R6Class(
             # check to see if 'by' is out of bounds (only run if inbounds)
             if (!((self$current - by) < self$min)) {
                 self$current <- self$current - by
-                private$update_progress_bar(
+                private$update__progressbar(
                     id = self$elem,
                     current = self$current,
                     max = self$max
@@ -330,7 +348,7 @@ pbar <- R6::R6Class(
             } else {
                 # reset and update
                 self$current <- to
-                private$update_progress_bar(
+                private$update__progressbar(
                     id = self$elem,
                     current = self$current,
                     max = self$max
@@ -359,17 +377,17 @@ pbar <- R6::R6Class(
 
         # init ui function
         # getDefaultReactiveDomain from shiny
-        init_parent_element = function(id) {
+        init__progressbar = function(id) {
             session <- getDefaultReactiveDomain()
-            session$sendCustomMessage("init_parent_element", id)
+            session$sendCustomMessage("init__progressbar", id)
         },
 
         # send data function
         # getDefaultReactiveDomain from shiny
-        update_progress_bar = function(id, current, max) {
+        update__progressbar = function(id, current, max) {
             session <- getDefaultReactiveDomain()
             session$sendCustomMessage(
-                "update_progress_bar",
+                "update__progressbar",
                 list(id, current, max)
             )
         }
