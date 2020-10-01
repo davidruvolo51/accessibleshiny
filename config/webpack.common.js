@@ -2,7 +2,7 @@
 // FILE: webpack.common.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-09-28
-// MODIFIED: 2020-09-28
+// MODIFIED: 2020-09-30
 // PURPOSE: configuration to be used in prod and dev
 // DEPENDENCIES: see below
 // STATUS: working
@@ -17,7 +17,7 @@ const path = require("path");
 
 // configuration
 module.exports = {
-    entry: "./inst/accessibleshiny/src/index.js",
+    entry: "./src/index.js",
     output: {
         filename: "accessibleshiny.min.js",
         path: path.join(__dirname, "..", "inst/accessibleshiny/public"),
