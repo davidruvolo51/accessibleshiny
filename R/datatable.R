@@ -1,30 +1,30 @@
 #' Accessible and Responsive Datatables
 #'
-#' The \code{datatable} function creates an accessible, responsive table from a
+#' The `datatable` function creates an accessible, responsive table from a
 #' dataset. The function returns a shiny tagList object which can
 #' be used in shiny applications or markdown documents. This function
 #' can also be used as an html table generator and the output can be
 #' written to file. This function takes the following arguments.
 #'
-#' @section Arugments:
 #'
 #' @param data A data object used to render the table (required)
 #' @param caption A short description (1-2 lines) for the table (optional)
 #' @param caption_placement change the position of the caption in relation to
 #'      the table. Choices are "top" (default) or "bottom".
-#' @param id a unique ID to pass to \code{<table id="..">}
-#' @param classnames a string containing one or more css classes to pass to
-#'      \code{<table class="..">}
+#' @param id a unique ID for the table
+#' @param classnames a string containing one or more css classes
 #' @param row_highlighting If `TRUE` (default), whenever the mouse hovers over
 #'      a cell, the entire row will be highlighted
 #' @param row_headers If `TRUE`, the first cell in each table row will be
-#'      rendered as a row header (\code{<th>}; default: `FALSE`).
+#'      rendered as a row header (default: `FALSE`).
 #' @param is_responsive If `TRUE` (default), the HTML structure of the table
 #'      will be responsive.
 #' @param html_escape If `TRUE` (default), all cell content will be rendered
 #'      as plain text.
 #'
 #' @examples
+#' 
+#' ```{r}
 #' datatable(data = iris)
 #'
 #' datatable(data = iris, id = "iris-table", classnames = "dark-theme")
@@ -33,18 +33,17 @@
 #'
 #' datatable(data = iris, id = "iris", row_headers = TRUE)
 #'
-#' df <- iris
+#' df <- dplyr::starwars
 #' df$link <- paste0(
 #'     "<a href='https://www.google.com/search?q=",
-#'     gsub(" ", "+", df$link),
+#'     gsub(" ", "+", df$character),
 #'     "'>",
-#'     df$link,
+#'     df$character,
 #'     "</a>"
 #' )
-#' tbl <- datatable(data = iris, html_escape = FALSE)
-#' writeLines(as.character(tbl), "~/Desktop/iris_table.html")
-#'
-#' @author dcruvolo
+#' tbl <- datatable(data = df, html_escape = FALSE)
+#' writeLines(as.character(tbl), "~/Desktop/table.html")
+#' ```
 #'
 #' @return Create a responsive datatable
 #'

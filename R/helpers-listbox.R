@@ -45,7 +45,7 @@
 
 #' List Options Item
 #'
-#' This function will render a list item (i.e., <li>) which will have a
+#' This function will render a list item which will have a
 #' an svg icon and a text label.
 #'
 #' @param inputId the inputId passed down from the parent function

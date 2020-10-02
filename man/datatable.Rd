@@ -4,19 +4,44 @@
 \alias{datatable}
 \title{Accessible and Responsive Datatables}
 \usage{
-datatable(data, caption = NULL, ...)
+datatable(
+  data,
+  caption = NULL,
+  caption_placement = NULL,
+  id = NULL,
+  classnames = NULL,
+  row_highlighting = TRUE,
+  row_headers = FALSE,
+  is_responsive = TRUE,
+  html_escape = TRUE
+)
 }
 \arguments{
 \item{data}{A data object used to render the table (required)}
 
 \item{caption}{A short description (1-2 lines) for the table (optional)}
 
-\item{...}{Other list object used to control the component. See the next
-section and the wiki for more information.}
+\item{caption_placement}{change the position of the caption in relation to
+the table. Choices are "top" (default) or "bottom".}
+
+\item{id}{a unique ID for the table}
+
+\item{classnames}{a string containing one or more css classes}
+
+\item{row_highlighting}{If \code{TRUE} (default), whenever the mouse hovers over
+a cell, the entire row will be highlighted}
+
+\item{row_headers}{If \code{TRUE}, the first cell in each table row will be
+rendered as a row header (default: \code{FALSE}).}
+
+\item{is_responsive}{If \code{TRUE} (default), the HTML structure of the table
+will be responsive.}
+
+\item{html_escape}{If \code{TRUE} (default), all cell content will be rendered
+as plain text.}
 }
 \value{
-Returns an html object, i.e., shiny tagList. Use
-\code{options = list(...)} for addtional rendering options.
+Create a responsive datatable
 }
 \description{
 The \code{datatable} function creates an accessible, responsive table from a
@@ -25,70 +50,27 @@ be used in shiny applications or markdown documents. This function
 can also be used as an html table generator and the output can be
 written to file. This function takes the following arguments.
 }
-\section{Arugments}{
-
-}
-
-\section{Optional Arguments}{
-
-
-There are a number of optional arguments that are availble. These arguments
-will allow you to control the html markup or styling of the accordion
-element. These arguments are listed below.
-
-\itemize{
-\item \code{id}: a unique id to pass to the \code{<table>} markup
-\item \code{class}: a string containing one or more css classnames
-to add to the \code{<table class="">} attribute.
-\item \code{style}: the style attributes can be used to control the
-appearance of the element. Arguments must be
-entered as a list: \code{style = list(...)}.
-\itemize{
-\item \code{row_highlighting}: a logical value to enable or
-disable row highighting (default is TRUE)
-\item \code{caption_below}: a logical argument that positions
-the caption below the table (i.e., after). By default, the
-caption is placed before the table (i.e., FALSE)
-}
-\item \code{options}: a list of arguments used to control the
-structure of the accordion element. Arguments must be added as
-a list: \code{options = list(...)}
-\itemize{
-\item \code{responsive}: A logical argument for enabling or
-disabling the generation of the html markup that handles
-the responsiveness of the datatable. Default is TRUE
-\item \code{row_headers}: A logical argument that renders the first
-cell of every row as a row header element (i.e. \code{<th>};
-default is FALSE)
-\item \code{html_escape}: A logical argument to render cell content
-as text or as html elements. The default (TRUE) will render
-content as text. Use FALSE to escape.
-}
-}
-}
-
 \examples{
+
+```{r}
 datatable(data = iris)
 
-datatable(data = iris, id = "iris-table", class = "dark-theme")
+datatable(data = iris, id = "iris-table", classnames = "dark-theme")
 
-datatable(data = iris, options = list(responsive = FALSE))
+datatable(data = iris, is_responsive = FALSE)
 
-datatable(id = "iris", data = iris, options = list(row_headers = TRUE))
+datatable(data = iris, id = "iris", row_headers = TRUE)
 
-df <- iris
+df <- dplyr::starwars
 df$link <- paste0(
     "<a href='https://www.google.com/search?q=",
-    gsub(" ", "+", df$link),
+    gsub(" ", "+", df$character),
     "'>",
-    df$link,
+    df$character,
     "</a>"
 )
-tbl <- datatable(data = iris, options = list(html_escape = FALSE))
-writeLines(as.character(tbl), "~/Desktop/iris_table.html")
+tbl <- datatable(data = df, html_escape = FALSE)
+writeLines(as.character(tbl), "~/Desktop/table.html")
+```
+
 }
-\author{
-dcruvolo
-}
-\keyword{a11y}
-\keyword{datatable}
