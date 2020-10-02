@@ -27,6 +27,9 @@ shiny::addResourcePath(
 
 #' //////////////////////////////////////
 
+# init progressbar
+pbar <- progressbar(start = 0, max = 12)
+
 # ui
 ui <- tagList(
     tags$head(
@@ -57,6 +60,10 @@ ui <- tagList(
             )
         ),
         tags$title("Shiny Test")
+    ),
+    pbar$bar(
+        inputId = "appBar",
+        fill = "#2d7ddd"
     ),
     tags$main(
         tags$header(
