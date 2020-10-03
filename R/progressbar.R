@@ -81,7 +81,7 @@ pbar <- R6::R6Class(
         max = NULL,
 
         #' @field text text formula that updates the `aria-valuetext`
-        text = "{start} of {max}",
+        text = "{value} of {max}",
 
         #' @description
         #'
@@ -160,7 +160,7 @@ pbar <- R6::R6Class(
             fixed = FALSE,
             position = "top",
             yOffset = NULL,
-            text = "{now} of {max}",
+            text = "{value} of {max}",
             classnames = NULL
         ) {
             stopifnot(is.logical(fixed))
@@ -181,6 +181,9 @@ pbar <- R6::R6Class(
                 css <- paste0(css, " ", classnames)
             }
 
+            self$text <- text
+            f <- private$update__ariatext()
+
             # build progress bar
             pb <- tags$div(
                     id = inputId,
@@ -189,7 +192,7 @@ pbar <- R6::R6Class(
                     `aria-valuecurrent` = self$current,
                     `aria-valuemin` = self$min,
                     `aria-valuemax` = self$max,
-                    `aria-valuetext` = self$text,
+                    `aria-valuetext` = f,
                     tags$div(class = "bar")
             )
 
@@ -211,48 +214,6 @@ pbar <- R6::R6Class(
 
             # return
             return(pb)
-        },
-
-        #' @description listen
-        #'
-        #' Initializes the progress bar within the shiny server
-        #'
-        #' @examples
-        #' ```{r}
-        #' library(shiny)
-        #'
-        #' mybar <- accessibleshiny::progressbar(max = 10)
-        #'
-        #' ui <- tagList(
-        #'     accessibleshiny::use_accessibleshiny(),
-        #'     tags$main(
-        #'         style = "display: block; height: 50vh; margin-top: 50px",
-        #'         actionButton("increaseBar", "Next"),
-        #'         actionButton("descreaseBar", "Previous")
-        #'     ),
-        #'     mybar$bar(
-        #'         id = "bar1",
-        #'         fixed = TRUE
-        #'     )
-        #' )
-        #'
-        #' server <- function(input, output) {
-        #'     mybar$listen()
-        #'
-        #'     observeEvent(input$increaseBar, {
-        #'         mybar$increase()
-        #'     })
-        #'
-        #'     observeEvent(input$descreaseBar, {
-        #'         mybar$decrease()
-        #'     })
-        #' }
-        #'
-        #' shinyApp(ui, server)
-        #' ```
-        listen = function() {
-            private$init__progressbar(self$elem)
-            private$update__progressbar(self$elem, self$current, self$max)
         },
 
         #' @description increase
@@ -297,11 +258,7 @@ pbar <- R6::R6Class(
             # check to see if 'by' is out of bounds (only run if inbounds)
             if (!((by + self$current) > self$max)) {
                 self$current <- self$current + by
-                private$update__progressbar(
-                    id = self$elem,
-                    current = self$current,
-                    max = self$max
-                )
+                private$update__progressbar(current = self$current)
             }
 
             # when 'by' is out of bounds, reassign 'current' as 'max'
@@ -351,11 +308,7 @@ pbar <- R6::R6Class(
             # check to see if 'by' is out of bounds (only run if inbounds)
             if (!((self$current - by) < self$min)) {
                 self$current <- self$current - by
-                private$update__progressbar(
-                    id = self$elem,
-                    current = self$current,
-                    max = self$max
-                )
+                private$update__progressbar(current = self$current)
             }
 
             # when 'by' is out of bounds, reassign 'current' as 'min'
@@ -403,31 +356,35 @@ pbar <- R6::R6Class(
         #' ```
         reset = function() {
             self$current <- self$start
-            private$update__progressbar(
-                id = self$elem,
-                current = self$current,
-                max = self$max
-            )
+            private$update__progressbar(current = self$current)
         }
     ),
 
     # private functions
     private = list(
 
-        # @description init
-        # getDefaultReactiveDomain from shiny
-        init__progressbar = function(id) {
-            session <- getDefaultReactiveDomain()
-            session$sendCustomMessage("init__progressbar", id)
+        # @description update aria text
+        update__ariatext = function() {
+            formula <- self$text
+            if (grep("{value} of {max}", formula, fixed = TRUE)) {
+                formula <- gsub("{value}", self$current, formula, fixed = TRUE)
+                formula <- gsub("{max}", self$max, formula, fixed = TRUE)
+            }
+            return(formula)
         },
 
         # @description send data function
         # getDefaultReactiveDomain from shiny
-        update__progressbar = function(id, current, max) {
+        update__progressbar = function(current) {
+            f <- private$update__ariatext()
+            
             session <- getDefaultReactiveDomain()
-            session$sendCustomMessage(
-                "update__progressbar",
-                list(id, current, max)
+            session$sendInputMessage(
+                inputId = self$elem,
+                message = list(
+                    current = current,
+                    text = f
+                )
             )
         }
     )

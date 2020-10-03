@@ -1,37 +1,37 @@
 
 // parent element
-.progress-bar-parent {
+.progressbar__parent {
     position: relative;
 }
 
 // progress bar
-.progress-bar-container {
+.progressbar {
     display: block;
     width: 100%;
     background-color: transparent;
     
     // additional container classes
     // fixed position
-    &.progress-bar-fixed {
+    &.progressbar__fixed {
         position: fixed;
-        z-index: 100;
+        z-index: 10;
     }
     
     // position: fixed + top
-    &.position-top {
+    &.position__top {
         top: 0;
         left: 0;
     }
 
     // position: fixed + bottom
-    .position-bottom {
+    .position__bottom {
         bottom: 0;
         left: 0;
     }
 
     /////////////////////////////////////////////
     // progress bar
-    .progress-bar {
+    .bar {
         height: 13px;
         background-color: #bdbdbd;
         transform: scaleX(0);
