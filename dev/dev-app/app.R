@@ -2,7 +2,7 @@
 #' FILE: app.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-09-09
-#' MODIFIED: 2020-09-09
+#' MODIFIED: 2020-10-05
 #' PURPOSE: shiny app for component development, debuggin, testing, etc
 #' STATUS: ongoing
 #' PACKAGES: shiny; accessibleshiny;
@@ -28,7 +28,7 @@ shiny::addResourcePath(
 #' //////////////////////////////////////
 
 # init progressbar
-pbar <- progressbar(start = 0, max = 12)
+pbar <- progressbar(start = 1, max = 12)
 
 # ui
 ui <- tagList(
@@ -46,6 +46,8 @@ ui <- tagList(
                 "html, body {
                     font-family: Helvetica, Arial, sans-serif;
                     font-size: 16pt;
+                    padding: 0;
+                    margin: 0;
                 }",
                 "section, header {
                     width: 90%;
@@ -61,10 +63,12 @@ ui <- tagList(
         ),
         tags$title("Shiny Test")
     ),
-    pbar$bar(
-        inputId = "appBar",
-        fill = "#2d7ddd"
-    ),
+    # pbar$bar(
+    #     inputId = "appBar",
+    #     fill = "#2d7ddd",
+    #     fixed = TRUE,
+    #     text = "slide {value} of {max}"
+    # ),
     tags$main(
         tags$header(
             tags$h1("Accessible Shiny Development App"),
@@ -72,87 +76,118 @@ ui <- tagList(
                 "Use this app to development and design UI components."
             )
         ),
-        tags$section(
-            tags$h2("Listbox Component"),
-            listbox(
-                inputId = "popularTech",
-                title = "The Most Popular Technologies",
-                label = "Select a technology",
-                options = c(
-                    "JavaScript",
-                    "HTML/CSS",
-                    "SQL",
-                    "Python",
-                    "Java",
-                    "Bash/Shell/Powershell",
-                    "C#",
-                    "PHP",
-                    "Typescript",
-                    "C++"
-                ),
-                values = c(
-                    "js",
-                    "html_css",
-                    "sql",
-                    "py",
-                    "java",
-                    "bsh_sh_powershell",
-                    "csharp",
-                    "php",
-                    "typescript",
-                    "cpp"
-                ),
-                classnames = "my-listbox-style"
-            )
-        ),
+        # tags$section(
+        #     tags$h2("Progress Bar"),
+        #     tags$button(
+        #         id = "updateBar",
+        #         class = "shiny-bound-input action-button",
+        #         "Update"
+        #     ),
+        #     tags$button(
+        #         id = "decreaseBar",
+        #         class = "shiny-bound-input action-button",
+        #         "Decrease"
+        #     )
+        # ),
+        # tags$section(
+        #     tags$h2("Listbox Component"),
+        #     listbox(
+        #         inputId = "popularTech",
+        #         title = "The Most Popular Technologies",
+        #         label = "Select a technology",
+        #         options = c(
+        #             "JavaScript",
+        #             "HTML/CSS",
+        #             "SQL",
+        #             "Python",
+        #             "Java",
+        #             "Bash/Shell/Powershell",
+        #             "C#",
+        #             "PHP",
+        #             "Typescript",
+        #             "C++"
+        #         ),
+        #         values = c(
+        #             "js",
+        #             "html_css",
+        #             "sql",
+        #             "py",
+        #             "java",
+        #             "bsh_sh_powershell",
+        #             "csharp",
+        #             "php",
+        #             "typescript",
+        #             "cpp"
+        #         ),
+        #         classnames = "my-listbox-style"
+        #     )
+        # ),
 
         # Responsive Datatable Component
-        tags$section(
-            tags$h2("Responsive Datatable"),
-            datatable(
-                data = birds[1:10, ],
-                caption = "Bird Counts",
-                caption_placement = "top",
-                id = "bird-data-reporting-rates",
-                classnames = "example-classname",
-                row_highlighting = TRUE,
-                row_headers = TRUE,
-                is_responsive = TRUE,
-                html_escape = TRUE
-            )
-        ),
+        # tags$section(
+        #     tags$h2("Responsive Datatable"),
+        #     datatable(
+        #         data = birds[1:10, ],
+        #         caption = "Bird Counts",
+        #         caption_placement = "top",
+        #         id = "bird-data-reporting-rates",
+        #         classnames = "example-classname",
+        #         row_highlighting = TRUE,
+        #         row_headers = TRUE,
+        #         is_responsive = TRUE,
+        #         html_escape = TRUE
+        #     )
+        # ),
 
         # Accordion Component Example
         tags$section(
             tags$h2("Accordion Component"),
-            accordion(
+            # accordion(
+            #     inputId = "what-is-shiny",
+            #     title = "What is Shiny?",
+            #     content = tagList(
+            #         tags$p(
+            #             "Shiny is an R package that makes it easy to build",
+            #             "interactive web apps straight from R. You can host",
+            #             "standalone apps on a webpage or embed them in R",
+            #             "Markdown documents or build dashboards. You can",
+            #             "also extend your Shiny apps with CSS themes,",
+            #             "htmlwidgets, and JavaScript actions."
+            #         ),
+            #         tags$cite("Rstudio.org")
+            #     ),
+            #     style = "focused"
+            # )
+            accordion_input(
                 inputId = "what-is-shiny",
                 title = "What is Shiny?",
                 content = tagList(
                     tags$p(
                         "Shiny is an R package that makes it easy to build",
                         "interactive web apps straight from R. You can host",
-                        "standalone apps on a webpage or embed them in R Markdown",
-                        "documents or build dashboards. You can also extend your",
-                        "Shiny apps with CSS themes, htmlwidgets, and JavaScript",
-                        "actions."
+                        "standalone apps on a webpage or embed them in R",
+                        "Markdown documents or build dashboards. You can",
+                        "also extend your Shiny apps with CSS themes,",
+                        "htmlwidgets, and JavaScript actions."
                     ),
                     tags$cite("Rstudio.org")
                 ),
                 style = "focused"
             )
         ),
-        tags$button(
-            id = "reset",
-            class = "shiny-bound-input action-button",
-            "Reset"
-        )
+        # tags$button(
+        #     id = "reset",
+        #     class = "shiny-bound-input action-button",
+        #     "Reset"
+        # )
     ),
     tags$script(src = "accessibleshiny/accessibleshiny.min.js")
 )
 
 # server
 server <- function(input, output, session) {
+    observeEvent(input$updateBar, pbar$increase())
+    observeEvent(input$decreaseBar, pbar$decrease())
     observeEvent(input$reset, {
         reset_accordion("what-is-shiny")
         reset_listbox("popularTech")

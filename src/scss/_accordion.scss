@@ -1,78 +1,8 @@
+@import "_accordion_common";
+
 // accordion component
 .accordion {
-	font-family: inherit;
-	background-color: inherit;
-	color: currentColor;
-	margin: 16px 0;
-	padding: 16px 12px;
-	border: 2px solid transparent;
-	border-radius: $border-radius;
-	box-sizing: border-box;
-
-	// accordion heading styles (includes button)
-	.accordion__heading {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		margin: 0;
-		padding: 0;
-		font-family: inherit;
-		font-size: 100%;
-		word-break: break-word;
-		color: currentColor;
-	}
-
-	// reset button styles
-	.accordion__toggle {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		width: 100%;
-		border: none;
-		position: relative;
-		background: none;
-		background-color: none;
-		outline: none;
-		margin: 0;
-		padding: 0;
-		cursor: pointer;
-		font-size: inherit;
-		text-align: left;
-		color: currentColor;
-
-		// add spacing to button label (internal text)
-		.toggle__label {
-			word-break: break-word;
-			display: inline-block;
-			width: calc(100% - 24px);
-			margin-left: $leftOffest;
-			color: currentColor;
-		}
-
-		// <svg>
-		$icon-size: 26px;
-		.toggle__icon {
-			width: $icon-size;
-			height: $icon-size;
-			padding: 2px;
-			transform: rotate(0);
-			transform-origin: center;
-			transition: transform 0.3s ease-in-out;
-
-			// rotate (will be added to element via JS)
-			&.rotated {
-				transform: rotate(180deg);
-			}
-		}
-	}
-
-	// accordion content
-	.accordion__content {
-		margin: 0;
-		padding: 0;
-		margin-left: $leftOffest;
-		color: currentColor;
-	}
+	@include accordion__common;
 
 	// accordion theme: flat
 	// minimal hover and focus states
@@ -117,9 +47,9 @@
 }
 
 // adhere to reduced motion setting
+// enforce instant rotation for button icon
 @media (prefers-reduced-motion) {
 	.accordion {
-		// enforce instant rotation for button icon
 		.accordion__toggle {
 			.toggle__icon {
 				transition: all 1ms ease-in-out;

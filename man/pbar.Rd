@@ -53,43 +53,6 @@ shinyApp(ui, server)
 ```
 
 ## ------------------------------------------------
-## Method `pbar$listen`
-## ------------------------------------------------
-
-```{r}
-library(shiny)
-
-mybar <- accessibleshiny::progressbar(max = 10)
-
-ui <- tagList(
-    accessibleshiny::use_accessibleshiny(),
-    tags$main(
-        style = "display: block; height: 50vh; margin-top: 50px",
-        actionButton("increaseBar", "Next"),
-        actionButton("descreaseBar", "Previous")
-    ),
-    mybar$bar(
-        id = "bar1",
-        fixed = TRUE
-    )
-)
-
-server <- function(input, output) {
-    mybar$listen()
-
-    observeEvent(input$increaseBar, {
-        mybar$increase()
-    })
-
-    observeEvent(input$descreaseBar, {
-        mybar$decrease()
-    })
-}
-
-shinyApp(ui, server)
-```
-
-## ------------------------------------------------
 ## Method `pbar$increase`
 ## ------------------------------------------------
 
@@ -213,7 +176,6 @@ shinyApp(ui, server)
 \itemize{
 \item \href{#method-new}{\code{pbar$new()}}
 \item \href{#method-bar}{\code{pbar$bar()}}
-\item \href{#method-listen}{\code{pbar$listen()}}
 \item \href{#method-increase}{\code{pbar$increase()}}
 \item \href{#method-decrease}{\code{pbar$decrease()}}
 \item \href{#method-reset}{\code{pbar$reset()}}
@@ -267,7 +229,7 @@ Create a new progress bar in the shiny UI
   fixed = FALSE,
   position = "top",
   yOffset = NULL,
-  text = "{now} of {max}",
+  text = "{value} of {max}",
   classnames = NULL
 )}\if{html}{\out{</div>}}
 }
@@ -295,57 +257,6 @@ progress bar relative to the parent element}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{```{r}
-library(shiny)
-
-mybar <- accessibleshiny::progressbar(max = 10)
-
-ui <- tagList(
-    accessibleshiny::use_accessibleshiny(),
-    tags$main(
-        style = "display: block; height: 50vh; margin-top: 50px",
-        actionButton("increaseBar", "Next"),
-        actionButton("descreaseBar", "Previous")
-    ),
-    mybar$bar(
-        id = "bar1",
-        fixed = TRUE
-    )
-)
-
-server <- function(input, output) {
-    mybar$listen()
-
-    observeEvent(input$increaseBar, {
-        mybar$increase()
-    })
-
-    observeEvent(input$descreaseBar, {
-        mybar$decrease()
-    })
-}
-
-shinyApp(ui, server)
-```
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-listen"></a>}}
-\if{latex}{\out{\hypertarget{method-listen}{}}}
-\subsection{Method \code{listen()}}{
-listen
-
-Initializes the progress bar within the shiny server
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pbar$listen()}\if{html}{\out{</div>}}
-}
-
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{```{r}

@@ -2,7 +2,7 @@
 // FILE: _accordion.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-07-08
-// MODIFIED: 2020-08-03
+// MODIFIED: 2020-10-05
 // PURPOSE: accordion input component binding
 // DEPENDENCIES: Shiny assets
 // STATUS: working
@@ -54,16 +54,6 @@ $.extend(AccordionInput, {
                 icon.removeClass("rotated");
             }
         }
-
-        // onFocus
-        $(el).on("focusin", function(e) {
-            $(el).addClass("accordion__focused");
-        });
-
-        // onBlur
-        $(el).on("focusout", function(e) {
-            $(el).removeClass("accordion__focused");
-        });
 
         // onClick: toggle accordion state
         $(el).on("click", "button.accordion__toggle", function(e) {

@@ -84,7 +84,8 @@ accordion_input <- function(
     title,
     content,
     checked = FALSE,
-    class = "accordion__style__a"
+    classnames = NULL,
+    style = "flat"
 ) {
 
     # validate
@@ -99,7 +100,7 @@ accordion_input <- function(
     # build child elements
     el <- tags$div(
         id = ids$group,
-        class = "accordion accordion__input",
+        class = paste0("accordion__input accordion__", style),
         `data-accordion-initial-state` = tolower(checked),
         accordion_input_helpers$heading(
             ids = ids,
@@ -113,9 +114,9 @@ accordion_input <- function(
     )
 
     # append class (if applicable)
-    if (!is.null(class)) {
+    if (!is.null(classnames)) {
         el$attribs$class <- paste0(
-            el$attrib$class, " ", class
+            el$attrib$class, " ", classnames
         )
     }
 
