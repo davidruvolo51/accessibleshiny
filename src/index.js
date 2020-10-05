@@ -2,7 +2,7 @@
 // FILE: index.js
 // AUTHOR: David Ruvolo
 // CREATED: 2020-07-08
-// MODIFIED: 2020-10-02
+// MODIFIED: 2020-10-05
 // PURPOSE: parcel entry
 // DEPENDENCIES: NA
 // STATUS: in.progress
@@ -14,10 +14,11 @@ import "./scss/index.scss"
 
 
 // import modules
-import setDocMeta from "./js/_setDocMeta"
-import Accordion from "./js/_accordion"
-import Listbox from "./js/_listbox"
-import Progressbar from "./js/_progressbar"
+import setDocMeta from "./js/_setDocMeta";
+import Accordion from "./js/_accordion";
+import AccordionInput from "./js/_accordion_input";
+import Listbox from "./js/_listbox";
+import Progressbar from "./js/_progressbar";
 
 ////////////////////////////////////////
 
@@ -35,5 +36,6 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
 // register bindings
 Shiny.inputBindings.register(Accordion);
+Shiny.inputBindings.register(AccordionInput);
 Shiny.inputBindings.register(Listbox);
 Shiny.inputBindings.register(Progressbar);
