@@ -12,6 +12,19 @@ $box-shadow: 0 0 6px 4px $shadow;
 $leftOffest: 21px;
 $breakpoint: 972px;
 
+// define pkg wide visibly hidden class
+.accessibleshiny {
+    .visually__hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        clip: rect(0, 0, 0, 0);
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+}
+
 
 // import components
 @import "_datatable", "_accordion", "_listbox", "_progressbar";
