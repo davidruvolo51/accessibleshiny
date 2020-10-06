@@ -56,9 +56,11 @@ listbox <- function(
 ) {
 
     # validate
-    stopifnot(is.character(inputId))
-    stopifnot(is.character(title))
-    stopifnot(!is.null(options))
+    stopifnot(
+        "`inputId` must be a string" = is.character(inputId),
+        "`title` must be a string" = is.character(title),
+        "`options` cannot blank" = !is.null(options)
+    )
 
     # process options + values
     data <- list(options = options, values = options)

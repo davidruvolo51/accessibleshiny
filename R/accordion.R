@@ -84,12 +84,10 @@ accordion <- function(
 
     # validate html headings
     stopifnot(
-        "input for 'heading_level' is invalid. Use: h1 through h6" = {
+        "`heading_level` is invalid. Use: h1 through h6" = {
             heading_level %in% c("h1", "h2", "h3", "h4", "h5", "h6")
-        }
-    )
-    stopifnot(
-        "input for `style` is invalid. Use `flat` or `focused`" = {
+        },
+        "`style` is invalid. Use `flat` or `focused`" = {
             style %in% c("flat", "focused")
         }
     )

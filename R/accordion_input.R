@@ -89,10 +89,12 @@ accordion_input <- function(
 ) {
 
     # validate
-    if (!is.character(inputId)) stop("argument 'inputId' must be a string")
-    if (!is.character(title)) stop("argument 'title' must be a string")
-    if (is.null(content)) stop("argument 'content' cannot be null")
-    if (!is.logical(checked)) stop("argument 'checked' must be TRUE or FALSE")
+    stopifnot(
+        "`inputId` must be a string" = is.character(inputId),
+        "`title` must be a string" = is.character(title),
+        "`content` cannot be NULL" = !is.null(content),
+        "`checked` must be TRUE or FALSE" = is.logical(checked)
+    )
 
     # define ids
     ids <- accordion_input_helpers$set_html_ids(inputId = inputId)

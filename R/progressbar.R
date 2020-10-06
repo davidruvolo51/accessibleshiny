@@ -51,10 +51,12 @@
 #' @return Create a new progress bar
 #' @export
 progressbar <- function(start = 0, min = 0, max = 7) {
-    stopifnot(is.numeric(start))
-    stopifnot(is.numeric(min))
-    stopifnot(is.numeric(max))
-    return(pbar$new(start = start, min = min, max = max))
+    stopifnot(
+        "`start` must be numeric" = is.numeric(start),
+        "`min` must be numeric" = is.numeric(min),
+        "`max` must be numeric" = is.numeric(max)
+    )
+    pbar$new(start = start, min = min, max = max)
 }
 
 
@@ -96,9 +98,6 @@ pbar <- R6::R6Class(
         #'
         #' @return Create a new progress bar
         initialize = function(start = 0, min = 0, max = 7) {
-            stopifnot(is.numeric(start))
-            stopifnot(is.numeric(min))
-            stopifnot(is.numeric(max))
             self$start <- start
             self$current <- start
             self$min <- min
@@ -163,7 +162,7 @@ pbar <- R6::R6Class(
             text = "{value} of {max}",
             classnames = NULL
         ) {
-            stopifnot(is.logical(fixed))
+            stopifnot("`fixed` must be TRUE or FALSE" = is.logical(fixed))
             self$elem <- inputId
 
             # process fixed and position
